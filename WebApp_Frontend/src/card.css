@@ -1,0 +1,12 @@
+p {
+    line-height: 1.5em;
+    height: 3em;
+    overflow: hidden;
+    
+}
+
+p::before {
+   content: '...';
+   float: right;
+   margin-top: 1.5em;
+}

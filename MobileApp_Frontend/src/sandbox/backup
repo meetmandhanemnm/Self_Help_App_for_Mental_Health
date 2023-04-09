@@ -1,0 +1,358 @@
+import React, { useEffect, useState, useContext } from "react";
+import { View, InputText, StyleSheet } from "react-native";
+import { Button, Text, Input, ListItem, Avatar } from "react-native-elements";
+import { FlatList } from "react-navigation";
+import jsonServer from "../../api/jsonServer";
+import Spacer from "../components/Spacer";
+import DropDownComponent from "../components/2_DropDownComponent";
+import { Entypo } from "@expo/vector-icons";
+import { removeToken, removeUsnPassToken } from "../components/1_Token";
+import { Context as PatientContext } from "../context/patientContext";
+//import { Context as WorkoutContext } from "../context/workoutContext";
+// import { Context as BlogContext } from "../context/blogContext";
+
+// import { useIsFocused } from "@react-navigation/native"; //for react 5
+
+// const reducer = (state, action) => {
+//   return {...state,{"id":action.payload.id}}
+// };
+// const getToken = async () => {
+//   try {
+//     await AsyncStorage.getItem("token").then((token) =>
+//       console.log("Toeknnnnn ()()()(  ===========", token)
+//     );
+//   } catch (e) {
+//     console.log("\n\n(((((((((((((((((((((((((((()))))))))) NO TOKEN");
+//   }
+// };
+
+// const PatientReducerStorage = (patient_det) => {
+//   // Addind Patient data to Patient Reducer
+//   const { state, addPatient } = useContext(PatientContext);
+//   try {
+//     console.log("----------- Patient Details : ---------");
+//     console.log("\n\n\n\n\n==== Patient Detials from Reducer BEFORE ", state);
+
+//     console.log("==== Trying to Add Patient to Reducer ( In Pat Home)");
+//     addPatient(patient_det);
+
+//     console.log(
+//       "+_+_+_+_+_+_+_+_____________++++++++++++_______________+++\n Patient Data from Reducer : \n",
+//       state.patient_data
+//     );
+//   } catch (err) {
+//     console.log(
+//       "\n\n\t\t ------------ Ayoo : Reducer Issue to add Patient ",
+//       err.message
+//     );
+//   }
+// };
+
+// const WorkoutReducerStorage = (workout_details) => {
+//   const { state, addWorkout } = useContext(WorkoutContext);
+//   try {
+//     console.log("----------- Workout Details : ---------");
+//     console.log("\n\n\n\n\n==== Workout Detials from Reducer BEFORE ", state);
+
+//     console.log("==== Trying to Add Workout to Reducer ( In Pat Home)");
+//     addWorkout(workout_details);
+
+//     console.log(
+//       "+_+_+_+_+_+_+_+_____________++++++++++++_______________+++\n Workout Data from Reducer : \n",
+//       state.workout_data
+//     );
+//   } catch (err) {
+//     console.log(
+//       "\n\n\t\t ------------ Ayoo : Reducer Issue to add Wrokout ",
+//       err.message
+//     );
+//   }
+// };
+
+const PatientHome = (props) => {
+  console.log("****PATIENT HOME******************************");
+  const { state, addPatient } = useContext(PatientContext);
+  const [workout_data, setWorkoutData] = useState("");
+  const [patient_det, setPatientDet] = useState("");
+  // const { state, addBlogPosts, editBlogPosts } = useContext(PatientContext);
+
+  //For calling getpataints when Focuses
+  const unsubscribe = props.navigation.addListener("didFocus", () => {
+    console.log("focussed");
+    getPatientWorkOut();
+  });
+
+  const getPatientWorkOut = async () => {
+    //Getting patient data from login screen
+    try {
+      setPatientDet(props.navigation.getParam("pat_det"));
+    } catch (e) {
+      console.log("--------------- Error getting Patient Detials ");
+    }
+    //Store Patiner details to Reducer :
+    //PatientReducerStorage(patient_det);
+    try {
+      console.log("----------- Patient Details : ---------");
+      // console.log(
+      //   "\n\n\n\n\n==== Patient Detials from Reducer BEFORE ",
+      //   patient_det
+      // );
+
+      console.log("\n\n\n\n\n==== Patient Detials from Reducer BEFORE ", state);
+
+      console.log("==== Trying to Add Patient to Reducer ( In Pat Home)");
+      addPatient(patient_det);
+
+      console.log(
+        "+_+_+_+_+_+_+_+_____________++++++++++++_______________+++\n Patient Data from Reducer  AFTER : \n",
+        state
+      );
+      console.log(
+        "+_+_+_+_+_+_+_+_____________++++++++++++_______________+++\n Patient Data from Reducer  AFTER : \n",
+        state.patient_data
+      );
+    } catch (err) {
+      console.log(
+        "\n\n\t\t ------------ Ayoo : Reducer Issue to add Patient ",
+        err.message
+      );
+    }
+
+    try {
+      // const patientID = patient_det["patient_id"];
+      const patientID = 29;
+
+      const response = await jsonServer.get(`/patient/workout/${patientID}`);
+      console.log("\n\n\n-----------------GET : Getting Patient Workout Data");
+      console.log(response.data);
+      setWorkoutData(response.data);
+    } catch (e) {
+      console.log("\n\n\n----------------Ayoo..Issue Getting the Workouts");
+      console.log(e.message);
+    }
+
+    //Store Workout Data in Reducer :
+    // WorkoutReducerStorage(workout_data);
+  };
+  useEffect(() => {
+    getPatientWorkOut();
+  }, []);
+
+  let total = 0;
+  for (let i = 0; i < workout_data.length; i++) {
+    if (workout_data[i].completed) total += 1;
+  }
+
+  const [expandState, setState] = React.useState([]);
+
+  return (
+    <View style={style.containerStyle}>
+      <Spacer />
+      <Text
+        h3
+        style={{
+          textAlign: "center",
+          fontFamily: "sans-serif",
+          fontSize: 19,
+        }}
+      >
+        {/* Hello {patient_det["username"]} */}
+        Hello Simha!!!
+      </Text>
+      <Spacer />
+      <Text h4 style={{ textAlign: "center" }}>
+        Completed {total} / {workout_data.length} workouts
+      </Text>
+      <Spacer />
+
+      <FlatList
+        data={workout_data}
+        keyExtractor={(workout) => workout.workout_instance_id}
+        renderItem={({ item }) => {
+          return expandState.includes(item.workout_instance_id) ? (
+            <Spacer>
+              <DropDownComponent
+                workout_title={item.workout.title}
+                workout_description={item.workout.description}
+                workout_status={item.completed}
+                goToQuestions={() =>
+                  props.navigation.navigate("Questions", {
+                    workoutObj: item,
+                  })
+                }
+                questions=""
+                expandable={true}
+                onPress={() => {
+                  {
+                    setState(
+                      expandState.filter((i) => i !== item.workout_instance_id)
+                    );
+                  }
+                }}
+              />
+            </Spacer>
+          ) : (
+            <DropDownComponent
+              workout_title={item.workout.title}
+              workout_description={item.description}
+              workout_status={item.completed}
+              expandable={false}
+              onPress={() => {
+                {
+                  setState([...expandState, item.workout_instance_id]);
+                }
+              }}
+            />
+          );
+        }}
+      />
+    </View>
+  );
+};
+
+const style = StyleSheet.create({
+  containerStyle: {
+    marginTop: 50,
+    flex: 1,
+  },
+});
+PatientHome.navigationOptions = () => {
+  return {
+    headerShown: false,
+  };
+};
+export default PatientHome;
+
+//----------------------------------------------
+
+import createDataContext from "./createDataContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+// const workOutReducer = (state, action) => {
+//   // reducer fun
+//   switch (action.type) {
+//     case "addworkout":
+//       return { ...state, errorMessage: action.payload };
+
+//     default:
+//       return state;
+//   }
+// };
+const patientReducer = (state, action) => {
+  // console.log(
+  //   "\n\n\t\t ---------- REDUCER : Patient Reducer --------------------- ACTION PAYLOAD : ",
+  //   action.payload
+  // );
+  switch (action.type) {
+    case "add_patient":
+      console.log("-------------Adding Patient ");
+      return {
+        ...state,
+        // pat_name: action.payload.pat_name,
+        // pat_id: action.payload.pat_id,
+        patient_data: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+const addPatient = (dispatch) => {
+  return async (patient_data) => {
+    //Trying to signin
+    //Handel success by updating state
+    //Handling error
+    console.log("\n------Add Patient Deatils----------\n", patient_data);
+    const pat_data = " hehehe how are you ";
+    try {
+      dispatch({
+        type: "add_patient",
+        payload: patient_data,
+      });
+    } catch (err) {
+      console.log("Error : ", err.message);
+    }
+  };
+};
+
+// const clearErrorMessage = (dispatch) => () => {
+//   dispatch({ type: "clear_error_message" });
+// };
+// const signup = (dispatch) => {
+//   return async ({ email, password }) => {
+//     //make api req to signup with email and pass
+//     //if signup change state
+//     //if signing up fails, reflect errror message
+//     try {
+//       console.log("------ IN Signup");
+
+//       const response = await trackerAPI.post("/signup", { email, password });
+//       await AsyncStorage.setItem("token", response.data.token); // Store the token
+//       dispatch({ type: "signin", payload: response.data.token });
+
+//       //Navigate to main flow
+//       //We can use callback in fun params like before also
+//       navigate("TrackList");
+//     } catch (err) {
+//       console.log(err.message);
+//       // console.log(err.response.data);
+//       dispatch({
+//         type: "add_error",
+//         payload: "Something went wrong with Signup",
+//       });
+//     }
+//   };
+// };
+// const signin = (dispatch) => {
+//   return async ({ email, password }) => {
+//     //Trying to signin
+//     //Handel success by updating state
+//     //Handling error
+//     try {
+//       console.log("\n------SIGNIN----------");
+
+//       const response = await trackerAPI.post("/signin", { email, password });
+//       await AsyncStorage.setItem("token", response.data.token);
+//       dispatch({ type: "signin", payload: response.data.token });
+//       console.log(" Logged In Successfully");
+//       navigate("TrackList");
+//     } catch (err) {
+//       console.log("Error : ", err.message);
+//       dispatch({
+//         type: "add_error",
+//         payload: "Something went wrong with signin",
+//       });
+//     }
+//   };
+// };
+
+// const signout = (dispatch) => {
+//   return async () => {
+//     //signout
+//     //Remove the token in Asynch Storage
+//     await AsyncStorage.removeItem("token");
+//     dispatch({ type: "signout" });
+//     navigate("loginFlow");
+//   };
+// };
+// const tryLocalSignin = (dispatch) => async () => {
+//   // For autosigin
+//   const token = await AsyncStorage.getItem("token");
+//   console.log(
+//     "All avaliable Cache storage : ",
+//     await AsyncStorage.getAllKeys()
+//   );
+//   if (token) {
+//     dispatch({ type: "signin", payload: token });
+//     navigate("TrackList");
+//   } else {
+//     navigate("loginFlow");
+//   }
+// };
+
+export const { Provider, Context } = createDataContext(
+  patientReducer,
+  { addPatient },
+
+  { patient_data: "" }
+);

@@ -1,0 +1,27 @@
+> > npx create-expo-app mentalhealthApp
+> > npm install react-navigation
+> > npm install react-navigation-stack
+> > npm install axios
+
+---
+
+To start DB:
+add an entry in "scripts" tag in package.js file
+"db": "json-server -w db.json",
+"tunnel": "ngrok http 3000",
+Create a database file "db.json"
+
+> > npm run db
+> > ngrok http 3000
+
+---
+
+Token GIT :
+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
+
+git remote set-url origin https://github.com/NarasimhanN/HealthCareApp_M3_FrontEnd.git
+
+---
+
+Legendary Issue:
+useState()->workout_data and Reducer ->state.workout_data are linked and point to the same object. So change in reducer in QuestionScreen changes the useState value in a different page (PatientHomeScreen) are they both are always in synch, so no need of additional focus funtion in PatientHome
