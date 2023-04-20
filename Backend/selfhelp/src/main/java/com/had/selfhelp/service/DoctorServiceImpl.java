@@ -26,9 +26,8 @@ public class DoctorServiceImpl implements DoctorService {
 	}
 
 	@Override
-	public String findById(int theId) {
-		Doctor d = doctorRepository.getReferenceById(theId);
-		return d.getFirstName()+" "+d.getLastName();
+	public Doctor findById(int theId) {
+		return doctorRepository.getReferenceById(theId);
 	}
 
 	@Override

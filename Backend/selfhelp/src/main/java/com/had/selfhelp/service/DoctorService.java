@@ -9,11 +9,12 @@ public interface DoctorService {
 
 	public void save(Doctor theDoctor);
 	
-	public String findById(int theId);
+	public Doctor findById(int theId);
 	
 	public List<Patient> findPatients(int theId);
 	
 	public Doctor login(Doctor D);
 
 	public List<Doctor> findDoctors();
+
 }
