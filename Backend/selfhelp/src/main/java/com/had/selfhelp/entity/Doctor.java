@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "doctor")
 public class Doctor {
@@ -37,6 +39,7 @@ public class Doctor {
 	@Column(name = "password")
 	private String password;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "doctor")
 	private List<Patient> patients;
 	
@@ -122,7 +125,7 @@ public class Doctor {
 	public String toString() {
 		return "Doctor [doctor_id=" + doctor_id + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", qualification=" + qualification + ", type=" + type + ", username=" + username + ", password="
-				+ password + ", patients=" + patients + "]";
+				+ password + "]";
 	}
 
 	

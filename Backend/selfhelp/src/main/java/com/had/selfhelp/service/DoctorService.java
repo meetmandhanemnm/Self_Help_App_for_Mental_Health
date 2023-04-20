@@ -9,7 +9,7 @@ public interface DoctorService {
 
 	public void save(Doctor theDoctor);
 	
-	public Doctor findById(int theId);
+	public String findById(int theId);
 	
 	public List<Patient> findPatients(int theId);
 	

@@ -74,8 +74,10 @@ public class DoctorController {
 	} 
 	
 	@GetMapping("/{doctor_id}")
-	public Doctor getDoctorById(@PathVariable(name = "doctor_id") int doctor_id) {
+	public String getDoctorById(@PathVariable(name = "doctor_id") int doctor_id) {
 		return doctorService.findById(doctor_id);
 	}
+	
+	
 
 }
