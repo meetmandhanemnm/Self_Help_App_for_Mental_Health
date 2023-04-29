@@ -72,5 +72,10 @@ public class DoctorController {
 	public List<Workout_question_response> getWorkoutResponse(@PathVariable(name = "workout_instance_id") int workout_instance_id) {
 		return workoutService.findWorkoutResponse(workout_instance_id);
 	} 
+	
+	@GetMapping("/{doctor_id}")
+	public Doctor getDoctorById(@PathVariable(name = "doctor_id") int doctor_id) {
+		return doctorService.findById(doctor_id);
+	}
 
 }
