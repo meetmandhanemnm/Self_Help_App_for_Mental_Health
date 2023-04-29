@@ -89,6 +89,10 @@ const PersonalDetailsRegistration = ({ navigation }) => {
           Enter the following Details
         </Text>
         <Input
+          label="Email"
+          onChangeText={(data) => (patientDetails["email"] = data)}
+        />
+        <Input
           label="First Name"
           onChangeText={(data) => (patientDetails["firstName"] = data)}
         />

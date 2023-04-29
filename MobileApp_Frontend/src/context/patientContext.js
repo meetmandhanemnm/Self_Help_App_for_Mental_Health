@@ -34,6 +34,8 @@ const patientReducer = (state, action) => {
       return state;
 
     //return state;
+    case "add_doctor":
+      return { ...state, doctor_data: action.payload };
     default:
       return state;
   }
@@ -71,6 +73,23 @@ const addWorkout = (dispatch) => {
       dispatch({
         type: "add_workout",
         payload: workout_data,
+      });
+    } catch (err) {
+      console.log("Error : ", err.message);
+    }
+  };
+};
+const addDoctor = (dispatch) => {
+  return async (doctor_data) => {
+    try {
+      console.log(
+        "\n\n=====================  REDUCER : addWorkout() \n DOCTOR Data Recieved:",
+        doctor_data
+      );
+
+      dispatch({
+        type: "add_doctor",
+        payload: doctor_data,
       });
     } catch (err) {
       console.log("Error : ", err.message);
@@ -183,7 +202,7 @@ const updateWorkoutStatus = (dispatch) => {
 
 export const { Provider, Context } = createDataContext(
   patientReducer,
-  { addPatient, addWorkout, updatePreReqWorkout },
+  { addPatient, addWorkout, updatePreReqWorkout, addDoctor },
 
-  { patient_data: "", workout_data: "" }
+  { patient_data: "", workout_data: "", doctor_data: "" }
 );

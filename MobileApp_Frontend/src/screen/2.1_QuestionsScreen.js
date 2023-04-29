@@ -9,7 +9,7 @@ import { Context as PatientContext } from "../context/patientContext";
 const QuestionsScreen = ({ navigation }) => {
   //********************************************************** */
   // For Logging Reducer data . State not used in code ( only updatePreReqWorkout is used)
-  // console.log("\n\n\t ((((((((( QUESTION PAGE of Workout ))))))))");
+  console.log("\n\n\t ((((((((( QUESTION PAGE of Workout ))))))))");
   const { state, addWorkout } = useContext(PatientContext);
 
   // console.log("\n\n+++++++++++++++++++++++++++++++++ Reducer VAL:  \n", state);
@@ -21,18 +21,19 @@ const QuestionsScreen = ({ navigation }) => {
     useContext(PatientContext);
   const [responses, setRespose] = useState([]);
   const workoutObj = navigation.getParam("workoutObj");
+  //workoutObj is the Workout Obj that was clicked from the previous page
 
-  //console.log("Workout Obj : ", workoutObj);
+  console.log("Workout Obj : ", workoutObj);
   const workout_id = workoutObj.workout.workout_id;
   const workout_instance_id = workoutObj.workout_instance_id;
   const questions = workoutObj.workout.questions;
 
   //For sending Q and Response for the perticular workout - For workout with Q & A
   const postResponse = async (question_response, callback) => {
+    console.log(
+      "\n\n\n-----------------POST ( Workout Questions Response) : UPDATING DB with Responses"
+    );
     try {
-      console.log(
-        "\n\n\n-----------------POST ( Workout Questions Response) : UPDATING DB with Responses"
-      );
       // const resp = await jsonServer.post("/questionare_answers", responses);
       const resp = await jsonServer.post(
         `/patient/workout/response`,
@@ -50,31 +51,50 @@ const QuestionsScreen = ({ navigation }) => {
     }
   };
 
-  // For workout without Q&A
+  // For workout without Q&A : Update workout is Complete
   const postResponse_onlyID = async (callback) => {
+    console.log(
+      " \n\n\t    >>postResponse_onlyID()   : workout_instance_id:",
+      workout_instance_id
+    );
+    const responseObj = {
+      workout_instance_id: workout_instance_id,
+    };
+
     try {
-    } catch (err) {}
+      const resp = await jsonServer.post(
+        `/patient/workout/complete`,
+        responseObj
+      );
+    } catch (err) {
+      console.log(
+        "\n\t Ayoooo : Issue in POSTING Status when Workout Complete ( w/o Qs) : ",
+        err.message
+      );
+    }
     //Going back to patient
     callback();
   };
 
-  const updateResultToBackend = async (
-    updated_workout_instance_id,
-    updated_workout_instance
-  ) => {
+  //Update PreReq as 0 in DB for workouts whos prereq = current workout instance id
+  const updateBackEndPreReq = async (workout_instance_id) => {
     console.log(
-      "\n >>>>>>>>>>>>> updateResultToBackend()  -----\n For workout instance id : ",
-      updated_workout_instance_id
+      "\n >>>>>>>>>>>>> updateBackEndPreReq()  -----\n For workout instance id : ",
+      workout_instance_id
     );
+    const responseObj = {
+      workout_instance_id: workout_instance_id,
+    };
 
     try {
-      const resp = await jsonServer.post(`/patient/workout`, {
-        instance: { workout_instance_id: updated_workout_instance_id },
-      });
+      const resp = await jsonServer.put(
+        `/patient/workout/complete`,
+        responseObj
+      );
       console.log("\n\n\t\t SENTTTTT");
     } catch (err) {
       console.log(
-        "\n\t\t Ayooo: Issue Updating to Backend ( Workout Queston Page",
+        "\n\t\t Ayooo: Issue Updating to Backend - PreReq ",
         err.message
       );
     }
@@ -86,29 +106,33 @@ const QuestionsScreen = ({ navigation }) => {
     // workoutObj.completed = true;
     // updateWorkoutStatus(workout_instance_id);
     // updatePreReqWorkout(workout_instance_id);
-    const workoutCopy = state.workout_data;
-    //console.log("\n\t Copy of Reducer - Workout Object : ");
-    // console.log(workoutCopy);
+    try {
+      const workoutCopy = state.workout_data;
+      //console.log("\n\t Copy of Reducer - Workout Object : ");
+      // console.log(workoutCopy);
 
-    for (let i = 0; i < workoutCopy.length; i++) {
-      if (workoutCopy[i].workout.workout_id == workout_id) {
-        workoutCopy[i].completed = true;
-        //   workoutCopy[i].title = "Hahaha";
-        //.,mn updateResultToBackend(workout_id, workoutCopy[i]);
+      for (let i = 0; i < workoutCopy.length; i++) {
+        if (workoutCopy[i].workout.workout_id == workout_id) {
+          workoutCopy[i].completed = true;
+          //   workoutCopy[i].title = "Hahaha";
+          //.,mn updateResultToBackend(workout_id, workoutCopy[i]);
+        }
       }
-    }
 
-    for (let i = 0; i < workoutCopy.length; i++) {
-      if (workoutCopy[i].pre_id == workout_instance_id) {
-        workoutCopy[i].pre_id = 0;
-        // updateResultToBackend(
-        //   workoutCopy[i].workout_instance_id,
-        //   workoutCopy[i]
-        // );
+      for (let i = 0; i < workoutCopy.length; i++) {
+        if (workoutCopy[i].pre_id == workout_instance_id) {
+          workoutCopy[i].pre_id = 0;
+          updateBackEndPreReq(workoutCopy[i].workout_instance_id);
+        }
       }
+
+      console.log("\n Updating Workout Value to Workout Reducer fun");
+      addWorkout(workoutCopy);
+    } catch (err) {
+      console.log(
+        " \n\n\t Ayoo : Some issue in Updation of Workout - for preid"
+      );
     }
-    console.log("\n Updating Workout Value to Workout Reducer fun");
-    addWorkout(workoutCopy);
 
     // updateResultToBackend();
   };

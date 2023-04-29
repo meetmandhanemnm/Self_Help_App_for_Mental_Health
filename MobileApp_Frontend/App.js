@@ -7,13 +7,14 @@ import PatientHome from "./src/screen/2_PatientHome";
 import QuestionsScreen from "./src/screen/2.1_QuestionsScreen";
 import InitScreen from "./src/screen/0_InitScreen";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
-import ChatScreen from "./src/screen/4_ChatScreen";
+import Example from "./src/screen/4_ChatScreen";
 import AccountScreen from "./src/screen/3_AccountScreen";
 import { setNavigator } from "./src/navigateRef";
 import { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider as PatientContext } from "./src/context/patientContext";
 import ChoiceofDoctor from "./src/screen/1.3_ChoiceofDoctor";
+import ForgotPassword from "./src/screen/1.4_ForgotPassword";
 
 // import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 // import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
@@ -144,6 +145,12 @@ import ChoiceofDoctor from "./src/screen/1.3_ChoiceofDoctor";
 // }
 
 ////////////////////////////////////
+// import PushNotification, {
+//   PushNotificationIOS,
+// } from "react-native-push-notification";
+// import React, { useEffect } from "react";
+// const now = new Date();
+// const oneMinuteLater = new Date(now.getTime() + 60000); // add 1 minute (60,000 ms) to current time
 
 const navigator = createStackNavigator(
   {
@@ -154,6 +161,9 @@ const navigator = createStackNavigator(
     PatientHome: PatientHome,
     Questions: QuestionsScreen,
     ChoiceOfDoctor: ChoiceofDoctor,
+    Account: AccountScreen,
+    Chat: Example,
+    Forgot: ForgotPassword,
   },
   { initialRouteName: "Start" }
 );
@@ -162,6 +172,19 @@ const navigator = createStackNavigator(
 const App = createAppContainer(navigator);
 
 export default () => {
+  // useEffect(() => {
+  //   PushNotification.requestPermissions();
+  //   PushNotification.configure({
+  //     onNotification: (notification) => {
+  //       console.log(notification);
+  //     },
+  //   });
+  // }, []);
+  // PushNotification.localNotificationSchedule({
+  //   message: "Reminder: App is idle. Please open to continue using.",
+  //   date: oneMinuteLater, // start the notification one minute from now
+  //   repeatType: "minute",
+  // });
   return (
     <PatientContext>
       <App />
