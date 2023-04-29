@@ -93,9 +93,10 @@ public class PatientServiceImpl implements PatientService {
 		Patient P = patientRepository.getReferenceById(patient_id);
 		P.setDoctor(d);
 		P.setD_id(d.getDoctor_id());
+		P.setDoctor_change(new Date());
 		patientRepository.save(P);
-		PatientDoctorChange pd = patientDoctorChangeRepository.findByPatient(P);
-		patientDoctorChangeRepository.delete(pd);
+		List<PatientDoctorChange> pd = patientDoctorChangeRepository.findByPatient(P);
+		patientDoctorChangeRepository.deleteAll(pd);
 	}
 
 	@Override
@@ -120,6 +121,7 @@ public class PatientServiceImpl implements PatientService {
 		Patient thePatient = patientRepository.getReferenceById(patient_id);
 		thePatient.setDoctor(doctorList.get(0));
 		thePatient.setD_id(doctorList.get(0).getDoctor_id());
+		thePatient.setDoctor_change(new Date());
 		patientRepository.save(thePatient);
 	}
 

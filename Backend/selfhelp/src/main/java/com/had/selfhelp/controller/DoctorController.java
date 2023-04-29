@@ -1,6 +1,7 @@
 package com.had.selfhelp.controller;
 
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,14 @@ import com.had.selfhelp.entity.Workout;
 import com.had.selfhelp.entity.Workout_question_response;
 import com.had.selfhelp.service.DoctorService;
 import com.had.selfhelp.service.WorkoutService;
+
+class sortByDoctorChange implements Comparator<Patient>{
+
+	@Override
+	public int compare(Patient P1, Patient P2) {
+		return P1.getDoctor_change().compareTo(P2.getDoctor_change());
+	}	
+};
 
 @RestController
 @RequestMapping("/doctor")
@@ -78,4 +87,12 @@ public class DoctorController {
 		return doctorService.findById(doctor_id);
 	}
 
+	@GetMapping("/visualise/{doctor_id}")
+	public Doctor getDoctorVisualise(@PathVariable(name = "doctor_id") int doctor_id) {
+		Doctor d = doctorService.findById(doctor_id);
+		List<Patient> patientList = d.getPatients();
+		patientList.sort(new sortByDoctorChange());
+		d.setPatients(patientList);
+		return d;
+	}
 }

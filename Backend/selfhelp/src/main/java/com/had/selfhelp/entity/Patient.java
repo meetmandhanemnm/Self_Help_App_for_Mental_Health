@@ -59,12 +59,21 @@ public class Patient {
 	
 	private int d_id;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "doctor_change")
+	private Date doctor_change;
+	
+	private int numActAssigned;
+	
+	private int numActCompleted;
+	
 	public Patient() {
 		
 	}
 
 	public Patient(int patient_id, String firstName, String lastName, char gender, long contact_number, String username,
-			String password, String remarks, int severity, Date last_login, Doctor doctor, int d_id) {
+			String password, String remarks, int severity, Date last_login, Doctor doctor, int d_id, Date doctor_change,
+			int numActAssigned, int numActCompleted) {
 		this.patient_id = patient_id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -77,6 +86,9 @@ public class Patient {
 		this.last_login = last_login;
 		this.doctor = doctor;
 		this.d_id = d_id;
+		this.doctor_change = doctor_change;
+		this.numActAssigned = numActAssigned;
+		this.numActCompleted = numActCompleted;
 	}
 
 	public int getPatient_id() {
@@ -174,12 +186,38 @@ public class Patient {
 	public void setLast_login(Date last_login) {
 		this.last_login = last_login;
 	}
+	
+	public Date getDoctor_change() {
+		return doctor_change;
+	}
+
+	public void setDoctor_change(Date doctor_change) {
+		this.doctor_change = doctor_change;
+	}
+
+	public int getNumActAssigned() {
+		return numActAssigned;
+	}
+
+	public void setNumActAssigned(int numActAssigned) {
+		this.numActAssigned = numActAssigned;
+	}
+
+	public int getNumActCompleted() {
+		return numActCompleted;
+	}
+
+	public void setNumActCompleted(int numActCompleted) {
+		this.numActCompleted = numActCompleted;
+	}
 
 	@Override
 	public String toString() {
 		return "Patient [patient_id=" + patient_id + ", firstName=" + firstName + ", lastName=" + lastName + ", gender="
 				+ gender + ", contact_number=" + contact_number + ", username=" + username + ", password=" + password
-				+ ", remarks=" + remarks + ", severity=" + severity + ", last_login=" + last_login + ", d_id=" + d_id + "]";
+				+ ", remarks=" + remarks + ", severity=" + severity + ", last_login=" + last_login + ", doctor="
+				+ doctor + ", d_id=" + d_id + ", doctor_change=" + doctor_change + ", numActAssigned=" + numActAssigned
+				+ ", numActCompleted=" + numActCompleted + "]";
 	}
 	
 }

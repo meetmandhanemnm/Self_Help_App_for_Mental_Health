@@ -42,7 +42,7 @@ public class Doctor {
 	@Column(name = "password")
 	private String password;
 	
-	@JsonIgnore
+//	@JsonIgnore
 	@OneToMany(mappedBy = "doctor")
 	private List<Patient> patients;
 	

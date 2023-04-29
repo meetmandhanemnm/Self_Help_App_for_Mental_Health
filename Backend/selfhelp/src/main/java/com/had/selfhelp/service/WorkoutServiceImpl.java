@@ -60,6 +60,9 @@ public class WorkoutServiceImpl implements WorkoutService {
 		w3.setCompleted(false);
 		w3.setPre_id(0);
 		
+		thePatient.setNumActAssigned(3);
+		patientRepository.save(thePatient);
+		
 		List<Workout_instance> list = new ArrayList<Workout_instance>();
 		list.add(w1);
 		list.add(w2);
@@ -78,11 +81,13 @@ public class WorkoutServiceImpl implements WorkoutService {
 	@Override
 	public void addWorkoutInstances(List<Workout> list, int patientId, int pre_id) {
 		List<Workout_instance> temp = new ArrayList<Workout_instance>();
+		Patient P = patientRepository.getReferenceById(patientId);
 		for(Workout workout:list) {
 			Workout_instance instance = new Workout_instance();
 			instance.setCompleted(false);
 			instance.setPatient(patientRepository.getReferenceById(patientId));
 			instance.setWorkout(workoutRepository.getReferenceById(workout.getWorkout_id()));
+			P.setNumActAssigned(P.getNumActAssigned()+1);
 			System.out.println("Before setting prerequisite!!!!!!");
 			if(pre_id==0)
 				instance.setPrerequisite(null);
@@ -94,6 +99,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 			workout_instance_repo.save(instance);
 			temp.add(instance);
 			System.out.println("after add!!!");
+			patientRepository.save(P);
 		}
 	}
 
@@ -123,6 +129,9 @@ public class WorkoutServiceImpl implements WorkoutService {
 	public List<Workout_question_response> saveResponse(List<Workout_question_response> responseList) {
 		Workout_instance instance = workout_instance_repo.getReferenceById(responseList.get(0).getInstance_id());
 		instance.setCompleted(true);
+		Patient P = patientRepository.getReferenceById(instance.getPatient().getPatient_id());
+		P.setNumActCompleted(P.getNumActCompleted()+1);
+		patientRepository.save(P);
 		workout_instance_repo.save(instance);
 		for(Workout_question_response res : responseList) {
 			res.setWorkout_instance(instance);
@@ -147,6 +156,9 @@ public class WorkoutServiceImpl implements WorkoutService {
 	public void updateInstance(Workout_instance instance) {
 		Workout_instance in = workout_instance_repo.getReferenceById(instance.getWorkout_instance_id());
 		in.setCompleted(false);
+		Patient P = patientRepository.getReferenceById(in.getPatient().getPatient_id());
+		P.setNumActCompleted(P.getNumActCompleted()-1);
+		patientRepository.save(P);
 		workout_instance_repo.save(in);
 	}
 
@@ -154,6 +166,9 @@ public class WorkoutServiceImpl implements WorkoutService {
 	public void markInstance(Workout_instance instance) {
 		Workout_instance ins = workout_instance_repo.getReferenceById(instance.getWorkout_instance_id());
 		ins.setCompleted(true);
+		Patient P = patientRepository.getReferenceById(ins.getPatient().getPatient_id());
+		P.setNumActCompleted(P.getNumActCompleted()+1);
+		patientRepository.save(P);
 		workout_instance_repo.save(ins);
 	}
 
