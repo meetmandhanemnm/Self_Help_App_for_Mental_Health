@@ -53,6 +53,7 @@ const StartScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const { addPatient, addDoctor } = useContext(PatientContext);
+  const { state } = useContext(PatientContext);
 
   const validateToken = async () => {
     console.log("\n\n\t >>>>>>>>> validationToken()");

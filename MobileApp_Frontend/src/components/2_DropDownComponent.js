@@ -29,7 +29,7 @@ const DropDownComponent = ({
               style={{
                 fontSize: 18,
 
-                color: workout_status ? "green" : "black",
+                color: workout_status ? "#B19FF9" : "black",
                 marginLeft: 14,
               }}
             >

@@ -1,11 +1,18 @@
 import React, { useEffect, useState, useContext } from "react";
-import { View, InputText, StyleSheet } from "react-native";
+import {
+  View,
+  InputText,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
 import { Button, Text, Input, ListItem, Avatar } from "react-native-elements";
 import { FlatList } from "react-navigation";
 import jsonServer from "../../api/jsonServer";
 import Spacer from "../components/Spacer";
 import DropDownComponent from "../components/2_DropDownComponent";
 import { Entypo } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   removeToken,
   tokenAvaliable,
@@ -17,6 +24,8 @@ import {
 } from "../offlineStorage/1_Token";
 import { Context as PatientContext } from "../context/patientContext";
 // import { Context as BlogContext } from "../context/blogContext";
+import { registerIndieID } from "native-notify";
+import { FontAwesome } from "@expo/vector-icons";
 
 // import { useIsFocused } from "@react-navigation/native"; //for react 5
 
@@ -66,10 +75,29 @@ const PatientHome = (props) => {
   console.log("\n\n(((((((((((((((PATEINT HOME)))))))))))))))");
   const { state, addWorkout } = useContext(PatientContext);
   const [workout_data, setWorkoutData] = useState("");
-
+  const [quote, setQuote] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const quotes = [
+    "The best way to predict your future is to create it.",
+    "Don't let yesterday take up too much of today.",
+    "Believe you can and you're halfway there.",
+    "Strive not to be a success, but rather to be of value.",
+    "You miss 100% of the shots you don't take.",
+  ];
   const getPatientWorkOut = async () => {
     // console.log("\n\n >>>>>>>> getPatientWorkout()\n");
     // console.log("\n\n\n\n\n==== Reducer data BEFORE ", state);
+
+    console.log(
+      "--------- Register For Push Notificaiton : ID (For API)- ",
+      state.patient_data.patient_id
+    );
+
+    registerIndieID(
+      `${state.patient_data.patient_id}`,
+      7695,
+      "wDN7Drh1sdRsg6rE11FAVz"
+    );
 
     // To Get the workout of the Perticular patient ( Using patient ID)
     try {
@@ -131,6 +159,11 @@ const PatientHome = (props) => {
     console.log("Doctor Data :\n", state.doctor_data);
   }, []);
 
+  const getRandomQuote = () => {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    setQuote(quotes[randomIndex]);
+    setModalVisible(true);
+  };
   // const updateWorkoutDataFromReducer = () => {
   //   setWorkoutData(state.workout_data);
   // };
@@ -186,16 +219,27 @@ const PatientHome = (props) => {
         <Text h3 style={{}}>
           Namaskar
         </Text>
-        <Text h2 style={{ marginBottom: 0, color: "rgba(130, 202, 186, 1)" }}>
+        <Text h2 style={{ color: "rgba(111, 202, 186, 1)" }}>
           {`${state.patient_data.firstName} ${state.patient_data.lastName} !!`}
         </Text>
       </Spacer>
 
-      <Text h4 style={{ textAlign: "center", fontSize: 20 }}>
-        {/* Completed {total} / {workout_data.length} workouts */}
-        ----------- Workout List ----------
-      </Text>
-      <Spacer />
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>{quote}</Text>
+
+            {/* <TouchableOpacity onPress={() => setModalVisible(false)}>
+              <Text style={styles.closeButton}>Close</Text>
+            </TouchableOpacity> */}
+          </View>
+        </View>
+      </Modal>
 
       <FlatList
         data={workout_data} // It works for this also ( Technically it should not)
@@ -269,6 +313,16 @@ const PatientHome = (props) => {
             props.navigation.navigate("Account");
           }}
         />
+
+        <TouchableOpacity
+          onPress={() => {
+            getRandomQuote();
+          }}
+        >
+          <View style={{ flexDirection: "row", marginLeft: 35, marginTop: 10 }}>
+            <FontAwesome name="heartbeat" size={24} color="#B19FF9" />
+          </View>
+        </TouchableOpacity>
         {/* <Button
           title="Logout"
           loadingProps={{ size: "small", color: "white" }}
@@ -298,7 +352,7 @@ const PatientHome = (props) => {
           titleStyle={{ fontWeight: "bold", fontSize: 23 }}
           containerStyle={{
             marginRight: 10,
-            marginLeft: 120,
+            marginLeft: 60,
             height: 50,
             width: 120,
             marginBottom: 10,
@@ -313,6 +367,49 @@ const PatientHome = (props) => {
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  button: {
+    backgroundColor: "#B19FF9",
+    padding: 10,
+    borderRadius: 10,
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalView: {
+    backgroundColor: "#B19FF9",
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+    elevation: 5,
+  },
+  modalText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
+    textAlign: "center",
+  },
+  closeButton: {
+    marginTop: 10,
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 10,
+    color: "#B19FF9",
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+});
 const style = StyleSheet.create({
   containerStyle: {
     marginTop: 50,

@@ -15,6 +15,8 @@ import { removeOfflineData } from "./../offlineStorage/1_Token";
 import jsonServer from "../../api/jsonServer";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import axios from "axios";
+
 const requestNewDoctor = () => {
   console.log("\n\n\t >>>>> requestNewDoctor() ");
   try {
@@ -311,6 +313,9 @@ const AccountScreen = (props) => {
             alignSelf: "center",
           }}
           onPress={() => {
+            axios.delete(
+              `https://app.nativenotify.com/api/app/indie/sub/7695/wDN7Drh1sdRsg6rE11FAVz/${state.patient_data.patient_id}`
+            );
             removeOfflineData("token");
             props.navigation.navigate("Start");
           }}
