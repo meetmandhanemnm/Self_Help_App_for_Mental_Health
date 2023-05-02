@@ -8,13 +8,14 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 import { Button, Text, Input } from "react-native-elements";
 import jsonServer from "../../api/jsonServer";
 import Spacer from "../components/Spacer";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-
+import { FontAwesome } from "@expo/vector-icons";
 // const postPatientDetails = async (patientDetails, callback) => {
 //   // await jsonServer.post("/patient", patientDetails);
 
@@ -41,7 +42,16 @@ const ForgotPassword = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
 
-  const handlePress = async () => {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handlePress = () => {
+    setModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+  };
+  const handlePresss = async () => {
     try {
       // const resp = await jsonServer.post(``, { email });
       console.log(email);
@@ -61,7 +71,7 @@ const ForgotPassword = ({ navigation }) => {
           h3
           style={{
             marginTop: 30,
-            color: "purple",
+            color: "#9370DB",
           }}
         >
           We're humans afterall,{"\n"}It's ok to forget :)
@@ -72,7 +82,7 @@ const ForgotPassword = ({ navigation }) => {
           onChangeText={(data) => setEmail(data)}
         />
         <TouchableOpacity
-          style={styles.button}
+          style={style.button}
           onPress={() => {
             handlePress();
           }}
@@ -89,45 +99,86 @@ const ForgotPassword = ({ navigation }) => {
             {error}
           </Text>
         ) : null}
-        {/* 
-        <Button
-          title="Verify OTP"
-          icon={{
-            name: "user",
-            type: "font-awesome",
-            size: 15,
-            color: "white",
-          }}
-          iconRight
-          iconContainerStyle={{ marginLeft: 10 }}
-          titleStyle={{ fontWeight: "700" }}
-          buttonStyle={{
-            backgroundColor: "rgba(199, 43, 98, 1)",
-            borderColor: "transparent",
-            borderWidth: 0,
-            borderRadius: 30,
-          }}
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 10,
-            alignSelf: "center",
-          }}
-          style={style.buttonStyle}
-          onPress={() => {}}
-        /> */}
       </Spacer>
+
+      <Modal //Check email prompt
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleModalClose}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>
+              The <FontAwesome name="key" size={24} color="black" /> to unlock
+              your account is in you registered email. {"\n"} Please Login with
+              it
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Start");
+              }}
+            >
+              <Text style={styles.closeButton}>Goto Login</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
-  button: {
-    marginTop: 20,
-    backgroundColor: "#9370DB",
-    padding: 15,
-    borderRadius: 100,
-    width: 150,
-    alignSelf: "center",
+  container: {
+    flex: 1,
     alignItems: "center",
+    justifyContent: "center",
+  },
+  openButton: {
+    backgroundColor: "#2196F3",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalView: {
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: 350,
+    height: 200,
+  },
+
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontSize: 18,
+  },
+  closeButton: {
+    marginTop: 10,
+    color: "white",
+    backgroundColor: "#9370DB",
+    borderRadius: 20,
+    padding: 15,
+    elevation: 2,
+  },
+  modal: {
+    backgroundColor: "black",
+    padding: 20,
   },
 });
 const style = StyleSheet.create({
@@ -150,6 +201,15 @@ const style = StyleSheet.create({
   //   // marginBottom: 30,
   //   paddingTop: 100,
   // },
+  button: {
+    marginTop: 20,
+    backgroundColor: "#9370DB",
+    padding: 15,
+    borderRadius: 100,
+    width: 150,
+    alignSelf: "center",
+    alignItems: "center",
+  },
   containerStyle: {
     marginTop: 40,
   },

@@ -16,6 +16,7 @@ import jsonServer from "../../api/jsonServer";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import axios from "axios";
+import { ScrollView } from "react-native-gesture-handler";
 
 const requestNewDoctor = () => {
   console.log("\n\n\t >>>>> requestNewDoctor() ");
@@ -32,6 +33,8 @@ const AccountScreen = (props) => {
   const [newpass1, setNewPass1] = useState("");
   const [newpass2, setNewPass2] = useState("");
   const [passError, setPassError] = useState("");
+  const [doctorModalText, setDoctorModalText] = useState("");
+  const [doctorModalButtonText, setDoctorModalButtonText] = useState("");
 
   const workout_data = state.workout_data;
   const [remark, setRemark] = useState("");
@@ -96,42 +99,7 @@ const AccountScreen = (props) => {
           response={state.patient_data.severity}
         />
 
-        {state.patient_data.d_id == 0 ? (
-          <View>
-            <TouchableOpacity onPress={requestNewDoctor()}>
-              <Text style={{ marginTop: 10, fontSize: 14, color: "blue" }}>
-                Need a doctor's help ? click here
-              </Text>
-              <DetailsEntry />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          // <Button
-          //   title="Request a Doctor"
-          //   onPress={() => {
-          //     //   removeUsnPassToken();
-          //     requestNewDoctor();
-          //   }}
-          //   icon={{
-          //     name: "",
-          //     type: "font-awesome",
-          //     size: 15,
-          //     color: "white",
-          //   }}
-          //   iconContainerStyle={{ marginRight: 10 }}
-          //   titleStyle={{ fontWeight: "700" }}
-          //   buttonStyle={{
-          //     backgroundColor: "#5F9EA0",
-          //     borderColor: "transparent",
-          //     borderWidth: 0,
-          //     borderRadius: 30,
-          //   }}
-          //   containerStyle={{
-          //     width: 200,
-          //     alignSelf: "center",
-          //     marginVertical: 30,
-          //   }}
-          // />
+        {!(state.patient_data.d_id == 0) ? (
           <>
             <DetailsEntry
               question={"Assigned Doctor"}
@@ -143,48 +111,42 @@ const AccountScreen = (props) => {
                 state.doctor_data.lastName
               }
             />
-
-            {/* <TouchableOpacity onPress={changeDoctorInDB()}>
-              <Text style={{ marginTop: 10, fontSize: 14, color: "blue" }}>
-                Change Doctor? click here
-              </Text>
-            </TouchableOpacity> */}
-
-            {/* <Button
-              title="Change Doctor"
-              onPress={() => {
-                //   removeUsnPassToken();
-                changeDoctorInDB();
-              }}
-              icon={{
-                name: "",
-                type: "font-awesome",
-                size: 15,
-                color: "white",
-              }}
-              iconContainerStyle={{ marginRight: 10 }}
-              titleStyle={{ fontWeight: "700" }}
-              buttonStyle={{
-                backgroundColor: "#5F9EA0",
-                borderColor: "transparent",
-                borderWidth: 0,
-                borderRadius: 30,
-              }}
-              containerStyle={{
-                width: 200,
-                alignSelf: "center",
-                marginVertical: 30,
-              }}
-            /> */}
           </>
+        ) : (
+          <DetailsEntry />
         )}
+
         <Spacer>
           <Text style={{ fontSize: 20, marginTop: 40 }}>Important Links :</Text>
-          <TouchableOpacity onPress={handlePress}>
-            <Text style={{ marginTop: 10, fontSize: 14, color: "blue" }}>
-              Change Doctor?
-            </Text>
-          </TouchableOpacity>
+          {state.patient_data.d_id != 0 ? (
+            <>
+              <TouchableOpacity
+                onPress={() => {
+                  setDoctorModalText("Doctors could be annoying!!");
+                  setDoctorModalButtonText("Request Change");
+                  handlePress();
+                }}
+              >
+                <Text style={{ marginTop: 10, fontSize: 14, color: "blue" }}>
+                  Change Doctor?
+                </Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <>
+              <TouchableOpacity
+                onPress={() => {
+                  setDoctorModalText("Help is on the way. ");
+                  setDoctorModalButtonText("Request Doctor");
+                  handlePress();
+                }}
+              >
+                <Text style={{ marginTop: 10, fontSize: 14, color: "blue" }}>
+                  Do you want a doctor's help?
+                </Text>
+              </TouchableOpacity>
+            </>
+          )}
           <TouchableOpacity
             onPress={() => {
               setpasswordModelVisible(true);
@@ -193,91 +155,89 @@ const AccountScreen = (props) => {
             <Text style={{ marginTop: 10, fontSize: 14, color: "blue" }}>
               Change Password?
             </Text>
-
-            <Modal //Change Doctor Model
-              animationType="slide"
-              transparent={true}
-              visible={doctorModalVisible}
-              onRequestClose={handleModalClose}
-            >
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  <Text style={styles.modalText}>
-                    Doctors could be annoying!! Any specific reasons in
-                    <MaterialCommunityIcons
-                      name="head"
-                      size={24}
-                      color="black"
-                    />
-                    ?
-                  </Text>
-
-                  <Input onChangeText={(data) => setRemark(data)} />
-
-                  <TouchableOpacity onPress={changeDoctorInDB}>
-                    <Text style={styles.closeButton}>Request Change</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modal>
-
-            <Modal //Change Password Model
-              animationType="slide"
-              transparent={true}
-              visible={passwordModelVisible}
-              onRequestClose={handleModalClose}
-            >
-              <View style={styles.centeredView}>
-                <View style={styles.modalView2}>
-                  <Text style={styles.modalText}>
-                    Everb
-                    <AntDesign name="smileo" size={24} color="black" />
-                    dy likes changes
-                  </Text>
-                  <View style={{ marginTop: 20 }} />
-                  <Input
-                    autoCapitalize="none"
-                    secureTextEntry={true}
-                    label="Enter new password"
-                    onChangeText={(data) => setNewPass1(data)}
-                  />
-                  <Input
-                    autoCapitalize="none"
-                    secureTextEntry={true}
-                    label="Re Enter new password"
-                    onChangeText={(data) => {
-                      setNewPass2(data);
-                      if (!newpass1 && !newpass2 && newpass1 !== newpass2)
-                        setPassError("notmatch");
-                      // dont know why its not setting
-                      else setPassError("");
-                    }}
-                  />
-                  {passError ? (
-                    <Text style={{ color: "red" }}>
-                      Seems like the Passwords don't match
-                    </Text>
-                  ) : null}
-                  <TouchableOpacity
-                    onPress={() => {
-                      if (newpass1 === newpass2) {
-                        console.log("CHANGE PASSWORD :  Pass MATCH");
-                        changePasswordInDB(newpass1);
-                      } else {
-                        setPassError("Passwords Not matching...yet...");
-                        console.log("CHANGE PASS : Pass not MATCHING");
-                      }
-                    }}
-                  >
-                    <Text style={styles.closeButton}>Change Password</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modal>
           </TouchableOpacity>
+          <Modal //Change Doctor Model
+            animationType="slide"
+            transparent={true}
+            visible={doctorModalVisible}
+            onRequestClose={handleModalClose}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>
+                  {doctorModalText} {"\n"}Any specific remarks in
+                  <MaterialCommunityIcons name="head" size={24} color="black" />
+                  ?
+                </Text>
+
+                <Input onChangeText={(data) => setRemark(data)} />
+
+                <TouchableOpacity onPress={changeDoctorInDB}>
+                  <Text style={styles.closeButton}>
+                    {doctorModalButtonText}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+
+          <Modal //Change Password Model
+            animationType="slide"
+            transparent={true}
+            visible={passwordModelVisible}
+            onRequestClose={handleModalClose}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView2}>
+                <Text style={styles.modalText}>
+                  Everb
+                  <AntDesign name="smileo" size={24} color="black" />
+                  dy likes changes
+                </Text>
+                <View style={{ marginTop: 20 }} />
+                <Input
+                  autoCapitalize="none"
+                  secureTextEntry={true}
+                  label="Enter new password"
+                  onChangeText={(data) => setNewPass1(data)}
+                />
+                <Input
+                  autoCapitalize="none"
+                  secureTextEntry={true}
+                  label="Re Enter new password"
+                  onChangeText={(data) => {
+                    setNewPass2(data);
+                    if (!newpass1 && !newpass2 && newpass1 !== newpass2)
+                      setPassError("notmatch");
+                    // dont know why its not setting
+                    else setPassError("");
+                  }}
+                />
+                {passError ? (
+                  <Text style={{ color: "red" }}>
+                    Seems like the Passwords don't match
+                  </Text>
+                ) : null}
+                <TouchableOpacity
+                  onPress={() => {
+                    if (newpass1 === newpass2) {
+                      console.log("CHANGE PASSWORD :  Pass MATCH");
+                      changePasswordInDB(newpass1);
+                    } else {
+                      setPassError("Passwords Not matching...yet...");
+                      console.log("CHANGE PASS : Pass not MATCHING");
+                    }
+                  }}
+                >
+                  <Text style={styles.closeButton}>Change Password</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
         </Spacer>
       </Spacer>
-      <View style={{ flexDirection: "row", marginTop: 90 }}>
+
+      <View style={{ flexDirection: "row", marginTop: 85 }}>
         <Button
           title="WorkoutList"
           loadingProps={{ size: "small", color: "white" }}
@@ -287,9 +247,10 @@ const AccountScreen = (props) => {
           }}
           titleStyle={{ fontWeight: "bold", fontSize: 23 }}
           containerStyle={{
-            marginHorizontal: 30,
+            marginHorizontal: 5,
             height: 50,
-            width: 155,
+            width: 160,
+            marginRight: 60,
             marginBottom: 10,
             alignSelf: "center",
           }}
@@ -306,16 +267,17 @@ const AccountScreen = (props) => {
           }}
           titleStyle={{ fontWeight: "bold", fontSize: 23 }}
           containerStyle={{
-            marginHorizontal: 10,
+            marginHorizontal: 5,
             height: 50,
-            width: 150,
+            width: 155,
             marginBottom: 10,
             alignSelf: "center",
           }}
           onPress={() => {
-            axios.delete(
-              `https://app.nativenotify.com/api/app/indie/sub/7695/wDN7Drh1sdRsg6rE11FAVz/${state.patient_data.patient_id}`
-            );
+            //For Removing the ID for PushNotification
+            // axios.delete(
+            //   `https://app.nativenotify.com/api/app/indie/sub/7695/wDN7Drh1sdRsg6rE11FAVz/${state.patient_data.patient_id}`
+            // );
             removeOfflineData("token");
             props.navigation.navigate("Start");
           }}

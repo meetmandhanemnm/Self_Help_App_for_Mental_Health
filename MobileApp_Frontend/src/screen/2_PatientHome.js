@@ -26,7 +26,7 @@ import { Context as PatientContext } from "../context/patientContext";
 // import { Context as BlogContext } from "../context/blogContext";
 import { registerIndieID } from "native-notify";
 import { FontAwesome } from "@expo/vector-icons";
-
+import { Ionicons } from "@expo/vector-icons";
 // import { useIsFocused } from "@react-navigation/native"; //for react 5
 
 // const reducer = (state, action) => {
@@ -88,16 +88,17 @@ const PatientHome = (props) => {
     // console.log("\n\n >>>>>>>> getPatientWorkout()\n");
     // console.log("\n\n\n\n\n==== Reducer data BEFORE ", state);
 
+    //Registration for PushNotification
     console.log(
       "--------- Register For Push Notificaiton : ID (For API)- ",
       state.patient_data.patient_id
     );
 
-    registerIndieID(
-      `${state.patient_data.patient_id}`,
-      7695,
-      "wDN7Drh1sdRsg6rE11FAVz"
-    );
+    // registerIndieID(
+    //   `${state.patient_data.patient_id}`,
+    //   7695,
+    //   "wDN7Drh1sdRsg6rE11FAVz"
+    // );
 
     // To Get the workout of the Perticular patient ( Using patient ID)
     try {
@@ -303,9 +304,9 @@ const PatientHome = (props) => {
           }}
           titleStyle={{ fontWeight: "bold", fontSize: 23 }}
           containerStyle={{
-            marginHorizontal: 10,
+            marginHorizontal: 6,
             height: 50,
-            width: 120,
+            width: 140,
             marginBottom: 10,
             alignSelf: "center",
           }}
@@ -319,8 +320,9 @@ const PatientHome = (props) => {
             getRandomQuote();
           }}
         >
-          <View style={{ flexDirection: "row", marginLeft: 35, marginTop: 10 }}>
-            <FontAwesome name="heartbeat" size={24} color="#B19FF9" />
+          <View style={{ flexDirection: "row", marginLeft: 28, marginTop: 10 }}>
+            {/* <FontAwesome name="heartbeat" size={30} color="#B19FF9" /> */}
+            <Entypo name="emoji-happy" size={30} color="#B19FF9" />
           </View>
         </TouchableOpacity>
         {/* <Button
@@ -352,9 +354,9 @@ const PatientHome = (props) => {
           titleStyle={{ fontWeight: "bold", fontSize: 23 }}
           containerStyle={{
             marginRight: 10,
-            marginLeft: 60,
+            marginLeft: 39,
             height: 50,
-            width: 120,
+            width: 137,
             marginBottom: 10,
             alignSelf: "center",
           }}

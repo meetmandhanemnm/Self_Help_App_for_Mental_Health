@@ -95,13 +95,21 @@ const StartScreen = ({ navigation }) => {
 
       //Get Doctor name
       console.log(" DOCCTOR ID : ", response.data["d_id"]);
-      const doctor_resp = await jsonServer
-        .get(`/doctor/${response.data["d_id"]}`)
-        .catch((err) => {
-          console.log("\n\t Ayoo : Error Retriving Doctor Name ", err.message);
-        });
-      //Store Doctor in Reducer
-      storageDoctorDetailsReducer(doctor_resp.data);
+
+      //If Doctor Exists
+      if (pat_det.d_id) {
+        const doctor_resp = await jsonServer
+          .get(`/doctor/${response.data["d_id"]}`)
+          .catch((err) => {
+            console.log(
+              "\n\t Ayoo : Error Retriving Doctor Name ",
+              err.message
+            );
+          });
+        //Store Doctor in Reducer
+
+        storageDoctorDetailsReducer(doctor_resp.data);
+      }
 
       //To StorePatientDetails Offline
       try {
@@ -109,7 +117,8 @@ const StartScreen = ({ navigation }) => {
         //getOfflineData("patient_data");
 
         //Storing Doctor Data offline:
-        storeOfflineData("doctor_data", JSON.stringify(doctor_resp.data));
+        if (pat_det.d_id)
+          storeOfflineData("doctor_data", JSON.stringify(doctor_resp.data));
         // getOfflineData("doctor_data");
 
         // removeOfflineData("tokeen");
