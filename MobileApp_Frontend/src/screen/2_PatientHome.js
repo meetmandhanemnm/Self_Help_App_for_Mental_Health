@@ -93,7 +93,7 @@ const PatientHome = (props) => {
       "--------- Register For Push Notificaiton : ID (For API)- ",
       state.patient_data.patient_id
     );
-
+    registerIndieID(`${70}`, 7695, "wDN7Drh1sdRsg6rE11FAVz");
     // registerIndieID(
     //   `${state.patient_data.patient_id}`,
     //   7695,
@@ -325,25 +325,7 @@ const PatientHome = (props) => {
             <Entypo name="emoji-happy" size={30} color="#B19FF9" />
           </View>
         </TouchableOpacity>
-        {/* <Button
-          title="Logout"
-          loadingProps={{ size: "small", color: "white" }}
-          buttonStyle={{
-            backgroundColor: "rgba(111, 202, 186, 1)",
-            borderRadius: 5,
-          }}
-          titleStyle={{ fontWeight: "bold", fontSize: 23 }}
-          containerStyle={{
-            marginHorizontal: 10,
-            height: 50,
-            width: 100,
-            marginBottom: 10,
-            alignSelf: "center",
-          }}
-          onPress={() => {
-            logOut(() => props.navigation.navigate("Start"));
-          }}
-        /> */}
+
         <Button
           title="Chat"
           loadingProps={{ size: "small", color: "white" }}

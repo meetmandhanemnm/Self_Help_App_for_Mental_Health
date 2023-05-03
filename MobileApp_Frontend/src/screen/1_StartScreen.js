@@ -174,7 +174,7 @@ const StartScreen = ({ navigation }) => {
           <Spacer />
           <Spacer>
             <Input
-              label="Email"
+              label="Username"
               value={email}
               onChangeText={(newEmail) => setEmail(newEmail)}
               autoCapitalize="none"

@@ -9,6 +9,7 @@ import {
   FlatList,
   TouchableOpacity,
   Modal,
+  ActivityIndicator,
 } from "react-native";
 import { Button, Text, Input } from "react-native-elements";
 import jsonServer from "../../api/jsonServer";
@@ -41,6 +42,7 @@ import { FontAwesome } from "@expo/vector-icons";
 const ForgotPassword = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -51,16 +53,28 @@ const ForgotPassword = ({ navigation }) => {
   const handleModalClose = () => {
     setModalVisible(false);
   };
-  const handlePresss = async () => {
+  // const handlePresss = async () => {
+  //   try {
+  //     // const resp = await jsonServer.post(``, { email });
+  //     console.log(email);
+  //     Alert.alert(
+  //       "Password Change",
+  //       "New password sent to your Registerd Email-ID",
+  //       [{ text: "OK", onPress: () => navigation.navigate("Start") }]
+  //     );
+  //   } catch {
+  //     setError("Oppsss..Something went wrong! Verify the Email ID");
+  //   }
+  // };
+  const validateEmail = async () => {
+    setIsLoading(true);
     try {
-      // const resp = await jsonServer.post(``, { email });
-      console.log(email);
-      Alert.alert(
-        "Password Change",
-        "New password sent to your Registerd Email-ID",
-        [{ text: "OK", onPress: () => navigation.navigate("Start") }]
-      );
-    } catch {
+      const resp = await jsonServer.put(`/patient/resetPassword/${email}`);
+      setIsLoading(false);
+      //Open Success Model
+      handlePress();
+    } catch (err) {
+      setIsLoading(false);
       setError("Oppsss..Something went wrong! Verify the Email ID");
     }
   };
@@ -76,15 +90,18 @@ const ForgotPassword = ({ navigation }) => {
         >
           We're humans afterall,{"\n"}It's ok to forget :)
         </Text>
-        <View style={{ marginVertical: 60 }}></View>
+        <View style={{ marginTop: 120 }}></View>
         <Input
           label="Enter Registered EmailID "
           onChangeText={(data) => setEmail(data)}
         />
+        {error ? (
+          <Text style={{ alignSelf: "center", color: "red" }}>{error}</Text>
+        ) : null}
         <TouchableOpacity
           style={style.button}
           onPress={() => {
-            handlePress();
+            validateEmail();
           }}
         >
           <View style={{ flexDirection: "row" }}>
@@ -94,13 +111,14 @@ const ForgotPassword = ({ navigation }) => {
             <AntDesign name="message1" size={24} color="black" />
           </View>
         </TouchableOpacity>
-        {error ? (
-          <Text style={{ marginTop: 20, alignSelf: "center", color: "red" }}>
-            {error}
-          </Text>
-        ) : null}
       </Spacer>
-
+      {isLoading ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      ) : null}
       <Modal //Check email prompt
         animationType="slide"
         transparent={true}

@@ -62,8 +62,11 @@ const AccountScreen = (props) => {
   const changePasswordInDB = async (new_password) => {
     console.log("\n\n\t >>>>> changePasswordInDB() | Request for a change");
     try {
-      const req_body = { patient: state.patient_data, password: new_password };
-      const resp = await jsonServer.post(`//`, req_body);
+      const req_body = {
+        email: state.patient_data.email,
+        password: new_password,
+      };
+      const resp = await jsonServer.put(`/patient/Password`, req_body);
       console.log(" ----- Request Sent : ", resp.data);
     } catch (err) {
       console.log("\n\n\t AYOO : Issue changing Password");
@@ -95,7 +98,7 @@ const AccountScreen = (props) => {
           response={`${total}/${workout_data.length} workouts completed`}
         />
         <DetailsEntry
-          question={"Sevarity "}
+          question={"Severity "}
           response={state.patient_data.severity}
         />
 
@@ -278,6 +281,9 @@ const AccountScreen = (props) => {
             // axios.delete(
             //   `https://app.nativenotify.com/api/app/indie/sub/7695/wDN7Drh1sdRsg6rE11FAVz/${state.patient_data.patient_id}`
             // );
+            axios.delete(
+              `https://app.nativenotify.com/api/app/indie/sub/7695/wDN7Drh1sdRsg6rE11FAVz/${70}`
+            );
             removeOfflineData("token");
             props.navigation.navigate("Start");
           }}
