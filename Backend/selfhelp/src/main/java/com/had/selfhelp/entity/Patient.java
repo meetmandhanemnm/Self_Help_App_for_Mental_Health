@@ -179,8 +179,7 @@ public class Patient {
 	public String toString() {
 		return "Patient [patient_id=" + patient_id + ", firstName=" + firstName + ", lastName=" + lastName + ", gender="
 				+ gender + ", contact_number=" + contact_number + ", username=" + username + ", password=" + password
-				+ ", remarks=" + remarks + ", severity=" + severity + ", last_login=" + last_login + ", doctor="
-				+ doctor + ", d_id=" + d_id + "]";
+				+ ", remarks=" + remarks + ", severity=" + severity + ", last_login=" + last_login + ", d_id=" + d_id + "]";
 	}
 	
 }

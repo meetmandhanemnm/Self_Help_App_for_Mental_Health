@@ -4,12 +4,17 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "doctor")
 public class Doctor {
@@ -37,6 +42,7 @@ public class Doctor {
 	@Column(name = "password")
 	private String password;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "doctor")
 	private List<Patient> patients;
 	
@@ -122,7 +128,7 @@ public class Doctor {
 	public String toString() {
 		return "Doctor [doctor_id=" + doctor_id + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", qualification=" + qualification + ", type=" + type + ", username=" + username + ", password="
-				+ password + ", patients=" + patients + "]";
+				+ password + "]";
 	}
 
 	

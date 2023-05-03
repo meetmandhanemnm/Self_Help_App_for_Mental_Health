@@ -113,4 +113,9 @@ public class PatientController {
 	public List<PatientDoctorChange> getDoctorChangeRequests() {
 		return patientService.getDoctorChangeRequests();
 	}
+	
+	@PutMapping("/workout/complete")
+	public void markPrerequistes(@RequestBody Workout_instance instance) {
+		workoutService.updatePrerequisite(instance);
+	}
 }

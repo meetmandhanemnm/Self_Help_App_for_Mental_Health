@@ -33,5 +33,7 @@ public interface WorkoutService {
 	public void updateInstance(Workout_instance instance);
 
 	public void markInstance(Workout_instance instance);
+
+	public void updatePrerequisite(Workout_instance instance);
 		
 }
