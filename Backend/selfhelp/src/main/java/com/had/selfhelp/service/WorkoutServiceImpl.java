@@ -1,6 +1,7 @@
 package com.had.selfhelp.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,9 @@ public class WorkoutServiceImpl implements WorkoutService {
 
 	@Override
 	public List<Workout_instance> findWorkoutInstances(int patientId) {
+		Patient P = patientRepository.getReferenceById(patientId);
+		P.setLast_login(new Date());
+		patientRepository.save(P);
 		return workout_instance_repo.findByPatient(patientRepository.getReferenceById(patientId));
 	}
 

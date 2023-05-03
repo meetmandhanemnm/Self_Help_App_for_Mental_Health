@@ -56,6 +56,10 @@ public class DoctorController {
 	public Doctor addDoctor(@RequestBody Doctor theDoctor) {
 		theDoctor.setDoctor_id(0);
 		doctorService.save(theDoctor);
+		emailService.sendSimpleEmail(theDoctor.getEmail(),
+                "Congratulations and welcome to the Self Help App For Mental Health!!\nThank you for registering as a doctor.Here are your login credentials:\n Username - " +theDoctor.getUsername()+"\n Password - "+theDoctor.getPassword()+"\nWe recommend you to change the password as soon as you login the first time.\n Regards",
+                "Welcome Dr. "+theDoctor.getFirstName()+" "+theDoctor.getLastName()+" to the Self Help App for Mental Health!!"
+        );
 		return theDoctor;
 	}
 	
