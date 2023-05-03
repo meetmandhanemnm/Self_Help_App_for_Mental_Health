@@ -49,4 +49,16 @@ public class DoctorServiceImpl implements DoctorService {
 		return doctorRepository.findAll();
 	}
 
+	@Override
+	public Doctor findByEmail(String email) {
+		return doctorRepository.findByEmail(email);
+	}
+
+	@Override
+	public void changePass(Doctor d, String pass) {
+		Doctor temp = doctorRepository.getReferenceById(d.getDoctor_id());
+		temp.setPassword(pass);
+		doctorRepository.save(temp);
+	}
+
 }

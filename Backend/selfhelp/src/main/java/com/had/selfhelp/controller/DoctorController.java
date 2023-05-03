@@ -4,27 +4,36 @@ package com.had.selfhelp.controller;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.had.selfhelp.dao.DoctorRepository;
 import com.had.selfhelp.dao.Workout_instance_repo;
 import com.had.selfhelp.entity.Doctor;
 import com.had.selfhelp.entity.Patient;
 import com.had.selfhelp.entity.Workout;
 import com.had.selfhelp.entity.Workout_question_response;
 import com.had.selfhelp.service.DoctorService;
+import com.had.selfhelp.service.EmailSenderService;
 import com.had.selfhelp.service.WorkoutService;
 
 class sortByDoctorChange implements Comparator<Patient>{
 
 	@Override
 	public int compare(Patient P1, Patient P2) {
-		return P1.getDoctor_change().compareTo(P2.getDoctor_change());
+		if(P1.getDoctor_change()!=null && P2.getDoctor_change()!=null)
+			return P1.getDoctor_change().compareTo(P2.getDoctor_change());
+		return 0;
 	}	
 };
 
@@ -34,11 +43,13 @@ public class DoctorController {
 
 	private DoctorService doctorService;
 	private WorkoutService workoutService;
+	private EmailSenderService emailService;
 	
 	@Autowired
-	public DoctorController(DoctorService doctorService, WorkoutService workoutService) {
+	public DoctorController(DoctorService doctorService, WorkoutService workoutService, EmailSenderService emailService) {
 		this.doctorService = doctorService;
 		this.workoutService = workoutService;
+		this.emailService = emailService;
 	}
 
 	@PostMapping("/")
@@ -94,5 +105,33 @@ public class DoctorController {
 		patientList.sort(new sortByDoctorChange());
 		d.setPatients(patientList);
 		return d;
+	}
+	
+	@PostMapping("/resetPassword/{email}")
+	public ResponseEntity<?> forgotPass(@PathVariable(name = "email") String email) {
+        Doctor d = doctorService.findByEmail(email);
+
+        if(d!=null) {
+
+            String u = d.getUsername();
+            String pass = "abcdefg";
+            d.setPassword(pass);
+            doctorService.changePass(d,pass);
+            emailService.sendSimpleEmail(email,
+                    "Your new Password is - " +pass,
+                    "This Email for Password Reset"
+            );
+            return ResponseEntity.ok().body("password change successfully please check your email!!!");
+        }
+        else{
+            return new ResponseEntity<>(
+                    "No email Id Found",
+                    HttpStatus.BAD_REQUEST);
+        }
+	}
+	
+	@PostMapping("/Password")
+	public void changePassword(@RequestBody Doctor D) {
+		doctorService.changePass(doctorService.findById(D.getDoctor_id()), D.getPassword());
 	}
 }

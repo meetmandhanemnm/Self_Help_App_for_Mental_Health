@@ -27,4 +27,8 @@ public interface PatientService {
 	public List<PatientDoctorChange> getDoctorChangeRequests();
 
 	public void assignDoctor(int patient_id);
+
+	public Patient findByEmail(String email);
+
+	public void changePass(Patient p, String pass);
 }

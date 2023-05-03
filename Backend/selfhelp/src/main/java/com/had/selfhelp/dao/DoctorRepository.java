@@ -9,4 +9,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
 	Doctor findByUsernameAndPassword(String username, String password);
 	
 	Doctor findByType(char c);
+
+	Doctor findByEmail(String email);
 }

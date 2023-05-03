@@ -17,4 +17,8 @@ public interface DoctorService {
 
 	public List<Doctor> findDoctors();
 
+	public Doctor findByEmail(String email);
+
+	public void changePass(Doctor d, String pass);
+
 }

@@ -3,6 +3,8 @@ package com.had.selfhelp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,7 @@ import com.had.selfhelp.entity.Questionnaire_response;
 import com.had.selfhelp.entity.Workout_instance;
 import com.had.selfhelp.entity.Workout_question;
 import com.had.selfhelp.entity.Workout_question_response;
+import com.had.selfhelp.service.EmailSenderService;
 import com.had.selfhelp.service.PatientService;
 import com.had.selfhelp.service.WorkoutService;
 
@@ -28,11 +31,13 @@ public class PatientController {
 
 	private PatientService patientService;
 	private WorkoutService workoutService;
+	private EmailSenderService emailService;
 	
 	@Autowired
-	public PatientController(PatientService patientService,	WorkoutService workoutService) {
+	public PatientController(PatientService patientService,	WorkoutService workoutService, EmailSenderService emailService) {
 		this.patientService = patientService;
 		this.workoutService = workoutService;
+		this.emailService = emailService;
 	}
 
 	@PostMapping("/")
@@ -117,5 +122,33 @@ public class PatientController {
 	@PutMapping("/workout/complete")
 	public void markPrerequistes(@RequestBody Workout_instance instance) {
 		workoutService.updatePrerequisite(instance);
+	}
+	
+	@PutMapping("/resetPassword/{email}")
+	public ResponseEntity<?> forgotPass(@PathVariable(name = "email") String email) {
+        Patient p = patientService.findByEmail(email);
+
+        if(p!=null) {
+
+            String u = p.getUsername();
+            String pass = "abcdefg";
+            p.setPassword(pass);
+            patientService.changePass(p,pass);
+            emailService.sendSimpleEmail(email,
+                    "Your new Password is - " +pass,
+                    "This Email for Password Reset"
+            );
+            return ResponseEntity.ok().body("password change successfully please check your email!!!");
+        }
+        else{
+            return new ResponseEntity<>(
+                    "No email Id Found",
+                    HttpStatus.BAD_REQUEST);
+        }
+	}
+	
+	@PutMapping("/Password")
+	public void changePassword(@RequestBody Patient P) {
+		patientService.changePass(patientService.findByEmail(P.getEmail()), P.getPassword());
 	}
 }

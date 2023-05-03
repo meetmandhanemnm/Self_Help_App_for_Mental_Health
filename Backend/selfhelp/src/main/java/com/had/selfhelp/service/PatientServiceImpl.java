@@ -114,15 +114,32 @@ public class PatientServiceImpl implements PatientService {
 	
 	@Override
 	public void assignDoctor(int patient_id) {
-		List<Doctor> doctorList = doctorRepository.findAll();
-		doctorList.remove(doctorRepository.findByType('C'));
-		doctorList.remove(doctorRepository.findByType('A'));
-		doctorList.sort(new sortByPatient());
+//		List<Doctor> doctorList = doctorRepository.findAll();
+//		doctorList.remove(doctorRepository.findByType('C'));
+//		doctorList.remove(doctorRepository.findByType('A'));
+//		doctorList.sort(new sortByPatient());
+//		Patient thePatient = patientRepository.getReferenceById(patient_id);
+//		thePatient.setDoctor(doctorList.get(0));
+//		thePatient.setD_id(doctorList.get(0).getDoctor_id());
+//		thePatient.setDoctor_change(new Date());
+//		patientRepository.save(thePatient);
+		
 		Patient thePatient = patientRepository.getReferenceById(patient_id);
-		thePatient.setDoctor(doctorList.get(0));
-		thePatient.setD_id(doctorList.get(0).getDoctor_id());
-		thePatient.setDoctor_change(new Date());
-		patientRepository.save(thePatient);
+		thePatient.setDoctor(doctorRepository.getReferenceById(15));
+		thePatient.setD_id(15);
+		
+	}
+
+	@Override
+	public Patient findByEmail(String email) {
+		return patientRepository.findByEmail(email);
+	}
+
+	@Override
+	public void changePass(Patient p, String pass) {
+		Patient temp = patientRepository.getReferenceById(p.getPatient_id());
+		temp.setPassword(pass);
+		patientRepository.save(temp);
 	}
 
 }
