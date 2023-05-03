@@ -16,4 +16,5 @@ public interface DoctorService {
 	public Doctor login(Doctor D);
 
 	public List<Doctor> findDoctors();
+
 }
