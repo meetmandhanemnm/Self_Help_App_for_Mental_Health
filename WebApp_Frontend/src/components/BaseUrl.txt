@@ -1,1 +1,0 @@
-` https://26de-103-156-19-229.in.ngrok.io/patient/responses/${patient_id} `
