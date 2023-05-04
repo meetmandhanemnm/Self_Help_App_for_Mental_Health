@@ -45,6 +45,13 @@ const AccountScreen = (props) => {
   for (let i = 0; i < workout_data.length; i++) {
     if (workout_data[i].completed) total += 1;
   }
+  //For appending Header with JWT
+  jsonServer.interceptors.request.use((config) => {
+    const token = `Bearer ${state.token}`;
+    config.headers.Authorization = token;
+    return config;
+  });
+
   const handlePress = () => {
     setdoctorModalVisible(true);
   };
@@ -65,8 +72,11 @@ const AccountScreen = (props) => {
       const req_body = {
         email: state.patient_data.email,
         password: new_password,
+        username: state.patient_data.username,
       };
+      // const resp = await jsonServer.put(`/patient/Password`, req_body);
       const resp = await jsonServer.put(`/patient/Password`, req_body);
+
       console.log(" ----- Request Sent : ", resp.data);
     } catch (err) {
       console.log("\n\n\t AYOO : Issue changing Password");
@@ -282,7 +292,7 @@ const AccountScreen = (props) => {
             //   `https://app.nativenotify.com/api/app/indie/sub/7695/wDN7Drh1sdRsg6rE11FAVz/${state.patient_data.patient_id}`
             // );
             axios.delete(
-              `https://app.nativenotify.com/api/app/indie/sub/7695/wDN7Drh1sdRsg6rE11FAVz/${70}`
+              `https://app.nativenotify.com/api/app/indie/sub/7695/wDN7Drh1sdRsg6rE11FAVz/${106}`
             );
             removeOfflineData("token");
             props.navigation.navigate("Start");

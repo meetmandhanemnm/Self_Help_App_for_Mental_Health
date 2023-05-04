@@ -5,17 +5,22 @@ import jsonServer from "../../api/jsonServer";
 import Spacer from "../components/Spacer";
 import navigate from "../navigateRef";
 import { Context as PatientContext } from "../context/patientContext";
+import NetInfo from "@react-native-community/netinfo";
 
 const QuestionsScreen = ({ navigation }) => {
   //********************************************************** */
   // For Logging Reducer data . State not used in code ( only updatePreReqWorkout is used)
   console.log("\n\n\t ((((((((( QUESTION PAGE of Workout ))))))))");
   const { state, addWorkout } = useContext(PatientContext);
-
+  const [error, setError] = useState("");
   // console.log("\n\n+++++++++++++++++++++++++++++++++ Reducer VAL:  \n", state);
 
   //********************************************************** */
   // const [questions, setQuestions] = useState("");
+
+  //For offline
+  const apiQueue = [];
+  const [isConnected, setIsConnected] = useState(true);
 
   const { updateWorkoutStatus, updatePreReqWorkout } =
     useContext(PatientContext);
@@ -27,6 +32,13 @@ const QuestionsScreen = ({ navigation }) => {
   const workout_id = workoutObj.workout.workout_id;
   const workout_instance_id = workoutObj.workout_instance_id;
   const questions = workoutObj.workout.questions;
+
+  //For appending Header with JWT
+  jsonServer.interceptors.request.use((config) => {
+    const token = `Bearer ${state.token}`;
+    config.headers.Authorization = token;
+    return config;
+  });
 
   //For sending Q and Response for the perticular workout - For workout with Q & A
   const postResponse = async (question_response, callback) => {
@@ -51,6 +63,35 @@ const QuestionsScreen = ({ navigation }) => {
     }
   };
 
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsConnected(state.isConnected);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  const checkInternetConnection = () => {
+    // check if the internet connection is back
+    if (isConnected) {
+      // dequeue failed API calls and resend them
+      console.log("\n\n----------------- Checking Q to send remaining APIs");
+
+      while (apiQueue.length > 0) {
+        const apiCall = apiQueue.shift();
+        apiCall();
+      }
+    }
+  };
+  if (!isConnected) {
+    console.log("\n\n----------------- NO NET");
+
+    // handle the case when there is no internet connection
+  } else {
+    console.log("\n\t t NET CONNECTEDDD");
+    checkInternetConnection();
+  }
   // For workout without Q&A : Update workout is Complete
   const postResponse_onlyID = async (callback) => {
     console.log(
@@ -71,6 +112,8 @@ const QuestionsScreen = ({ navigation }) => {
         "\n\t Ayoooo : Issue in POSTING Status when Workout Complete ( w/o Qs) : ",
         err.message
       );
+      console.log("\n\n\t PUSHing To workout sending Q");
+      apiQueue.push(postResponse_onlyID);
     }
     //Going back to patient
     callback();
@@ -264,22 +307,27 @@ const QuestionsScreen = ({ navigation }) => {
                   <Input
                     val=""
                     keyboardType="numeric"
-                    onChangeText={(newVal) =>
-                      setRespose(
-                        updateResponse(
-                          item.workout_question_id,
-                          item.question,
-                          newVal
-                        )
-                      )
-                    }
+                    onChangeText={(newVal) => {
+                      if (newVal >= 1 && newVal <= 5) {
+                        setError("");
+                        setRespose(
+                          updateResponse(
+                            item.workout_question_id,
+                            item.question,
+                            newVal
+                          )
+                        );
+                      } else setError("Please enter in the range of 1-5");
+                    }}
                   />
                 </View>
               );
             }}
           />
         </Spacer>
-
+        {error ? (
+          <Text style={{ color: "red", alignSelf: "center" }}>{error}</Text>
+        ) : null}
         <Button
           title="Submit"
           onPress={() => {

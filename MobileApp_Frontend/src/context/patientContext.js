@@ -36,6 +36,8 @@ const patientReducer = (state, action) => {
     //return state;
     case "add_doctor":
       return { ...state, doctor_data: action.payload };
+    case "add_token":
+      return { ...state, token: action.payload };
     default:
       return state;
   }
@@ -96,7 +98,23 @@ const addDoctor = (dispatch) => {
     }
   };
 };
+const addToken = (dispatch) => {
+  return async (token) => {
+    try {
+      console.log(
+        "\n\n=====================  REDUCER : addToken() \n TOKEN Recieved:",
+        token
+      );
 
+      dispatch({
+        type: "add_token",
+        payload: token,
+      });
+    } catch (err) {
+      console.log("Error : ", err.message);
+    }
+  };
+};
 const updatePreReqWorkout = (dispatch) => {
   return async (workout_instance_id) => {
     try {
@@ -202,7 +220,7 @@ const updateWorkoutStatus = (dispatch) => {
 
 export const { Provider, Context } = createDataContext(
   patientReducer,
-  { addPatient, addWorkout, updatePreReqWorkout, addDoctor },
+  { addPatient, addWorkout, updatePreReqWorkout, addDoctor, addToken },
 
-  { patient_data: "", workout_data: "", doctor_data: "" }
+  { patient_data: "", workout_data: "", doctor_data: "", token: "" }
 );

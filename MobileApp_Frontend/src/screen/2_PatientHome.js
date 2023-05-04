@@ -72,7 +72,6 @@ const logOut = (callback) => {
 
 const PatientHome = (props) => {
   console.disableYellowBox = true;
-  console.log("\n\n(((((((((((((((PATEINT HOME)))))))))))))))");
   const { state, addWorkout } = useContext(PatientContext);
   const [workout_data, setWorkoutData] = useState("");
   const [quote, setQuote] = useState("");
@@ -84,6 +83,21 @@ const PatientHome = (props) => {
     "Strive not to be a success, but rather to be of value.",
     "You miss 100% of the shots you don't take.",
   ];
+  console.log("\n\n(((((((((((((((PATEINT HOME)))))))))))))))");
+
+  const [modalChatVisible, setModalChatVisible] = useState(false);
+
+  //For appending Header with JWT
+  jsonServer.interceptors.request.use((config) => {
+    const token = `Bearer ${state.token}`;
+    config.headers.Authorization = token;
+    return config;
+  });
+
+  const handleChatModalClose = () => {
+    setModalChatVisible(false);
+  };
+
   const getPatientWorkOut = async () => {
     // console.log("\n\n >>>>>>>> getPatientWorkout()\n");
     // console.log("\n\n\n\n\n==== Reducer data BEFORE ", state);
@@ -93,7 +107,7 @@ const PatientHome = (props) => {
       "--------- Register For Push Notificaiton : ID (For API)- ",
       state.patient_data.patient_id
     );
-    registerIndieID(`${70}`, 7695, "wDN7Drh1sdRsg6rE11FAVz");
+    registerIndieID(`${106}`, 7695, "wDN7Drh1sdRsg6rE11FAVz");
     // registerIndieID(
     //   `${state.patient_data.patient_id}`,
     //   7695,
@@ -102,14 +116,11 @@ const PatientHome = (props) => {
 
     // To Get the workout of the Perticular patient ( Using patient ID)
     try {
-      // const patientID = patient_det["patient_id"];
-      //const patientID = 29;
       const patientID = state.patient_data.patient_id;
-      //  console.log("\n\n\n-----------------GET : Getting Patient Workout Data");
-      //  console.log(" URL USed : ", `/patient/workout/${patientID}`);
+
+      //const response = await jsonServer.get(`/patient/workout/${patientID}`);
       const response = await jsonServer.get(`/patient/workout/${patientID}`);
-      // const response2 = await jsonServer.get(`/patient/workout/${patientID}`);
-      //   console.log(response.data);
+
       setWorkoutData(response.data);
       addWorkout(response.data);
       storeOfflineData("workout_data", JSON.stringify(response.data));
@@ -343,15 +354,93 @@ const PatientHome = (props) => {
             alignSelf: "center",
           }}
           onPress={() => {
-            //If doctor is assigned
-            props.navigation.navigate("Chat");
+            if (state.patient_data.d_id == 0) {
+              setModalChatVisible(true);
+              // Give a modal telling doctor not assigned
+            } //If doctor is assigned
+            else props.navigation.navigate("Chat");
           }}
         />
+        <Modal //If Doctor is not Assigned
+          animationType="slide"
+          transparent={true}
+          visible={modalChatVisible}
+          onRequestClose={handleChatModalClose}
+        >
+          <View style={stylesChatModel.centeredView}>
+            <View style={stylesChatModel.modalView}>
+              <Text style={stylesChatModel.modalText}>
+                Sorry!! Seems like you don't have a doctor to Chat with. You can
+                request for a doctor from Account Page
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalChatVisible(false);
+                }}
+              >
+                <Text style={stylesChatModel.closeButton}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </View>
     </View>
   );
 };
 
+const stylesChatModel = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  openButton: {
+    backgroundColor: "#2196F3",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalView: {
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: 350,
+    height: 200,
+  },
+
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontSize: 18,
+  },
+  closeButton: {
+    marginTop: 10,
+    color: "white",
+    backgroundColor: "#9370DB",
+    borderRadius: 20,
+    padding: 15,
+    elevation: 2,
+  },
+  modal: {
+    backgroundColor: "black",
+    padding: 20,
+  },
+});
 const styles = StyleSheet.create({
   container: {
     flex: 1,

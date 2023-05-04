@@ -52,24 +52,26 @@ const StartScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const { addPatient, addDoctor } = useContext(PatientContext);
-  const { state } = useContext(PatientContext);
+  const { addPatient, addDoctor, addToken } = useContext(PatientContext);
 
   const validateToken = async () => {
     console.log("\n\n\t >>>>>>>>> validationToken()");
-    if (await tokenAvaliable()) {
-      console.log("\t\t Hurray! Direct Signin");
+    const jwtt = await tokenAvaliable();
+    if (jwtt) {
+      // if (await getOfflineData("token")) {
+      console.log("\t\t Hurray! Direct Signin", jwtt);
       //Get patient data from local storage
+
+      storeTokenReducer(jwtt);
       storePatientDetailsReducer(await getOfflineData("patient_data"));
       storageDoctorDetailsReducer(await getOfflineData("doctor_data"));
-
       console.log(
         "\n\n\t Navigating to Patient HOme Directly \n Getting Patient DEtails from Offline"
       );
       //Goto PatientHome
       navigation.navigate("PatientHome");
     } else {
-      console.log("\t\tNo Token Avaliable...Creating with new Signin");
+      console.log("\t\tNo Token Avaliable...Please Sign in");
       //Signup Page with Setting a new token
     }
     //removeToken();
@@ -80,10 +82,17 @@ const StartScreen = ({ navigation }) => {
     //const [pat_det, setPatientDet] = useState("");
     console.log("\n\t\t((((((((((( LOGIN )))))))))))))))))))))");
     try {
-      const response = await jsonServer.post(`/patient/login`, {
+      // const response = await jsonServer.post(`/patient/login`, {
+      //   username: email,
+      //   password: password,
+      // });
+      const response = await jsonServer.post(`/api/auth/login/patient`, {
         username: email,
         password: password,
       });
+      const jwt = response.headers.jwt;
+      storeOfflineData("token", jwt);
+      storeTokenReducer(jwt);
 
       const pat_det = response.data;
       // console.log("\n\n------------- Pring Pat_det in LoginScreen");
@@ -126,8 +135,8 @@ const StartScreen = ({ navigation }) => {
         console.log(" \n\t\t Ayooo : Issue Storing Data ", err.message);
       }
       //Setting Token for SSO in the future
-      setToken();
-
+      //    setToken();
+      setErrorMessage("");
       callback(pat_det);
 
       // console.log("\n\n\n-----------------POST : Getting Patient Detials");
@@ -146,6 +155,10 @@ const StartScreen = ({ navigation }) => {
   const storageDoctorDetailsReducer = (doc_det) => {
     console.log("\n\t Storing Doctor Detials : ", doc_det);
     addDoctor(doc_det);
+  };
+  const storeTokenReducer = (token) => {
+    console.log("\n\t Store Token Details : ", token);
+    addToken(token);
   };
 
   useEffect(() => {
@@ -221,7 +234,9 @@ const StartScreen = ({ navigation }) => {
             <Text style={style.linkStyle}>No Account? Signup here</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("Forgot")}>
-            <Text style={style.linkStyle2}>Forgot Password? Click here</Text>
+            <Text style={style.linkStyle2}>
+              Forgot Username/ Password? Click here
+            </Text>
           </TouchableOpacity>
           {/* <Button
             title="Chat"

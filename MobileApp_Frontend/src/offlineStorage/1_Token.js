@@ -15,7 +15,7 @@ const getToken = async () => {
     const token = await AsyncStorage.getItem("token").then((token) =>
       console.log(" ======= TOKEN VALUE : getToken() ", token)
     );
-    return token;
+    return JSON.parse(token);
   } catch (e) {
     console.log("\n\n :(:(:(:(:(:( NO TOKEN");
     return -1;
@@ -27,7 +27,7 @@ const tokenAvaliable = async () => {
     const token = await AsyncStorage.getItem("token");
     console.log(" ======= TOKEN VALUE : ", token);
 
-    if (token) return true;
+    if (token) return token;
     else return false;
   } catch (e) {
     console.log("\n\n :(:(:(:(:(:( NO TOKEN \n", e.message);
