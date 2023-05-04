@@ -130,7 +130,6 @@ public class PatientController {
 
         if(p!=null) {
 
-            String u = p.getUsername();
             String pass = "abcdefg";
             p.setPassword(pass);
             patientService.changePass(p,pass);
