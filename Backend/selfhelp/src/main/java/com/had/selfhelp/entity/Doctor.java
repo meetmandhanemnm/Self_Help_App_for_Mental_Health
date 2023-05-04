@@ -34,9 +34,6 @@ public class Doctor {
 	@Column(name = "type")
 	private char type;
 	
-	@Column(name = "contact")
-	private long contact_number;
-	
 	@Column(name = "username")
 	private String username;
 	
@@ -54,14 +51,12 @@ public class Doctor {
 		
 	}
 
-	public Doctor(int doctor_id, String firstName, String lastName, String qualification, char type,
-			long contact_number, String username, String password, List<Patient> patients) {
+	public Doctor(int doctor_id, String firstName, String lastName, String qualification, char type, String username, String password, List<Patient> patients) {
 		this.doctor_id = doctor_id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.qualification = qualification;
 		this.type = type;
-		this.contact_number = contact_number;
 		this.username = username;
 		this.password = password;
 		this.patients = patients;
@@ -131,14 +126,6 @@ public class Doctor {
 		this.patients = patients;
 	}
 
-	public long getContact_number() {
-		return contact_number;
-	}
-
-	public void setContact_number(long contact_number) {
-		this.contact_number = contact_number;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -150,8 +137,7 @@ public class Doctor {
 	@Override
 	public String toString() {
 		return "Doctor [doctor_id=" + doctor_id + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", qualification=" + qualification + ", type=" + type + ", contact_number=" + contact_number
-				+ ", username=" + username + ", password=" + password + ", email=" + email + ", patients=" + patients
+				+ ", qualification=" + qualification + ", type=" + type + ", username=" + username + ", password=" + password + ", email=" + email + ", patients=" + patients
 				+ "]";
 	}
 
