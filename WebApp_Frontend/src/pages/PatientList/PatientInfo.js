@@ -13,7 +13,7 @@ const result = [
   
 ];
 
-export default function PatientInfo() {
+export default function PatientInfo(props) {
 
   const navigate = useNavigate()
   const[res,setRes]=useState([]);
@@ -21,9 +21,21 @@ export default function PatientInfo() {
   // let doctor = sessionStorage.getItem("doctor_id");
   const doctor = JSON.parse(window.sessionStorage.getItem('doctor_id'));
   // console.log("Doctor_id",doctor.doctor_id);
+
+  axios.interceptors.request.use( config => {
+    const user = JSON.parse(localStorage.getItem('user'));
+  
+    if(user){
+      const token = 'Bearer ' + user;
+      config.headers.Authorization =  token;
+    }
+    return config;
+  });
+
+
   const Fetch_data = async()=>{
     
-    await axios.get(` https://4ae2-103-156-19-229.ngrok-free.app/doctor/patient/${doctor.doctor_id}`, {
+    await axios.get(`${props.Api}doctor/patient/${doctor.doctor_id}`, {
       headers: new Headers({
         "ngrok-skip-browser-warning": "69420",
       }),

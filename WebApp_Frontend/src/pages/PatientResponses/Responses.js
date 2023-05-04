@@ -4,7 +4,7 @@ import { useLocation, useParams } from "react-router-dom";
 import ReactLoading from "react-loading";
 
 
-export default function Responses() {
+export default function Responses(props) {
     const [isLoading, setIsLoading] = React.useState(true);
     const patient = JSON.parse(window.sessionStorage.getItem('patient'));
     const handleLoading = () => {
@@ -26,7 +26,16 @@ export default function Responses() {
   const fetchTodos = async () => {
     try {
         console.log("I",patient_id)
-      const response = await fetch(` https://4ae2-103-156-19-229.ngrok-free.app/patient/responses/${patient_id}`);
+        let a=JSON.parse(localStorage.getItem("user"))
+      const response = await fetch(` ${props.Api}patient/responses/${patient_id}`,
+      {
+        headers: new Headers({
+          "ngrok-skip-browser-warning": "69420",
+          "Authorization":`Bearer ${a}`
+        }),
+      }
+      
+      );
       const data = await response.json();
       setTodos(data);
 

@@ -27,9 +27,9 @@ const NonDoctorCard = ({ taskObj, index, save }) => {
     },
   ];
 
-  const toggle = () => {
-    setModal(!modal);
-  };
+  // const toggle = () => {
+  //   setModal(!modal);
+  // };
 
   const UpdateTask = () => {
     save(taskObj);
@@ -40,13 +40,11 @@ const NonDoctorCard = ({ taskObj, index, save }) => {
     <div className="doctor-card-wrapper mr-5">
       <div
         className="card-top"
-        style={{ backgroundColor: colors[index % 5].primaryColor }}
       ></div>
       <div className="task-holder">
         <span
           className="card-header"
           style={{
-            backgroundColor: colors[index % 5].secondaryColor,
             borderRadius: "10px",
             fontWeight: "bold",
           }}
@@ -59,7 +57,7 @@ const NonDoctorCard = ({ taskObj, index, save }) => {
             <i
               className="fa fa-plus "
               style={{
-                color: colors[index % 5].primaryColor,
+                color: colors[0].primaryColor,
                 cursor: "pointer",
               }}
             ></i>

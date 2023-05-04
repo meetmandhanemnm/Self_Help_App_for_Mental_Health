@@ -10,6 +10,15 @@ import AdminNavbar from './adminNavbar';
 function Admin(props){
   let [res,setRes]=useState([]);
 
+  axios.interceptors.request.use( config => {
+    const user = JSON.parse(localStorage.getItem('user'));
+  
+    if(user){
+      const token = 'Bearer ' + user;
+      config.headers.Authorization =  token;
+    }
+    return config;
+  });
 
   // axios.interceptors.request.use( config => {
   //   const user = JSON.parse(localStorage.getItem('user'));
@@ -25,7 +34,7 @@ function Admin(props){
   const navigate = useNavigate()
 
   const Fetch_data = async()=>{
-    await axios.get(`https://4ae2-103-156-19-229.ngrok-free.app/doctor/`, 
+    await axios.get(`${props.Api}doctor/`, 
     
     {
      
@@ -51,6 +60,9 @@ function Admin(props){
   useEffect(()=>{
     Fetch_data();
 },[]);
+
+console.log(res)
+// window.sessionStorage.setItem('response',res)
 
 
   return (

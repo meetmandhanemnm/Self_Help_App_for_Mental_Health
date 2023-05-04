@@ -3,6 +3,8 @@ import "../../pages/PatientList/PatientInfo.css";
 import axios from 'axios';
 import { Link, useLocation, useNavigate,  } from "react-router-dom";
 import { Alert } from 'reactstrap';
+import Swal from 'sweetalert2';
+
 
 
 
@@ -28,6 +30,7 @@ function ChangePassword(props){
   // console.log(props.Api)
   const doctor_id=window.sessionStorage.getItem("id");
   // console.log("doctor_id",doctor_id);
+  // console.log("doctor_id",doctor_id);
   async function save(event)
   {
       event.preventDefault();
@@ -49,11 +52,17 @@ function ChangePassword(props){
   //     {
   //       alert("User Registation Failed");
   //     }
-  await axios.post(`https://4ae2-103-156-19-229.ngrok-free.app/doctor/Password`, {
+  await axios.post(`${props.Api}doctor/Password`, {
     
   doctor_id : doctor_id,
   password : newp
-}).then(alert("Password Changed"),
+}).then(Swal.fire({
+  icon: 'success',
+  
+  text: 'Password Changed Successfully',
+  footer: 'OK!!'
+}),
+
         navigate('/'),
 )
  }

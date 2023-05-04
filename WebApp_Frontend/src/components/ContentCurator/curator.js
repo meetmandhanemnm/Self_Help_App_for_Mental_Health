@@ -6,13 +6,13 @@ import Card from '../Cards/Card';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-const Curator = () => {
+const Curator = (props) => {
     const [modal, setModal] =useState(false);
     const [taskList,setTaskList] = useState([]);
     const [arr,setarr] =useState([]);
     const navigate = useNavigate()
     const Fetch_data = async()=>{
-        await axios.get(` https://4ae2-103-156-19-229.ngrok-free.app/contentcurator/workout`, {
+        await axios.get(` ${props.Api}contentcurator/workout`, {
         //   headers: new Headers({
         //     "ngrok-skip-browser-warning": "69420",
         //   }),
