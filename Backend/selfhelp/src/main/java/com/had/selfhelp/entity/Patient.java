@@ -18,36 +18,37 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "patient")
 public class Patient {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int patient_id;
-	
+
 	@Column(name = "first_name")
 	private String firstName;
-	
+
 	@Column(name = "last_name")
 	private String lastName;
-	
+
 	@Column(name = "gender")
 	private char gender;
-	
+
 	@Column(name = "contact")
 	private long contact_number;
-	
+
 	@Column(name = "username")
 	private String username;
-	
+	@Column(name = "email")
+	private String email;
 	@Column(name = "password")
 	private String password;
-	
+
 	@Column(name = "remark")
 	private String remarks;
-	
+
 	@Column(name = "severity")
 	private int severity;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "last_login")
 	private Date last_login;
@@ -56,15 +57,24 @@ public class Patient {
 	@JoinColumn(name = "doctor_id")
 	@JsonIgnore
 	private Doctor doctor;
-	
+
 	private int d_id;
 
 	public Patient() {
-		
+
 	}
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "doctor_change")
+	private Date doctor_change;
+
+	private int numActAssigned;
+
+	private int numActCompleted;
+
 
 	public Patient(int patient_id, String firstName, String lastName, char gender, long contact_number, String username,
-			String password, String remarks, int severity, Date last_login, Doctor doctor, int d_id) {
+				   String password, String remarks, int severity, Date last_login, Doctor doctor, int d_id,String email,
+				   Date doctor_change,int numActAssigned,int numActCompleted) {
 		this.patient_id = patient_id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -77,6 +87,10 @@ public class Patient {
 		this.last_login = last_login;
 		this.doctor = doctor;
 		this.d_id = d_id;
+		this.email = email;
+		this.doctor_change = doctor_change;
+		this.numActAssigned = numActAssigned;
+		this.numActCompleted = numActCompleted;
 	}
 
 	public int getPatient_id() {
@@ -142,7 +156,7 @@ public class Patient {
 	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
 	}
-	
+
 	public int getD_id() {
 		return d_id;
 	}
@@ -174,12 +188,45 @@ public class Patient {
 	public void setLast_login(Date last_login) {
 		this.last_login = last_login;
 	}
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Date getDoctor_change() {
+		return doctor_change;
+	}
+
+	public void setDoctor_change(Date doctor_change) {
+		this.doctor_change = doctor_change;
+	}
+
+	public int getNumActAssigned() {
+		return numActAssigned;
+	}
+
+	public void setNumActAssigned(int numActAssigned) {
+		this.numActAssigned = numActAssigned;
+	}
+
+	public int getNumActCompleted() {
+		return numActCompleted;
+	}
+
+	public void setNumActCompleted(int numActCompleted) {
+		this.numActCompleted = numActCompleted;
+	}
 
 	@Override
 	public String toString() {
 		return "Patient [patient_id=" + patient_id + ", firstName=" + firstName + ", lastName=" + lastName + ", gender="
 				+ gender + ", contact_number=" + contact_number + ", username=" + username + ", password=" + password
-				+ ", remarks=" + remarks + ", severity=" + severity + ", last_login=" + last_login + ", d_id=" + d_id + "]";
+				+ ", remarks=" + remarks + ", severity=" + severity + ", last_login=" + last_login + ", doctor="
+				+ doctor + ", d_id=" + d_id + ", doctor_change=" + doctor_change + ", numActAssigned="
+				+ numActAssigned + ", numActCompleted=" + numActCompleted + "]";
 	}
-	
+
 }

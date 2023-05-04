@@ -1,60 +1,75 @@
 package com.had.selfhelp.controller;
 
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
+import com.had.selfhelp.entity.*;
+import com.had.selfhelp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
-import com.had.selfhelp.dao.Workout_instance_repo;
-import com.had.selfhelp.entity.Doctor;
-import com.had.selfhelp.entity.Patient;
-import com.had.selfhelp.entity.Workout;
-import com.had.selfhelp.entity.Workout_question_response;
+//import com.had.selfhelp.dao.Workout_instance_repo;
 import com.had.selfhelp.service.DoctorService;
 import com.had.selfhelp.service.WorkoutService;
 
+
+
+
+
+class sortByDoctorChange implements Comparator<Patient> {
+
+	@Override
+	public int compare(Patient P1, Patient P2) {
+		if(P1.getDoctor_change()!=null && P2.getDoctor_change()!=null)
+			return P1.getDoctor_change().compareTo(P2.getDoctor_change());
+		return 0;
+	}
+};
 @RestController
 @RequestMapping("/doctor")
-public class DoctorController {
+public class  DoctorController {
 
 	private DoctorService doctorService;
 	private WorkoutService workoutService;
-	
+	@Autowired
+	UserService userService;
+
+
 	@Autowired
 	public DoctorController(DoctorService doctorService, WorkoutService workoutService) {
 		this.doctorService = doctorService;
 		this.workoutService = workoutService;
 	}
 
-	@PostMapping("/")
-	public Doctor addDoctor(@RequestBody Doctor theDoctor) {
-		theDoctor.setDoctor_id(0);
-		doctorService.save(theDoctor);
-		return theDoctor;
-	}
+//	@PostMapping("/")
+//	public Doctor addDoctor(@RequestBody Doctor theDoctor) {
+//		theDoctor.setDoctor_id(0);
+//		doctorService.save(theDoctor);
+//		return theDoctor;
+//	}
 	
 	@GetMapping("/")
+	@PreAuthorize("hasAuthority('Admin')")
 	public List<Doctor> getDoctors() {
 		return doctorService.findDoctors();
 	}
 	
 	@GetMapping("/patient/{doctorId}")
+	@PreAuthorize("hasAuthority('Doctor')")
 	public List<Patient> getPatientList(@PathVariable(name = "doctorId") int doctorId) {
 		return doctorService.findPatients(doctorId);
 	}
 	
-	@PostMapping("/login")
-	public Doctor login(@RequestBody Doctor d) {
-		return doctorService.login(d);
-	}
+//	@PostMapping("/login")
+//	public Doctor login(@RequestBody Doctor d) {
+//		return doctorService.login(d);
+//	}
 	
 	@PostMapping("/workout/{patientId}/{pre_id}")
+	@PreAuthorize("hasAuthority('Doctor')")
 	public void addWorkout(@PathVariable(name = "patientId") int patientId, @RequestBody List<Workout> workoutList, @PathVariable(name = "pre_id") int pre_id) {
 		for(Workout w:workoutList)
 		{
@@ -64,18 +79,38 @@ public class DoctorController {
 	}
 	
 	@GetMapping("/workout/{patientId}")
+	@PreAuthorize("hasAuthority('Doctor')")
 	public List<Workout> getWorkoutNotAssigned(@PathVariable(name = "patientId") int patientId) {
 		 return workoutService.findWorkoutNotAssigned(patientId);
 	}
 	
 	@GetMapping("/workoutResponses/{workout_instance_id}")
+	@PreAuthorize("hasAuthority('Doctor')")
 	public List<Workout_question_response> getWorkoutResponse(@PathVariable(name = "workout_instance_id") int workout_instance_id) {
 		return workoutService.findWorkoutResponse(workout_instance_id);
 	} 
 	
 	@GetMapping("/{doctor_id}")
+	@PreAuthorize("hasAuthority('Patient')")
 	public Doctor getDoctorById(@PathVariable(name = "doctor_id") int doctor_id) {
 		return doctorService.findById(doctor_id);
+	}
+
+	@GetMapping("/visualise/{doctor_id}")
+	@PreAuthorize("hasAuthority('Doctor')")
+	public Doctor getDoctorVisualise(@PathVariable(name = "doctor_id") int doctor_id) {
+		Doctor d = doctorService.findById(doctor_id);
+		List<Patient> patientList = d.getPatients();
+		patientList.sort(new sortByDoctorChange());
+		d.setPatients(patientList);
+		return d;
+	}
+	@PostMapping("/Password")
+	public void changePassword(@RequestBody Doctor D) {
+
+        String username =    doctorService.findById(D.getDoctor_id()).getUsername();
+		userService.changePass(D.getPassword(),username);
+		doctorService.changePass(doctorService.findById(D.getDoctor_id()),D.getPassword());
 	}
 
 }

@@ -12,16 +12,16 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "patient_doctor_change")
 public class PatientDoctorChange {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int patient_doctor_change_id;
-	
+
 	@OneToOne
 	@JoinColumn(name = "patient_id", referencedColumnName = "id")
 	private Patient patient;
-	
+
 	private String remark;
 
 	public PatientDoctorChange(int patient_doctor_change_id, Patient patient, String remark) {
@@ -64,5 +64,5 @@ public class PatientDoctorChange {
 				+ ", remark=" + remark + "]";
 	}
 
-	
+
 }

@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import com.had.selfhelp.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +13,6 @@ import com.had.selfhelp.dao.PatientDoctorChangeRepository;
 import com.had.selfhelp.dao.PatientRepository;
 import com.had.selfhelp.dao.QuestionnaireRepo;
 import com.had.selfhelp.dao.Questionnaire_Response_Repo;
-import com.had.selfhelp.entity.Doctor;
-import com.had.selfhelp.entity.Patient;
-import com.had.selfhelp.entity.PatientDoctorChange;
-import com.had.selfhelp.entity.Questionnaire;
-import com.had.selfhelp.entity.Questionnaire_response;
 
 
 class sortByPatient implements Comparator<Doctor>{
@@ -78,7 +74,7 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public Patient login(Patient P) {
+	public Patient login(LoginRequest P) {
 		Patient thePatient = patientRepository.findByUsernameAndPassword(P.getUsername(),P.getPassword());
 		if(thePatient==null)
 			throw new RuntimeException("Did not find patient with these credentials");
@@ -93,9 +89,10 @@ public class PatientServiceImpl implements PatientService {
 		Patient P = patientRepository.getReferenceById(patient_id);
 		P.setDoctor(d);
 		P.setD_id(d.getDoctor_id());
+		P.setDoctor_change(new Date());
 		patientRepository.save(P);
-		PatientDoctorChange pd = patientDoctorChangeRepository.findByPatient(P);
-		patientDoctorChangeRepository.delete(pd);
+		List<PatientDoctorChange> pd = patientDoctorChangeRepository.findByPatient(P);
+		patientDoctorChangeRepository.deleteAll(pd);
 	}
 
 	@Override
@@ -113,14 +110,35 @@ public class PatientServiceImpl implements PatientService {
 	
 	@Override
 	public void assignDoctor(int patient_id) {
-		List<Doctor> doctorList = doctorRepository.findAll();
-		doctorList.remove(doctorRepository.findByType('C'));
-		doctorList.remove(doctorRepository.findByType('A'));
-		doctorList.sort(new sortByPatient());
+//		List<Doctor> doctorList = doctorRepository.findAll();
+//		doctorList.remove(doctorRepository.findByType('C'));
+//		doctorList.remove(doctorRepository.findByType('A'));
+//		doctorList.sort(new sortByPatient());
+//		Patient thePatient = patientRepository.getReferenceById(patient_id);
+//		thePatient.setDoctor(doctorList.get(0));
+//		thePatient.setD_id(doctorList.get(0).getDoctor_id());
+//		patientRepository.save(thePatient);
+
+
+
 		Patient thePatient = patientRepository.getReferenceById(patient_id);
-		thePatient.setDoctor(doctorList.get(0));
-		thePatient.setD_id(doctorList.get(0).getDoctor_id());
+		thePatient.setDoctor(doctorRepository.getReferenceById(15));
+		thePatient.setD_id(15);
+		thePatient.setDoctor_change(new Date());
+
 		patientRepository.save(thePatient);
+	}
+
+	@Override
+	public Patient findByEmail(String Email) {
+		return patientRepository.findByEmail(Email);
+	}
+
+	@Override
+	public void changePass(Patient p, String pass) {
+		Patient temp = patientRepository.getReferenceById(p.getPatient_id());
+		temp.setPassword(pass);
+		patientRepository.save(temp);
 	}
 
 }
