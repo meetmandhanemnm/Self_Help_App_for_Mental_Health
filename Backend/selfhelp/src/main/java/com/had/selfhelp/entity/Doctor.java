@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "doctor")
 public class Doctor {
@@ -33,7 +36,9 @@ public class Doctor {
 	
 	@Column(name = "username")
 	private String username;
-	
+	@Column(name = "email")
+	private String email;
+
 	@Column(name = "password")
 	private String password;
 	
@@ -44,14 +49,17 @@ public class Doctor {
 		
 	}
 
+
+
 	public Doctor(String firstName, String lastName, String qualification, char type, String username,
-			String password) {
+				  String password,String email) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.qualification = qualification;
 		this.type = type;
 		this.username = username;
 		this.password = password;
+		this.email = email;
 	}
 
 	public int getDoctor_id() {
@@ -117,14 +125,25 @@ public class Doctor {
 	public void setPatients(List<Patient> patients) {
 		this.patients = patients;
 	}
-
-	@Override
-	public String toString() {
-		return "Doctor [doctor_id=" + doctor_id + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", qualification=" + qualification + ", type=" + type + ", username=" + username + ", password="
-				+ password + ", patients=" + patients + "]";
+	public String getEmail() {
+		return email;
 	}
 
-	
-	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	@Override
+	public String toString() {
+		return "Doctor{" +
+				"doctor_id=" + doctor_id +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", qualification='" + qualification + '\'' +
+				", type=" + type +
+				", username='" + username + '\'' +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", patients=" + patients +
+				'}';
+	}
 }

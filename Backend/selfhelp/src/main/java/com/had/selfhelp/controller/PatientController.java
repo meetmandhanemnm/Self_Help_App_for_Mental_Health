@@ -1,15 +1,12 @@
 package com.had.selfhelp.controller;
 
 import java.util.List;
+import java.util.Random;
 
+import com.had.selfhelp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import com.had.selfhelp.entity.Doctor;
 import com.had.selfhelp.entity.Patient;
@@ -23,11 +20,14 @@ import com.had.selfhelp.service.PatientService;
 import com.had.selfhelp.service.WorkoutService;
 
 @RestController
+
 @RequestMapping("/patient")
 public class PatientController {
 
 	private PatientService patientService;
 	private WorkoutService workoutService;
+	@Autowired
+	UserService userService;
 	
 	@Autowired
 	public PatientController(PatientService patientService,	WorkoutService workoutService) {
@@ -54,6 +54,7 @@ public class PatientController {
 	}
 	
 	@GetMapping("/questions")
+
 	public List<Questionnaire> getQuestions() {
 		return patientService.getQuestions();
 	}
@@ -63,12 +64,13 @@ public class PatientController {
 		return patientService.getResponses(patientId);
 	}
 	
-	@PostMapping("/login")
-	public Patient login(@RequestBody Patient p) {
-		return patientService.login(p);
-	}
+//	@PostMapping("/login")
+//	public Patient login(@RequestBody Patient p) {
+//		return patientService.login(p);
+//	}
 	
 	@GetMapping("/workout/{patientId}")
+	@PreAuthorize("hasAuthority('Doctor')")
 	public List<Workout_instance> getWorkout(@PathVariable(name = "patientId") int patientId) {
 		return workoutService.findWorkoutInstances(patientId);
 	}
@@ -100,17 +102,30 @@ public class PatientController {
 	}
 	
 	@PutMapping("/doctor/{patient_id}")
+	@PreAuthorize("hasAuthority('Admin')")
 	public void changeDoctor(@PathVariable(name = "patient_id") int patient_id, @RequestBody Doctor doctor) {
 		patientService.updateDoctor(patient_id, doctor);
 	}
-	
+	@PutMapping("/workout/complete")
+	public void markPrerequistes(@RequestBody Workout_instance instance) {
+		workoutService.updatePrerequisite(instance);
+	}
 	@PostMapping("/doctor")
 	public void requestDoctorChange(@RequestBody PatientDoctorChange Pd) {
 		patientService.requestForDoctorChange(Pd);
 	}
 	
 	@GetMapping("/doctor")
+	@PreAuthorize("hasAuthority('Admin')")
 	public List<PatientDoctorChange> getDoctorChangeRequests() {
 		return patientService.getDoctorChangeRequests();
+	}
+	@PutMapping("/Password")
+	public void changePassword(@RequestBody Patient P) {
+
+
+		userService.changePass(P.getPassword(),P.getUsername());
+
+		patientService.changePass(patientService.findByEmail(P.getEmail()),P.getPassword());
 	}
 }
