@@ -20,6 +20,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 //import org.springframework.util.LinkedMultiValueMap;
 //import org.springframework.util.MultiValueMap;
 //import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.client.RestTemplate;
 
 import com.had.selfhelp.dao.PatientRepository;
@@ -32,12 +33,12 @@ public class Notification {
 	@Autowired
 	PatientRepository patientRepository;
 	
-	//@Scheduled(fixedDelay = 5000)
+//	@Scheduled(fixedDelay = 15000)
 	public void scheduleFixedRateTask() {
 		List<Patient> patientList = patientRepository.findAll();
 	    System.out.println("Fixed rate task - " + System.currentTimeMillis() / 1000);
 	    for(Patient P : patientList) {
-	    	if(P.getLast_login()!=null) {
+	    	if(P.getLast_login()!=null && P.getPatient_id()==106) {
 	                Date date1 = P.getLast_login();   
 	                Date date2 = new Date();   
 	                // Calculate time difference in milliseconds   
@@ -55,9 +56,9 @@ public class Notification {
 	
 		                    req.setAppId("7695");
 		                    req.setAppToken("wDN7Drh1sdRsg6rE11FAVz");
-		                    req.setMessage("Hey "+P.getFirstName()+ "! Long time no see!!");
+		                    req.setMessage("Don't miss on your mental health!");
 		                    req.setSubID(String.valueOf(P.getPatient_id()));
-		                    req.setTitle("Don't miss on your mental health!");
+		                    req.setTitle("Hey "+P.getFirstName()+ "! Long time no see!!");
 		                    
 		                    HttpEntity<?> request_token = new HttpEntity<>(req, headers);
 	

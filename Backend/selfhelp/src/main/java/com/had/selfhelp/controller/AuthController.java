@@ -164,7 +164,7 @@ public class AuthController {
     {
         Patient p  = patientService.findByEmail(email);
         Doctor d = doctorService.findByEmail(email);
-
+       // System.out.println(p.getEmail());
         if(p!=null || d!=null) {
 
             String u = p!=null?p.getUsername():d.getUsername();
@@ -191,7 +191,7 @@ public class AuthController {
             }
             userService.changePass(pass,u);
             emailSenderService.sendSimpleEmail(email,
-                    "Your new Password is - " +pass,
+                    "Your new Password for the username "+u+" is - " +pass,
                     "This Email for Password Reset"
             );
             return ResponseEntity.ok().body("password change successfully please check your email!!!");

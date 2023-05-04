@@ -2,15 +2,10 @@ package com.had.selfhelp.entity;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+//import com.had.selfhelp.configuration.AesEncryptor;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
@@ -22,23 +17,31 @@ public class Doctor {
 	@Column(name = "id")
 	private int doctor_id;
 
+	//@Convert(converter = AesEncryptor.class)
 	@Column(name = "first_name")
 	private String firstName;
 
+	//@Convert(converter = AesEncryptor.class)
 	@Column(name = "last_name")
 	private String lastName;
 
+	//@Convert(converter = AesEncryptor.class)
 	@Column(name = "qualification")
 	private String qualification;
 
+	//@Convert(converter = AesEncryptor.class)
 	@Column(name = "type")
 	private char type;
 
+	//@Convert(converter = AesEncryptor.class)
 	@Column(name = "username")
 	private String username;
+
+	//@Convert(converter = AesEncryptor.class)
 	@Column(name = "email")
 	private String email;
 
+	//@Convert(converter = AesEncryptor.class)
 	@Column(name = "password")
 	private String password;
 

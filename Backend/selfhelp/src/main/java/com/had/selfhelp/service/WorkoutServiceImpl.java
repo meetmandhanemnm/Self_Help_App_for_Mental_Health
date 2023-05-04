@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.had.selfhelp.util.Request;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import com.had.selfhelp.dao.PatientRepository;
@@ -16,6 +20,7 @@ import com.had.selfhelp.entity.Workout;
 import com.had.selfhelp.entity.Workout_instance;
 import com.had.selfhelp.entity.Workout_question;
 import com.had.selfhelp.entity.Workout_question_response;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class WorkoutServiceImpl implements WorkoutService {
@@ -101,6 +106,34 @@ public class WorkoutServiceImpl implements WorkoutService {
 			temp.add(instance);
 			System.out.println("after add!!!");
 			patientRepository.save(P);
+			//
+			try {
+				RestTemplate restTemplate = new RestTemplate();
+
+				HttpHeaders headers = new HttpHeaders();
+
+				headers.setContentType(MediaType.APPLICATION_JSON);
+
+				Request req = new Request();
+
+				req.setAppId("7695");
+				req.setAppToken("wDN7Drh1sdRsg6rE11FAVz");
+				req.setMessage("Your new workout is "+workout.getTitle());
+				req.setSubID(String.valueOf(P.getPatient_id()));
+				req.setTitle("Hey "+P.getFirstName()+ "! check out new Activity!!");
+
+				HttpEntity<?> request_token = new HttpEntity<>(req, headers);
+
+				String response = restTemplate.postForObject("https://app.nativenotify.com/api/indie/notification", request_token, String.class);
+				System.out.println("success");
+				if(response.contains("504 Gateway Time-out"))
+					continue;
+			}
+			catch (Exception e) {
+
+				System.out.println("catch");
+				continue;
+			}
 		}
 	}
 

@@ -43,7 +43,7 @@ public class AdminController {
     WorkoutService workoutService;
 
 
-    @PreAuthorize("hasAuthority('Admin')")
+//    @PreAuthorize("hasAuthority('Admin')")
     @PostMapping("/register/doctor") //ADMIN
     ResponseEntity<?> createDoctor(@RequestBody Doctor user){
         user.setDoctor_id(0);

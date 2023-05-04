@@ -44,6 +44,7 @@ public class PatientController {
 	}
 
 	@PostMapping("/responses/{patientId}")
+
 	public int addResponses(@RequestBody List<Questionnaire_response> response, @PathVariable(name = "patientId") int patient_id) {
 		System.out.println(response);
 		int severity = patientService.saveResponses(response, patient_id);
@@ -54,12 +55,13 @@ public class PatientController {
 	}
 
 	@GetMapping("/questions")
-
+	//@PreAuthorize("hasAuthority('Patient')")
 	public List<Questionnaire> getQuestions() {
 		return patientService.getQuestions();
 	}
 
 	@GetMapping("/responses/{patientId}")
+	//@PreAuthorize("hasAuthority('Patient')")
 	public List<Questionnaire_response> getResponses(@PathVariable(name = "patientId") int patientId) {
 		return patientService.getResponses(patientId);
 	}
@@ -70,7 +72,7 @@ public class PatientController {
 //	}
 
 	@GetMapping("/workout/{patientId}")
-	@PreAuthorize("hasAuthority('Doctor')")
+//	@PreAuthorize("hasAuthority('Doctor')")
 	public List<Workout_instance> getWorkout(@PathVariable(name = "patientId") int patientId) {
 		return workoutService.findWorkoutInstances(patientId);
 	}
