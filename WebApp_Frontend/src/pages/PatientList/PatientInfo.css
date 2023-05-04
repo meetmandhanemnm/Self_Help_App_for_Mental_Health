@@ -1,0 +1,37 @@
+/* .patient {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  } */
+    
+  table {
+    border: 2px solid forestgreen;
+    width: 800px;
+    height: 200px;
+    text-align: center;
+  }
+    
+  th {
+    border-bottom: 1px solid black;
+
+  }
+    
+  td {
+    text-align: center;
+  }
+
+  tr{
+    align-items: center;
+  }
+
+  .button{
+    position: relative;
+    height : 500 ;
+    align-items: center;
+    justify-content: center;
+
+    
+  }
+  
