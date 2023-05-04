@@ -7,7 +7,7 @@ import PatientHome from "./src/screen/2_PatientHome";
 import QuestionsScreen from "./src/screen/2.1_QuestionsScreen";
 import InitScreen from "./src/screen/0_InitScreen";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
-import Example from "./src/screen/4_ChatScreen";
+import ChatScreen from "./src/screen/4_ChatScreen";
 import AccountScreen from "./src/screen/3_AccountScreen";
 import { setNavigator } from "./src/navigateRef";
 import { View } from "react-native";
@@ -156,7 +156,7 @@ const navigator = createStackNavigator(
     Questions: QuestionsScreen,
     ChoiceOfDoctor: ChoiceofDoctor,
     Account: AccountScreen,
-    Chat: Example,
+    Chat: ChatScreen,
     Forgot: ForgotPassword,
   },
   { initialRouteName: "Start" }

@@ -343,6 +343,7 @@ const PatientHome = (props) => {
             alignSelf: "center",
           }}
           onPress={() => {
+            //If doctor is assigned
             props.navigation.navigate("Chat");
           }}
         />
