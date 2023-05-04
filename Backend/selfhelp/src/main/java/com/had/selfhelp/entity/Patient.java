@@ -18,37 +18,37 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "patient")
 public class Patient {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int patient_id;
-	
+
 	@Column(name = "first_name")
 	private String firstName;
-	
+
 	@Column(name = "last_name")
 	private String lastName;
-	
+
 	@Column(name = "gender")
 	private char gender;
-	
+
 	@Column(name = "contact")
 	private long contact_number;
-	
+
 	@Column(name = "username")
 	private String username;
 	@Column(name = "email")
 	private String email;
 	@Column(name = "password")
 	private String password;
-	
+
 	@Column(name = "remark")
 	private String remarks;
-	
+
 	@Column(name = "severity")
 	private int severity;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "last_login")
 	private Date last_login;
@@ -57,11 +57,11 @@ public class Patient {
 	@JoinColumn(name = "doctor_id")
 	@JsonIgnore
 	private Doctor doctor;
-	
+
 	private int d_id;
 
 	public Patient() {
-		
+
 	}
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "doctor_change")
@@ -156,7 +156,7 @@ public class Patient {
 	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
 	}
-	
+
 	public int getD_id() {
 		return d_id;
 	}
@@ -228,5 +228,5 @@ public class Patient {
 				+ doctor + ", d_id=" + d_id + ", doctor_change=" + doctor_change + ", numActAssigned="
 				+ numActAssigned + ", numActCompleted=" + numActCompleted + "]";
 	}
-	
+
 }

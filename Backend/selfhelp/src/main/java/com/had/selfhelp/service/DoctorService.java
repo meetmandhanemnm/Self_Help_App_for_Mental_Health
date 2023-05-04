@@ -9,12 +9,12 @@ import com.had.selfhelp.entity.Patient;
 public interface DoctorService {
 
 	public void save(Doctor theDoctor);
-	
+
 	public Doctor findById(int theId);
-    public Doctor findByEmail(String email);
-	
+	public Doctor findByEmail(String email);
+
 	public List<Patient> findPatients(int theId);
-	
+
 	public Doctor login(LoginRequest D);
 
 	public List<Doctor> findDoctors();

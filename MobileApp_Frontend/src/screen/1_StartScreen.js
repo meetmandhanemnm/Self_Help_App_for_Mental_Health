@@ -52,14 +52,17 @@ const StartScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const { addPatient } = useContext(PatientContext);
+  const { addPatient, addDoctor } = useContext(PatientContext);
+  const { state } = useContext(PatientContext);
 
   const validateToken = async () => {
     console.log("\n\n\t >>>>>>>>> validationToken()");
     if (await tokenAvaliable()) {
       console.log("\t\t Hurray! Direct Signin");
       //Get patient data from local storage
-      storePatientDatainReducer(await getOfflineData("patient_data"));
+      storePatientDetailsReducer(await getOfflineData("patient_data"));
+      storageDoctorDetailsReducer(await getOfflineData("doctor_data"));
+
       console.log(
         "\n\n\t Navigating to Patient HOme Directly \n Getting Patient DEtails from Offline"
       );
@@ -86,17 +89,45 @@ const StartScreen = ({ navigation }) => {
       // console.log("\n\n------------- Pring Pat_det in LoginScreen");
       // console.log(pat_det);
       // setUsnPassToken(email, password);
-      storePatientDatainReducer(pat_det);
+
+      //Store Patient Data in Reducer
+      storePatientDetailsReducer(pat_det);
+
+      //Get Doctor name
+      console.log(" DOCCTOR ID : ", response.data["d_id"]);
+
+      //If Doctor Exists
+      if (pat_det.d_id) {
+        const doctor_resp = await jsonServer
+          .get(`/doctor/${response.data["d_id"]}`)
+          .catch((err) => {
+            console.log(
+              "\n\t Ayoo : Error Retriving Doctor Name ",
+              err.message
+            );
+          });
+        //Store Doctor in Reducer
+
+        storageDoctorDetailsReducer(doctor_resp.data);
+      }
+
       //To StorePatientDetails Offline
       try {
         storeOfflineData("patient_data", JSON.stringify(pat_det));
-        getOfflineData("patient_data");
+        //getOfflineData("patient_data");
+
+        //Storing Doctor Data offline:
+        if (pat_det.d_id)
+          storeOfflineData("doctor_data", JSON.stringify(doctor_resp.data));
+        // getOfflineData("doctor_data");
+
         // removeOfflineData("tokeen");
       } catch (err) {
         console.log(" \n\t\t Ayooo : Issue Storing Data ", err.message);
       }
       //Setting Token for SSO in the future
       setToken();
+
       callback(pat_det);
 
       // console.log("\n\n\n-----------------POST : Getting Patient Detials");
@@ -109,8 +140,12 @@ const StartScreen = ({ navigation }) => {
     }
   };
 
-  const storePatientDatainReducer = (pat_det) => {
+  const storePatientDetailsReducer = (pat_det) => {
     addPatient(pat_det);
+  };
+  const storageDoctorDetailsReducer = (doc_det) => {
+    console.log("\n\t Storing Doctor Detials : ", doc_det);
+    addDoctor(doc_det);
   };
 
   useEffect(() => {
@@ -139,7 +174,7 @@ const StartScreen = ({ navigation }) => {
           <Spacer />
           <Spacer>
             <Input
-              label="Email"
+              label="Username"
               value={email}
               onChangeText={(newEmail) => setEmail(newEmail)}
               autoCapitalize="none"
@@ -185,6 +220,28 @@ const StartScreen = ({ navigation }) => {
           <TouchableOpacity onPress={() => navigation.navigate("PersonalDet")}>
             <Text style={style.linkStyle}>No Account? Signup here</Text>
           </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Forgot")}>
+            <Text style={style.linkStyle2}>Forgot Password? Click here</Text>
+          </TouchableOpacity>
+          {/* <Button
+            title="Chat"
+            loadingProps={{ size: "small", color: "white" }}
+            buttonStyle={{
+              backgroundColor: "rgba(111, 202, 186, 1)",
+              borderRadius: 5,
+            }}
+            titleStyle={{ fontWeight: "bold", fontSize: 23 }}
+            containerStyle={{
+              marginHorizontal: 10,
+              height: 50,
+              width: 110,
+              marginBottom: 10,
+              alignSelf: "center",
+            }}
+            onPress={() => {
+              navigation.navigate("Chat");
+            }}
+          /> */}
         </Spacer>
       </View>
     </>
@@ -203,6 +260,8 @@ const style = StyleSheet.create({
   },
   buttonStyle: {},
   linkStyle: { textAlign: "center", marginTop: 30, color: "blue" },
+  linkStyle2: { textAlign: "center", marginTop: 20, color: "blue" },
+
   imageStyle: {
     alignSelf: "center",
     marginBottom: 40,

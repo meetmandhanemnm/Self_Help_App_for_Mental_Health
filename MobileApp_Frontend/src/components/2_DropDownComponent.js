@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
-
+import { AntDesign } from "@expo/vector-icons";
 const DropDownComponent = ({
   workout_title,
   workout_description,
@@ -18,6 +18,8 @@ const DropDownComponent = ({
   questions,
   preReqId,
 }) => {
+  console.disableYellowBox = true;
+
   return (
     <View style={style.containerStyle}>
       <ListItem.Accordion
@@ -27,7 +29,7 @@ const DropDownComponent = ({
               style={{
                 fontSize: 18,
 
-                color: workout_status ? "green" : "black",
+                color: workout_status ? "#B19FF9" : "black",
                 marginLeft: 14,
               }}
             >

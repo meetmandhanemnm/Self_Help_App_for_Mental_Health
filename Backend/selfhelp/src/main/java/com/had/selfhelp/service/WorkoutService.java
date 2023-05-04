@@ -11,15 +11,15 @@ import com.had.selfhelp.entity.Workout_question_response;
 public interface WorkoutService {
 
 	public void save(Workout theWorkout);
-	
+
 	public List<Workout_instance> assignWorkout(Patient thePatient);
-	
+
 	public List<Workout_instance> findWorkoutInstances(int patientId);
-	
+
 	public void addWorkoutInstances(List<Workout> list, int patientId, int pre_id);
-	
+
 	public List<Workout> findWorkoutNotAssigned(int patientId);
-	
+
 	public List<Workout> findWorkout();
 
 	public List<Workout_question> findWorkoutQuestions(int workout_id);

@@ -53,16 +53,19 @@ const RegistrationScreen = ({ navigation }) => {
 
       console.log("Responses : \n", responses);
       console.log("LOG OF RESPONSE : ", resp.data);
-      if (resp.data == 5) {
-        console.log(
-          "Going to PATIENT HOME As Sevarity is High, Pakka doctor beku"
-        );
-        navigation.navigate("Start");
-        //Navigate to Patient Home page
-      } else {
-        // Sevarity is low so ask him if he needs a doctor
-        navigation.navigate("ChoiceOfDoctor", { pat_id: patient_id });
-      }
+      //Navigate to Patient Home page
+
+      navigation.navigate("Start");
+      // if (resp.data == 5) {
+      //   console.log(
+      //     "Going to PATIENT HOME As Sevarity is High, Pakka doctor beku"
+      //   );
+      //   navigation.navigate("Start");
+      //   //Navigate to Patient Home page
+      // } else {
+      //   // Sevarity is low so ask him if he needs a doctor
+      //   navigation.navigate("ChoiceOfDoctor", { pat_id: patient_id });
+      // }
     } catch (e) {
       console.log(
         "\n\n\n----------------Ayoo Some expection while Submitting the responses",

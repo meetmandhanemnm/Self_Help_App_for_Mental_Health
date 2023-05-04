@@ -21,19 +21,19 @@ public class Doctor {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int doctor_id;
-	
+
 	@Column(name = "first_name")
 	private String firstName;
-	
+
 	@Column(name = "last_name")
 	private String lastName;
-	
+
 	@Column(name = "qualification")
 	private String qualification;
-	
+
 	@Column(name = "type")
 	private char type;
-	
+
 	@Column(name = "username")
 	private String username;
 	@Column(name = "email")
@@ -41,12 +41,12 @@ public class Doctor {
 
 	@Column(name = "password")
 	private String password;
-	
+
 	@OneToMany(mappedBy = "doctor")
 	private List<Patient> patients;
-	
+
 	public Doctor() {
-		
+
 	}
 
 

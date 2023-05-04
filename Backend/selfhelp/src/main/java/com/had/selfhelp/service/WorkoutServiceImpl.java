@@ -172,6 +172,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 		patientRepository.save(P);
 		workout_instance_repo.save(ins);
 	}
+
 	@Override
 	public void updatePrerequisite(Workout_instance instance) {
 		Workout_instance ins = workout_instance_repo.getReferenceById(instance.getWorkout_instance_id());

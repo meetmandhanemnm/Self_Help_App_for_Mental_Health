@@ -40,17 +40,17 @@ const PersonalDetailsRegistration = ({ navigation }) => {
   const [radioButtons, setRadioButtons] = useState([
     {
       id: "1", // acts as primary key, should be unique and non-empty string
-      label: "Male",
+      label: "Male            ",
       value: "M",
     },
     {
       id: "2",
-      label: "Female",
+      label: "Female        ",
       value: "F",
     },
     {
       id: "3",
-      label: "Trans",
+      label: "Trans           ",
       value: "T",
     },
     {
@@ -85,9 +85,32 @@ const PersonalDetailsRegistration = ({ navigation }) => {
   return (
     <ScrollView style={style.containerStyle}>
       <Spacer>
-        <Text h4 style={style.headerStyle}>
-          Enter the following Details
+        <Text
+          h4
+          style={{
+            marginLeft: 10,
+            marginTop: 10,
+            color: "#9370DB",
+          }}
+        >
+          Enter the
         </Text>
+        <Text
+          h2
+          style={{
+            marginLeft: 10,
+            marginBottom: 30,
+            color: "#9370DB",
+          }}
+        >
+          below Details
+        </Text>
+
+        <Input
+          label="Email"
+          autoCapitalize="none"
+          onChangeText={(data) => (patientDetails["email"] = data)}
+        />
         <Input
           label="First Name"
           onChangeText={(data) => (patientDetails["firstName"] = data)}
@@ -96,20 +119,44 @@ const PersonalDetailsRegistration = ({ navigation }) => {
           label="Last Name"
           onChangeText={(data) => (patientDetails["lastName"] = data)}
         />
-        <Text style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}>
+        <Text
+          style={{
+            fontSize: 16,
+            color: "grey",
+            fontWeight: "bold",
+            marginLeft: 10,
+            marginBottom: 5,
+          }}
+        >
           Gender
         </Text>
-        <RadioGroup radioButtons={radioButtons} onPress={onPressRadioButton} />
+        <View style={style.container}>
+          <RadioGroup
+            radioButtons={radioButtons}
+            onPress={onPressRadioButton}
+          />
+        </View>
+        <View style={{ marginTop: 10 }} />
         <Input
           label="Contact No"
+          keyboardType="numeric"
           onChangeText={(data) => (patientDetails["contact_number"] = data)}
         />
         <Input
           label="Username"
+          autoCapitalize="none"
           onChangeText={(data) => (patientDetails["username"] = data)}
         />
         <Input
           label="Password"
+          autoCapitalize="none"
+          secureTextEntry={true}
+          onChangeText={(data) => (patientDetails["password"] = data)}
+        />
+        <Input
+          label="Re-type Password"
+          autoCapitalize="none"
+          secureTextEntry={true}
           onChangeText={(data) => (patientDetails["password"] = data)}
         />
         <Input
@@ -128,7 +175,8 @@ const PersonalDetailsRegistration = ({ navigation }) => {
           iconContainerStyle={{ marginLeft: 10 }}
           titleStyle={{ fontWeight: "700" }}
           buttonStyle={{
-            backgroundColor: "rgba(199, 43, 98, 1)",
+            // backgroundColor: "rgba(199, 43, 98, 1)",
+            backgroundColor: "#9370DB",
             borderColor: "transparent",
             borderWidth: 0,
             borderRadius: 30,
@@ -151,6 +199,11 @@ const PersonalDetailsRegistration = ({ navigation }) => {
 };
 
 const style = StyleSheet.create({
+  container: {
+    alignItems: "flex-start", // align to left
+    marginHorizontal: 16, // set horizontal margin
+  },
+
   // entryStyle: {
   //   flexDirection: "row",
   //   marginLeft: 12,

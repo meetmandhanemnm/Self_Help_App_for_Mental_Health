@@ -356,3 +356,38 @@ export const { Provider, Context } = createDataContext(
 
   { patient_data: "" }
 );
+////////////////////////
+const [radioButtons, setRadioButtons] = useState([
+  {
+    id: "1", // acts as primary key, should be unique and non-empty string
+    label: "Male",
+    value: "M",
+  },
+  {
+    id: "2",
+    label: "Female",
+    value: "F",
+  },
+  {
+    id: "3",
+    label: "Trans",
+    value: "T",
+  },
+  {
+    id: "4",
+    label: "Not Specify",
+    value: "N",
+  },
+]);
+function onPressRadioButton(radioButtonsArray) {
+  setRadioButtons(radioButtonsArray);
+  for (let i = 0; i < 4; i++) {
+    let ele = radioButtonsArray[i];
+
+    if (ele["selected"] == true) {
+      patientDetails["gender"] = ele["value"];
+      break;
+    }
+  }
+}
+<RadioGroup radioButtons={radioButtons} onPress={onPressRadioButton} />;
