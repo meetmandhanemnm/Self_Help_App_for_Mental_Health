@@ -75,8 +75,8 @@ public class Patient {
 	}
 
 	public Patient(int patient_id, String firstName, String lastName, char gender, long contact_number, String username,
-			String password, String remarks, int severity, Date last_login, Doctor doctor, int d_id, Date doctor_change,
-			int numActAssigned, int numActCompleted) {
+			String password, String remarks, int severity, Date last_login, String email, Doctor doctor, int d_id,
+			Date doctor_change, int numActAssigned, int numActCompleted) {
 		this.patient_id = patient_id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -87,6 +87,7 @@ public class Patient {
 		this.remarks = remarks;
 		this.severity = severity;
 		this.last_login = last_login;
+		this.email = email;
 		this.doctor = doctor;
 		this.d_id = d_id;
 		this.doctor_change = doctor_change;

@@ -127,6 +127,9 @@ public class PatientServiceImpl implements PatientService {
 		Patient thePatient = patientRepository.getReferenceById(patient_id);
 		thePatient.setDoctor(doctorRepository.getReferenceById(15));
 		thePatient.setD_id(15);
+		thePatient.setDoctor_change(new Date());
+		
+		patientRepository.save(thePatient);
 		
 	}
 
