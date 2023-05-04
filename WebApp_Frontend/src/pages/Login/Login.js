@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 
-function Login () {
+function Login (props) {
 
   const navigate = useNavigate();
   const [user, setUser] = useState("");
@@ -19,12 +19,23 @@ function Login () {
   
   const  handleLogin = async () => {
   
-    await axios.post('https://4ae2-103-156-19-229.ngrok-free.app/doctor/login', {
+    await axios.post(`${props.Api}doctor/login`, {
     
     username : user,
-    password :pwd
+    password :pwd,
+    headers: new Headers({
+      "ngrok-skip-browser-warning": "69420",
+    }),
   })
   .then(function (response) {
+    if (response.headers.jwt) {
+      const token=JSON.stringify(response.headers.jwt);
+      // console.log(token)
+      // const AuthStr="Bearer ".concat(token)
+      localStorage.setItem("user",token);
+      
+      console.log(response.headers.jwt)
+    }
     console.log(response.data);
     setRes(response.data);
 
@@ -109,14 +120,9 @@ function Login () {
                   <a href="#!" className="text-white"><i className="fab fa-twitter fa-lg mx-4 px-2"></i></a>
                   <a href="#!" className="text-white"><i className="fab fa-google fa-lg"></i></a>
                 </div>
-  
               </div>
-  
-              <div>
-                <p className="mb-0">Don't have an account? <a href="#!" className="text-white-50 fw-bold">Sign Up</a>
-                </p>
-              </div>
-  
+
+              
             </div>
           </div>
         </div>

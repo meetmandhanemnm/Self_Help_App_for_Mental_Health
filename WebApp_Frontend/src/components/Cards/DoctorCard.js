@@ -44,9 +44,9 @@ const DoctorCard = ({taskObj, index}) => {
     }
     return (
         <div className = "doctor-card-wrapper mr-5">
-            <div className = "card-top" style={{"backgroundColor": colors[index%5].primaryColor}}></div>
+            <div className = "card-top" style={{"backgroundColor":taskObj.completed ? colors[2].primaryColor:colors[3].primaryColor}}></div>
             <div className = "task-holder">
-                <span className = "card-header" style={{"backgroundColor": colors[index%5].secondaryColor, "borderRadius": "10px",fontWeight:'bold'}}>{taskObj.workout.title}</span>
+                <span className = "card-header" style={{"backgroundColor": colors[3].secondaryColor, "borderRadius": "10px",fontWeight:'bold'}}>{taskObj.workout.title}</span>
                 <p className = "para">{taskObj.workout.description}</p>
                 <div style={{position: "absolute", right : "20px", bottom : "20px"}}>
                    {/* <button> <i className = "fa fa-minus " style={{"color" : colors[index%5].primaryColor, "cursor" : "pointer"}} ></i></button> */}

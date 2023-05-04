@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import ReactLoading from "react-loading";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const WorkoutResponse = () => {
+const WorkoutResponse = (props) => {
   const [response, setResponse] = useState();
   const [isLoading, setIsLoading] = React.useState(true);
   const navigate= useNavigate();
   const {state} = useLocation();
   const { workout_instance_id} = state;
+  let a=JSON.parse(localStorage.getItem("user"))
   const handleLoading = () => {
   setIsLoading(false);
 //   window.location.reload();  
@@ -20,8 +21,14 @@ const WorkoutResponse = () => {
   const fetchTodos = async () => {
     try {
       const response = await fetch(
-        ` https://4ae2-103-156-19-229.ngrok-free.app/doctor/workoutResponses/${workout_instance_id}`
-      );
+        `${props.Api}doctor/workoutResponses/${workout_instance_id}`,{
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ' + `${a}`
+        }
+
+    });
       const data = await response.json();
       setResponse(data);
 

@@ -3,6 +3,7 @@ import "../PatientList/PatientInfo.css";
 import axios from 'axios';
 import Button from "react-bootstrap/Button";
 import { Link, useLocation, useNavigate,  } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 function Avail_doctors(props){
 
@@ -12,10 +13,21 @@ function Avail_doctors(props){
     const {state} = useLocation();
   const {doctor_id,patient_id,arr} = state;
 
+  axios.interceptors.request.use( config => {
+    const user = JSON.parse(localStorage.getItem('user'));
+  
+    if(user){
+      const token = 'Bearer ' + user;
+      config.headers.Authorization =  token;
+    }
+    return config;
+  });
+
+
   const Fetch_data = async()=>{
   
 
-    await axios.get(`https://4ae2-103-156-19-229.ngrok-free.app/doctor/`, 
+    await axios.get(`${props.Api}doctor/`, 
     
     {
       mode:'cors',
@@ -51,7 +63,7 @@ function Avail_doctors(props){
 
 const onSelect = async (doctor_id,patient_id)=>{
 
-  await axios.put(`https://4ae2-103-156-19-229.ngrok-free.app/patient/doctor/${patient_id}`, {
+  await axios.put(`${props.Api}patient/doctor/${patient_id}`, {
     
     mode:'cors',
     doctor_id : doctor_id
@@ -59,13 +71,24 @@ const onSelect = async (doctor_id,patient_id)=>{
 
   .then(function (response) {
     
-    alert("New doctor assigned successfully!!")
+    Swal.fire({
+      icon: 'success',
+      
+      text: 'Doctor Assigned Successfully',
+      footer: 'OK!!'
+    });
     navigate("/admin/patient_request",{state:{response:arr}})
 
     //Reload on login
     // window.location.reload(true);
   })
   .catch(function (error) {
+    Swal.fire({
+      icon: 'error',
+      
+      text: 'Doctor assignment failed',
+      footer: 'Failed!!'
+    });
     console.log(error);
   }); 
 

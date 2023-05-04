@@ -1,0 +1,29 @@
+.faq-container {
+  background-color: rgb(226, 221, 215);
+  max-width: 10000px;
+  margin: 0 ;
+  padding: 20px;
+  
+}
+
+
+
+.faq-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.faq-list li {
+  margin-bottom: 20px;
+}
+
+.faq-list h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.faq-list p {
+  font-size: 18px;
+  line-height: 1.5;
+}

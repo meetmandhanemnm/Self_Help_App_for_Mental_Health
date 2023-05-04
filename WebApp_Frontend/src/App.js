@@ -18,25 +18,28 @@ import ChangePassword from './components/ForgotPassword/ChangePassword';
 
 
 function App() {
-  let h=`https://4ae2-103-156-19-229.ngrok-free.app`
+  let h=`https://187a-119-161-98-68.ngrok-free.app/`
+ // https://ce27-104-28-220-173.ngrok-free.app
+  //https://187a-119-161-98-68.ngrok-free.app
+  //https://27f1-104-28-220-173.ngrok-free.app
   return (
     <>
       
         {/* <Navbar /> */}
         <Routes>
-          <Route path='/'  element={<Login/>} />
+          <Route path='/'  element={<Login Api={h}/>} />
           <Route path='/curator' element={<Curator/>}/>
-          <Route path='/home'  element={<Home/>} />
-          <Route path='/patient_details' element={<PatientInfo/>} />
-          <Route path='/patient_details/patient_responses' element={<Responses/>}/>
-          <Route path='/patient_details/patient_workout' element={<PatientWorkout/>}/>
-          <Route path='/patient_details/patient_workout/workout_responses' element={<WorkoutResponse/>}/>
+          <Route path='/home'  element={<Home Api={h}/>} />
+          <Route path='/patient_details' element={<PatientInfo Api={h}/>} />
+          <Route path='/patient_details/patient_responses' element={<Responses Api={h}/>}/>
+          <Route path='/patient_details/patient_workout' element={<PatientWorkout Api={h}/>}/>
+          <Route path='/patient_details/patient_workout/workout_responses' element={<WorkoutResponse Api={h}/>}/>
           <Route path='/admin' element={<Admin Api={h}/>}/>
           <Route path='/admin/admin_reg' element={<Admin_reg Api={h}/>}/>
-          <Route path='/admin/patient_request' element={<Patient_request/>}/>
-          <Route path='/admin/patient_request/avail_doctors' element={<Avail_doctors/>}/>
-          <Route path='/forgot_password' element={<ForgotPassword/>}/>
-          <Route path='/change_password' element={<ChangePassword/>}/>
+          <Route path='/admin/patient_request' element={<Patient_request Api={h}/>}/>
+          <Route path='/admin/patient_request/avail_doctors' element={<Avail_doctors Api={h}/>}/>
+          <Route path='/forgot_password' element={<ForgotPassword Api={h}/>}/>
+          <Route path='/change_password' element={<ChangePassword Api={h}/>}/>
 
 
 

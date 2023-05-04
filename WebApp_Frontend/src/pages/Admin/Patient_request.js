@@ -7,13 +7,26 @@ import { Link, useLocation, useNavigate,  } from "react-router-dom";
 
 function Patient_request(props){
   const navigate = useNavigate()
-  const response = JSON.parse(window.sessionStorage.getItem('doctor_id'));
+  var response = JSON.parse(window.sessionStorage.getItem('Response'))
 
   //let [res,setRes]=useState([{patient_id:1,firstName:"Raju",lastName:"Srivastav",Doc_id:7},{patient_id:5,firstName:"Vishal",lastName:"Singh",Doc_id:2},{patient_id:8,firstName:"Simha",lastName:"Nandagudi",Doc_id:11}]);
   let [res,setRes]=useState([]);
 
+  axios.interceptors.request.use( config => {
+    const user = JSON.parse(localStorage.getItem('user'));
+  
+    if(user){
+      const token = 'Bearer ' + user;
+      config.headers.Authorization =  token;
+    }
+    return config;
+  });
+
+  
+
+
   const Fetch_data = async()=>{
-    await axios.get(`https://4ae2-103-156-19-229.ngrok-free.app/patient/doctor`, 
+    await axios.get(`${props.Api}patient/doctor`, 
     
     {
       mode:'cors',
@@ -38,11 +51,11 @@ function Patient_request(props){
 },[]);
 
 console.log(res)
+console.log(typeof(response))
 
 
   const {state} = useLocation();
   // const {response} = state;
-  console.log(response)
 
   for (let i = 0; i < res.length; i++) {
 
@@ -110,8 +123,8 @@ console.log(res)
               <th>ID</th>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>Doctor_Id</th>
                 <th>Doctor Name</th>
+                <th>Remarks</th>
                 <th>Requests</th>
               </tr>
             </thead>
@@ -123,8 +136,8 @@ console.log(res)
             <td>{val.patient.firstName}</td>
             <td>{val.patient.lastName}</td>
             {/* <td>{val.age}</td> */}
-            <td>{val.patient.d_id}</td>
             <td>{val.patient.doctorname}</td>
+            <td>{val.remark}</td>
 
             <td>
                       <Button
