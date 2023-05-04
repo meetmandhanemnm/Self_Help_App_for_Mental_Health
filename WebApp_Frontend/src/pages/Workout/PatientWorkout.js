@@ -246,9 +246,9 @@ await axios.get(`${props.Api}doctor/workout/${patient_id}`,
         <button onClick={handleAdd} className="btn btn-primary">
           ADD
         </button>
-        <button onClick={SendNotification} className="btn btn-primary">
+        {/* <button onClick={SendNotification} className="btn btn-primary">
           Send Notifications
-        </button>
+        </button> */}
         <div>
           {NontaskList &&
             NontaskList.map((obj2, index) => (

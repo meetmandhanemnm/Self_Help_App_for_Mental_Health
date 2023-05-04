@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import ReactLoading from "react-loading";
+import './Response.css';
 
 
 export default function Responses(props) {
@@ -25,7 +26,7 @@ export default function Responses(props) {
   // http://localhost:8080/patient/responses/2
   const fetchTodos = async () => {
     try {
-        console.log("I",patient_id)
+        // console.log("I",patient_id)
         let a=JSON.parse(localStorage.getItem("user"))
       const response = await fetch(` ${props.Api}patient/responses/${patient_id}`,
       {
@@ -59,49 +60,49 @@ export default function Responses(props) {
 
   return (!isLoading) ? (
     <>
-      <div>
+    <div class="faq-container">
         <h2 style={{fontWeight:"bold"}}>Patient Details:-</h2>
       <p>Name: {firstName}</p>
         <p>Gender: {gender}</p>
-        <p>Remarks: {remarks}</p>
       </div>
+  <p style={{ color: "red", fontStyle: "italic", fontWeight: "bold" }}>
+          NOTE: Answers to the questionnaire are in the scale of (1-5).
+  </p>
+  <p style={{ color: "red", fontStyle: "italic", fontWeight: "bold" }}>
+      Rating 1: Low
+  </p>
+  <p style={{ color: "red", fontStyle: "italic", fontWeight: "bold" }}>
+      Rating 3: Average
+  </p>
+  <p style={{ color: "red", fontStyle: "italic", fontWeight: "bold" }}>
+      Rating 5: High 
+  </p>
+  <div class="faq-container">
+  <h2 style={{ textDecoration: 'underline black'}}>Patient's Responses to Questionnaire</h2>
+  <ul class="faq-list">
+    <li>
+      <h3>Q{data[0].question.qid}-{data[0].question.description}</h3>
+      <p>Rate: {data[0].answer}</p>
+    </li>
+    <li>
+    <h3>Q{data[1].question.qid}-{data[1].question.description}</h3>
+      <p>Rate: {data[1].answer}</p>
+    </li>
+    <li>
+    <h3>Q{data[2].question.qid}-{data[2].question.description}</h3>
+      <p>Rate: {data[2].answer}</p>
+    </li>
+    <li>
+    <h3>Q{data[3].question.qid}-{data[3].question.description}</h3>
+      <p>Rate: {data[3].answer}</p>
+    </li>
+    <li>
+    <h3>Q{data[4].question.qid}-{data[4].question.description}</h3>
+      <p>Rate: {data[4].answer}</p>
+    </li>
+  </ul>
+</div>
 
-      <h3 className="hero--header">Patient's Responses to Questionnaire</h3>
-      {/* <p className="hero--text">Below are Responses of <b>{data[0].name}</b> with <b>patient_id--{data[0].p_id}</b>.</p> */}
-      <h>
-        Q{data[0].question.qid}-{data[0].question.description}
-      </h>
-      <ul>
-        <li>{data[0].answer}</li>
-      </ul>
-
-      <h>
-        Q{data[1].question.qid}-{data[1].question.description}
-      </h>
-      <ul>
-        <li>{data[1].answer}</li>
-      </ul>
-
-      <h>
-        Q{data[2].question.qid}-{data[2].question.description}
-      </h>
-      <ul>
-        <li>{data[2].answer}</li>
-      </ul>
-
-      <h>
-        Q{data[3].question.qid}-{data[3].question.description}
-      </h>
-      <ul>
-        <li>{data[3].answer}</li>
-      </ul>
-
-      <h>
-        Q{data[4].question.qid}-{data[4].question.description}
-      </h>
-      <ul>
-        <li>{data[4].answer}</li>
-      </ul>
     </>
   ) : (
     <ReactLoading

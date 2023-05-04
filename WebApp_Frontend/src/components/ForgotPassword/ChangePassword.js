@@ -25,33 +25,32 @@ function ChangePassword(props){
   const [oldp, setOld] = useState("");
   const [newp, setNew] = useState("");
 
+  const [formErrors, setFormErrors] = useState({});
+
+
   const navigate = useNavigate();
 
-  // console.log(props.Api)
   const doctor_id=window.sessionStorage.getItem("id");
-  // console.log("doctor_id",doctor_id);
-  // console.log("doctor_id",doctor_id);
+
+  const validateForm = () => {
+    let errors = {};
+    if (!oldp) {
+      errors.oldp = '*Old Password is required'
+    }
+    if (!newp) {
+      errors.newp = '*New Password is required';
+    }
+    
+  
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  
   async function save(event)
   {
       event.preventDefault();
-  // try
-  //     {
-  //      await axios.post(`https://4ae2-103-156-19-229.ngrok-free.app/doctor/Password `
-  //    );
-  //       alert("Password changed Successfully!!..Please directing you to login page");
-  //       navigate('/')
-  //       // navigate('/admin')
-  //       // setId("");
-  //       // setName("");
-  //       // setAddress("");
-  //       // setMobile("");
-      
-      
-  //     }
-  // catch(err)
-  //     {
-  //       alert("User Registation Failed");
-  //     }
+  if(validateForm()){
   await axios.post(`${props.Api}doctor/Password`, {
     
   doctor_id : doctor_id,
@@ -65,6 +64,7 @@ function ChangePassword(props){
 
         navigate('/'),
 )
+  }
  }
 
  
@@ -72,19 +72,8 @@ function ChangePassword(props){
 return(
 <>
 <div class="container mt-4">
-<form>
+<form onSubmit={save}>
 
-{/* <div class="form-group">
-            <label>Email-id</label>
-            <input type="text" class="form-control" placeholder="Enter Email-id"
-            value={email}
-            onChange={(event) =>
-              {
-                setEmail(event.target.value);      
-              }}
-           />
-        </div>
-     */}
         <div class="form-group">
             <label>Old Password</label>
             <input type="password" class="form-control" placeholder="Enter your old password"
@@ -94,6 +83,8 @@ return(
                 setOld(event.target.value);      
               }}
            />
+        {formErrors.oldp && <span style={{color:"red",fontSize:15}}>{formErrors.oldp}</span>}
+
         </div>
 
         <div class="form-group">
@@ -105,9 +96,10 @@ return(
                 setNew(event.target.value);      
               }}
            />
+    {formErrors.newp && <span style={{color:"red",fontSize:15}}>{formErrors.newp}</span>}
         </div>
         
-        <button class="btn btn-primary mt-4"  onClick={save} >Submit</button>
+        <button class="btn btn-primary mt-4"  type='submit' >Submit</button>
         </form>
 
 

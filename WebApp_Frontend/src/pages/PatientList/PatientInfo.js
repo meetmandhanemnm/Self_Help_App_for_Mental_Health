@@ -69,7 +69,7 @@ useEffect(()=>{
   for (let i = 0; i < res.length; i++) {
     // console.log(res1[i].severity)
     console.log(res[i].severity)
-    if(res[i].severity>=12 && res[i].severity<=27){
+    if(res[i].severity>=0 && res[i].severity<=27){
       res[i].severity='Low'
       
     }
@@ -77,7 +77,7 @@ useEffect(()=>{
       res[i].severity='Medium'
     }
     else if(res[i].severity>=45){
-      res[i].severity='Highh'
+      res[i].severity='High'
     }
   //console.log(typeof(res[i].last_login)===string)
    if(res[i].last_login && res[i].last_login!=="Unknown" && typeof(res[i].last_login)===typeof('time')){

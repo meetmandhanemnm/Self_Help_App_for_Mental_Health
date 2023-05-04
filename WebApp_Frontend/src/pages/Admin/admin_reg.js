@@ -21,6 +21,35 @@ function Admin_reg(props){
   const navigate = useNavigate();
 
 
+
+const [formErrors, setFormErrors] = useState({});
+{/* <h1 style={{ color: 'red' }}>Hello world</h1> */}
+
+const validateForm = () => {
+  let errors = {};
+  if (!fname) {
+    errors.fname = '*FirstName is required'
+  }
+  if (!lname) {
+    errors.lname = '*LastName is required';
+  }
+  if (!qualification) {
+    errors.qualification = '*Qualification is required';
+  }
+  if (!email) {
+    errors.email = '*Email is required';
+  } else if (!/\S+@\S+\.\S+/.test(email)) {
+    errors.email = '*Email is invalid';
+  }
+  if (!username) {
+    errors.username = '*Username is required';
+  } 
+
+
+  setFormErrors(errors);
+  return Object.keys(errors).length === 0;
+};
+
   // const handleLoading = () => {
   //   setIsLoading(false);
   // //   window.location.reload();  
@@ -29,6 +58,8 @@ function Admin_reg(props){
   async function save(event)
   {
       event.preventDefault();
+
+if (validateForm()){
       setIsLoading(true);
 
   try
@@ -70,6 +101,7 @@ function Admin_reg(props){
           footer: 'Please try again.'
         })
       }
+    }
  }
 
 
@@ -81,12 +113,21 @@ function Admin_reg(props){
 //   },[])
 
 
+// const handleSubmit = (event) => {
+//   event.preventDefault();
+//   if (validateForm()) {
+    
+//     console.log(formData);
+//   }
+// };
+
+
 return(!isLoading)?(
 <>
 <h1 style={{textAlign:"center"}}>Doctor Registration</h1>
 <div className="container mt-4">
   
-<form>
+<form onSubmit={save}>
         <div className="form-group">
             <label>First Name</label>
             <input type="text" className="form-control" placeholder="Enter First Name"
@@ -96,6 +137,7 @@ return(!isLoading)?(
                 setFName(event.target.value);      
               }}
             />
+            {formErrors.fname && <span style={{color:"red",fontSize:15}}>{formErrors.fname}</span>}
         </div>
 
         <div className="form-group">
@@ -107,6 +149,7 @@ return(!isLoading)?(
                 setLName(event.target.value);      
                }}
             />
+            {formErrors.lname && <span style={{color:"red",fontSize:15}}>{formErrors.lname}</span>}
         </div>
 
         <div className="form-group">
@@ -118,6 +161,7 @@ return(!isLoading)?(
                 setQualification(event.target.value);      
               }}
            />
+           {formErrors.qualification && <span style={{color:"red",fontSize:15}}>{formErrors.qualification}</span>}
         </div>
 
         <div className="form-group">
@@ -129,6 +173,7 @@ return(!isLoading)?(
                 setEmail(event.target.value);      
               }}
            />
+           {formErrors.email && <span style={{color:"red",fontSize:15}}>{formErrors.email}</span>}
         </div>
 
         <div className="form-group">
@@ -140,10 +185,11 @@ return(!isLoading)?(
                 setUsername(event.target.value);      
               }}
            />
+           {formErrors.username && <span style={{color:"red",fontSize:15}}>{formErrors.username}</span>}
         </div>
 
 
-        <button className="btn btn-primary mt-4 "  onClick={save} >Register</button>
+        <button className="btn btn-primary mt-4 " type="submit" >Register</button>
 
         </form>
 
