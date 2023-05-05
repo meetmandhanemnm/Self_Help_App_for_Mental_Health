@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import EditTask from '../modals/EditTask'
 
 
-const Card = ({taskObj, index, deleteTask, updateListArray}) => {
+const Card = ({taskObj, index, deleteTask, updateListArray,Api}) => {
     const [modal, setModal] = useState(false);
 
     const colors = [
@@ -39,7 +39,7 @@ const Card = ({taskObj, index, deleteTask, updateListArray}) => {
     const handleDelete = () => {
         deleteTask(index)
     }
-
+console.log(Api)
     return (
         <div className = "card-wrapper mr-5">
             <div className = "card-top" style={{"backgroundColor": colors[index%5].primaryColor}}></div>
@@ -52,7 +52,7 @@ const Card = ({taskObj, index, deleteTask, updateListArray}) => {
                     <i className="fas fa-trash-alt" style = {{"color" : colors[index%5].primaryColor, "cursor" : "pointer"}} onClick = {handleDelete}></i>
                 </div>
         </div>
-        <EditTask modal = {modal} toggle = {toggle} updateTask = {updateTask} taskObj = {taskObj}/>
+        <EditTask modal = {modal} toggle = {toggle} updateTask = {updateTask} taskObj = {taskObj} Api={Api}/>
         </div>
     );
 };

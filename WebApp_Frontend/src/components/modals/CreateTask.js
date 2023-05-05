@@ -3,7 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-const CreateTask = ({modal, toggle, save}) => {
+const CreateTask = ({modal, toggle, save,Api}) => {
 
   const [taskName, setTaskName] = useState(''); 
   const [description, setDescription] =useState('');
@@ -26,10 +26,10 @@ const CreateTask = ({modal, toggle, save}) => {
   //   
   // }
 
-
+console.log(Api)
   const  handleSave = async (e) => {
   
-    await axios.post('https://4ae2-103-156-19-229.ngrok-free.app/contentcurator/workout', {
+    await axios.post(`${Api}contentcurator/workout`, {
     
     title : taskName,
     description : description

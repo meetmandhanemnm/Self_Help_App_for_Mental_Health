@@ -11,8 +11,21 @@ const Curator = (props) => {
     const [taskList,setTaskList] = useState([]);
     const [arr,setarr] =useState([]);
     const navigate = useNavigate()
+    console.log(props.Api)
+
+    axios.interceptors.request.use( config => {
+        const user = JSON.parse(localStorage.getItem('user'));
+      
+        if(user){
+          const token = 'Bearer ' + user;
+          config.headers.Authorization =  token;
+        }
+        return config;
+      });
+
+
     const Fetch_data = async()=>{
-        await axios.get(` ${props.Api}contentcurator/workout`, {
+        await axios.get(`${props.Api}contentcurator/workout`, {
         //   headers: new Headers({
         //     "ngrok-skip-browser-warning": "69420",
         //   }),
@@ -66,6 +79,7 @@ const Curator = (props) => {
         setTaskList(tempList)
         // window.location.reload()
     }
+    console.log(props.Api)
     return ( 
         <>
         <div className= "header text-center" >
@@ -75,9 +89,9 @@ const Curator = (props) => {
                 <button className='btn btn-primary mt-2' onClick={() => setModal(true)}>Create Activity</button>
         </div>
         <div className="task-container">
-              {taskList && taskList.map((obj,index) => <Card taskObj = {obj} index={index} deleteTask={deleteTask}  updateListArray = {updateListArray}/>)}  
+              {taskList && taskList.map((obj,index) => <Card taskObj = {obj} index={index} deleteTask={deleteTask}  updateListArray = {updateListArray} Api={props.Api}/>)}  
         </div>
-        <CreateTask toggle={toggle} modal={modal} save ={saveTask}/>
+        <CreateTask toggle={toggle} modal={modal} save ={saveTask} Api={props.Api}/>
         </>  
         
     );

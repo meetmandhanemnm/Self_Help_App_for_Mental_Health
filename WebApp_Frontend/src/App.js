@@ -18,7 +18,7 @@ import ChangePassword from './components/ForgotPassword/ChangePassword';
 
 
 function App() {
-  let h=`https://187a-119-161-98-68.ngrok-free.app/`
+  let h=`https://7dac-104-28-220-173.ngrok-free.app/`
  // https://ce27-104-28-220-173.ngrok-free.app
   //https://187a-119-161-98-68.ngrok-free.app
   //https://27f1-104-28-220-173.ngrok-free.app
@@ -28,7 +28,7 @@ function App() {
         {/* <Navbar /> */}
         <Routes>
           <Route path='/'  element={<Login Api={h}/>} />
-          <Route path='/curator' element={<Curator/>}/>
+          <Route path='/curator' element={<Curator Api={h}/>}/>
           <Route path='/home'  element={<Home Api={h}/>} />
           <Route path='/patient_details' element={<PatientInfo Api={h}/>} />
           <Route path='/patient_details/patient_responses' element={<Responses Api={h}/>}/>

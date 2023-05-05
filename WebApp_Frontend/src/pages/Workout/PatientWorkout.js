@@ -53,7 +53,7 @@ const PatientWorkout = (props) => {
   })
 
   .then((response)=>{
-    console.log( response.token)
+    // console.log( response.token)
     // localStorage.setItem("user", response.token);
     // localStorage.setItem("refreshToken", response.refresh_token);
     //console.log(response.data);

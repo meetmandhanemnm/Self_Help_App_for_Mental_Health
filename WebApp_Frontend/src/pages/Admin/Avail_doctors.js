@@ -62,10 +62,10 @@ function Avail_doctors(props){
 
 
 const onSelect = async (doctor_id,patient_id)=>{
+  console.log(doctor_id,patient_id)
 
   await axios.put(`${props.Api}patient/doctor/${patient_id}`, {
     
-    mode:'cors',
     doctor_id : doctor_id
   })
 

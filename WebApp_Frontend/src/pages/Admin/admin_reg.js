@@ -64,7 +64,7 @@ if (validateForm()){
 
   try
       {
-       await axios.post(`${props.Api}doctor/`,
+       await axios.post(`${props.Api}admin/register/doctor/`,
       {
       
       firstName: fname,
