@@ -205,12 +205,12 @@ const ChatScreen = (props) => {
 
   const sender = `P${state.patient_data.patient_id}`;
   const reciever = `D${state.patient_data.d_id}`;
-  const collection_id = ` D${state.patient_data.d_id}P${state.patient_data.patient_id}`;
+  const collection_id = `D${state.patient_data.d_id}P${state.patient_data.patient_id}`;
   const [messages, setMessages] = useState([]);
   const [key, setKey] = useState("12345");
 
   useEffect(() => {
-    console.log("Chat Room ID : ", collection_id);
+    console.log("Chat Room ID :", collection_id);
     const querySnapshot = firebase
       .firestore()
       .collection(collection_id)
@@ -233,6 +233,8 @@ const ChatScreen = (props) => {
 
   const onSend = (messageArray) => {
     const msg = { ...messageArray[0] };
+    console.log(msg);
+    //Encrypt the text
     const ciphertext = CryptoJS.AES.encrypt(msg.text, key).toString();
     msg.text = ciphertext;
     const myMsg = { ...msg, senderID: sender, receiverID: reciever };
@@ -315,26 +317,6 @@ const ChatScreen = (props) => {
     </View>
   );
 };
-
-// FireBaseChat.navigationOptions = () => {
-//   return {
-//     headerLeft: () => <Text>This is me</Text>,
-//     headerRight: () => (
-//       <TouchableOpacity
-//         onPress={() => {
-//           props.navigation.navigate("Create");
-//         }}
-//       >
-//         <AntDesign
-//           style={{ marginRight: 20 }}
-//           name="pluscircle"
-//           size={24}
-//           color="black"
-//         />
-//       </TouchableOpacity>
-//     ),
-//   };
-// };
 
 ChatScreen.navigationOptions = () => {
   return {

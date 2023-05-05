@@ -69,7 +69,9 @@ const ForgotPassword = ({ navigation }) => {
   const validateEmail = async () => {
     setIsLoading(true);
     try {
-      const resp = await jsonServer.put(`/patient/resetPassword/${email}`);
+      // const resp = await jsonServer.put(`/patient/resetPassword/${email}`);
+      const resp = await jsonServer.post(`/api/auth/forgotPass/${email}`);
+
       setIsLoading(false);
       //Open Success Model
       handlePress();

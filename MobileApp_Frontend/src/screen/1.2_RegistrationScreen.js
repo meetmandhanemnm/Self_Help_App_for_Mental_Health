@@ -14,8 +14,18 @@ import Spacer from "../components/Spacer";
 const RegistrationScreen = ({ navigation }) => {
   console.reportErrorsAsExceptions = false;
   const patient_id = navigation.getParam("pat_id");
+  const jwt = navigation.getParam("jwt");
+  console.log("JWTTTT : ", jwt);
+  const [error, setError] = useState("");
   const [questions, setQuestions] = useState([]);
   const [responses, setRespose] = useState([]);
+
+  //// For appending Header with JWT
+  jsonServer.interceptors.request.use((config) => {
+    const token = `Bearer ${jwt}`;
+    config.headers.Authorization = token;
+    return config;
+  });
 
   const updateResponse = (qid, ans) => {
     if (responses.filter((respone) => respone.question.qid == qid).length > 0)
@@ -32,13 +42,18 @@ const RegistrationScreen = ({ navigation }) => {
   const getQuestions = async () => {
     // const response = await jsonServer.get("/questionare");
     try {
+      // const response = await jsonServer.get("/patient/questions");
       const response = await jsonServer.get("/patient/questions");
+
       setQuestions(response.data);
       console.log("\n\n\n-----------------GET : Getting Questionare Questions");
       //  console.log(response);
       console.log(response.data);
     } catch (e) {
-      console.log("\n\n\n----------------Ayoo..Issue Getting the questions");
+      console.log(
+        "\n\n\n----------------Ayoo..Issue Getting the questions",
+        e.message
+      );
     }
   };
   const postResponse = async (patient_id) => {
@@ -46,12 +61,18 @@ const RegistrationScreen = ({ navigation }) => {
       console.log("\n\n\n-----------------POST : UPDATING DB with Responses");
       console.log("Patient ID :", patient_id);
       // const resp = await jsonServer.post("/questionare_answers", responses);
+      // const resp = await jsonServer.post(
+      //   `patient/responses/${patient_id}`,
+      //   responses,
+      // );
+      console.log("Responses : \n", responses);
+
       const resp = await jsonServer.post(
-        `patient/responses/${patient_id}`,
+        `/patient/responses/${patient_id}`,
+
         responses
       );
 
-      console.log("Responses : \n", responses);
       console.log("LOG OF RESPONSE : ", resp.data);
       //Navigate to Patient Home page
 
@@ -68,8 +89,8 @@ const RegistrationScreen = ({ navigation }) => {
       // }
     } catch (e) {
       console.log(
-        "\n\n\n----------------Ayoo Some expection while Submitting the responses",
-        e
+        "\n\n\n----------------Ayoo Some expection while Submitting the responses : ",
+        e.message
       );
     }
   };
@@ -95,9 +116,12 @@ const RegistrationScreen = ({ navigation }) => {
                     <Input
                       val=""
                       keyboardType="numeric"
-                      onChangeText={(newVal) =>
-                        setRespose(updateResponse(item.qid, newVal))
-                      }
+                      onChangeText={(newVal) => {
+                        if (newVal >= 1 && newVal <= 5) {
+                          setError("");
+                          setRespose(updateResponse(item.qid, newVal));
+                        } else setError("Please enter in the range 1-5");
+                      }}
                     />
                   </View>
                 );
@@ -105,6 +129,9 @@ const RegistrationScreen = ({ navigation }) => {
             />
           </View>
         </ScrollView>
+        {error ? (
+          <Text style={{ color: "red", alignSelf: "center" }}>{error}</Text>
+        ) : null}
         {/* <Button
         style={style.buttonStyle}
         title="Submit"
