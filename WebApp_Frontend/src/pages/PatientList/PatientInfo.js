@@ -152,6 +152,7 @@ useEffect(()=>{
                 <th>Severity</th>
                 <th>Patient Response</th>
                 <th>Patient workouts</th>
+                <th>Chat</th>
               </tr>
             </thead>
             <tbody>
@@ -183,9 +184,14 @@ useEffect(()=>{
                         Modify Workout
                       </Button>
                     </td>
-                    {/* <td>
-                      <ReviewsBar score={val.reviewScore}/>
-                    </td> */}
+                    <td>
+                      <Button
+                        type="click"
+                        variant="primary"
+                       onClick={()=>navigate('patient_chat',{state: { patient_id:val.patient_id,firstName:val.firstName,gender:val.gender,remarks:val.remarks}})}>
+                        Chat
+                      </Button>
+                    </td>
                   </tr> 
                 );
               })}

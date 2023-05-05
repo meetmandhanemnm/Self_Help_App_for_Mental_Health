@@ -15,16 +15,16 @@ import Patient_request from './pages/Admin/Patient_request';
 import Avail_doctors from './pages/Admin/Avail_doctors';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import ChangePassword from './components/ForgotPassword/ChangePassword';
+import Chat from './components/Chat/chat';
 
 
 function App() {
-  let h=`https://187a-119-161-98-68.ngrok-free.app/`
+  let h=`https://7dac-104-28-220-173.ngrok-free.app/`
  // https://ce27-104-28-220-173.ngrok-free.app
   //https://187a-119-161-98-68.ngrok-free.app
   //https://27f1-104-28-220-173.ngrok-free.app
   return (
     <>
-      
         {/* <Navbar /> */}
         <Routes>
           <Route path='/'  element={<Login Api={h}/>} />
@@ -33,6 +33,7 @@ function App() {
           <Route path='/patient_details' element={<PatientInfo Api={h}/>} />
           <Route path='/patient_details/patient_responses' element={<Responses Api={h}/>}/>
           <Route path='/patient_details/patient_workout' element={<PatientWorkout Api={h}/>}/>
+          <Route path='/patient_details/patient_chat' element={<Chat Api={h}/>}/>
           <Route path='/patient_details/patient_workout/workout_responses' element={<WorkoutResponse Api={h}/>}/>
           <Route path='/admin' element={<Admin Api={h}/>}/>
           <Route path='/admin/admin_reg' element={<Admin_reg Api={h}/>}/>

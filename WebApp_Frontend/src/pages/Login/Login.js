@@ -19,7 +19,7 @@ function Login (props) {
   
   const  handleLogin = async () => {
   
-    await axios.post(`${props.Api}doctor/login`, {
+    await axios.post(`${props.Api}api/auth/login/doctor`, {
     
     username : user,
     password :pwd,
@@ -28,6 +28,7 @@ function Login (props) {
     }),
   })
   .then(function (response) {
+    console.log("Response sdc",response)
     if (response.headers.jwt) {
       const token=JSON.stringify(response.headers.jwt);
       // console.log(token)
@@ -134,5 +135,4 @@ function Login (props) {
 }
 
 export default Login;
-
 

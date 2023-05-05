@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactLoading from "react-loading";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import './Response.css';
 const WorkoutResponse = (props) => {
   const [response, setResponse] = useState();
   const [isLoading, setIsLoading] = React.useState(true);
