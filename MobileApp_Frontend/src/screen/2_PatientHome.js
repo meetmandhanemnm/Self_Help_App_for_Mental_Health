@@ -107,12 +107,9 @@ const PatientHome = (props) => {
       "--------- Register For Push Notificaiton : ID (For API)- ",
       state.patient_data.patient_id
     );
-    registerIndieID(`${106}`, 7695, "wDN7Drh1sdRsg6rE11FAVz");
-    // registerIndieID(
-    //   `${state.patient_data.patient_id}`,
-    //   7695,
-    //   "wDN7Drh1sdRsg6rE11FAVz"
-    // );
+    registerIndieID(`6`, 7793, "Mm8O7Ld44FO4SEC6hbBrfd");
+
+    // registerIndieID(`${state.patient_data.patient_id}`, 7793, 'Mm8O7Ld44FO4SEC6hbBrfd');
 
     // To Get the workout of the Perticular patient ( Using patient ID)
     try {

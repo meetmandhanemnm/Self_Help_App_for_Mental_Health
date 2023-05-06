@@ -145,7 +145,7 @@ import ForgotPassword from "./src/screen/1.4_ForgotPassword";
 // }
 
 ////////////////////////////////////
-// import registerNNPushToken from "native-notify";
+import registerNNPushToken from "native-notify";
 const navigator = createStackNavigator(
   {
     Init: InitScreen,
@@ -166,7 +166,7 @@ const navigator = createStackNavigator(
 const AppC = createAppContainer(navigator);
 
 export default function App() {
-  //registerNNPushToken(123, "wDN7Drh1sdRsg6rE11FAVz");
+  registerNNPushToken(7793, "Mm8O7Ld44FO4SEC6hbBrfd");
   return (
     <PatientContext>
       <AppC />

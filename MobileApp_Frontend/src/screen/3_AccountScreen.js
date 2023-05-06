@@ -288,12 +288,12 @@ const AccountScreen = (props) => {
           }}
           onPress={() => {
             //For Removing the ID for PushNotification
-            // axios.delete(
-            //   `https://app.nativenotify.com/api/app/indie/sub/7695/wDN7Drh1sdRsg6rE11FAVz/${state.patient_data.patient_id}`
-            // );
+
+            // axios.delete(`https://app.nativenotify.com/api/app/indie/sub/7793/Mm8O7Ld44FO4SEC6hbBrfd/${state.patient_data.patient_id}`)
             axios.delete(
-              `https://app.nativenotify.com/api/app/indie/sub/7695/wDN7Drh1sdRsg6rE11FAVz/${106}`
+              `https://app.nativenotify.com/api/app/indie/sub/7793/Mm8O7Ld44FO4SEC6hbBrfd/${6}`
             );
+
             removeOfflineData("token");
             removeOfflineData("patient_data");
             removeOfflineData("doctor_data");
