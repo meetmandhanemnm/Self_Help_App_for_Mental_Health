@@ -85,7 +85,7 @@ const addDoctor = (dispatch) => {
   return async (doctor_data) => {
     try {
       console.log(
-        "\n\n=====================  REDUCER : addWorkout() \n DOCTOR Data Recieved:",
+        "\n\n=====================  REDUCER : addDoctor() \n DOCTOR Data Recieved:",
         doctor_data
       );
 

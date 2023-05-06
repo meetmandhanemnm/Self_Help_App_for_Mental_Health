@@ -53,13 +53,14 @@ const StartScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const { addPatient, addDoctor, addToken } = useContext(PatientContext);
+  const [JWT, setJWT] = useState("");
 
   const validateToken = async () => {
     console.log("\n\n\t >>>>>>>>> validationToken()");
     const jwtt = await tokenAvaliable();
     if (jwtt) {
       // if (await getOfflineData("token")) {
-      console.log("\t\t Hurray! Direct Signin", jwtt);
+      console.log("\n\t\t Hurray! Direct Signin", jwtt);
       //Get patient data from local storage
 
       storeTokenReducer(jwtt);
@@ -90,13 +91,22 @@ const StartScreen = ({ navigation }) => {
         username: email,
         password: password,
       });
-      const jwt = response.headers.jwt;
-      storeOfflineData("token", jwt);
-      storeTokenReducer(jwt);
+      // jwt = response.headers.jwt;
+      // storeOfflineData("token", jwt);
+      // storeTokenReducer(jwt);
+      // console.log("HEADEr : ", response.headers);
+      // console.log("Token Jwt  : ", response.headers.Jwt);
+      // console.log("Token Jwt  : ", response.headers.JWT);
+      console.log("Token Jwt  : ", response.headers.jwt);
 
+      setJWT(response.headers.jwt);
+      storeOfflineData("token", response.headers.jwt);
+      storeTokenReducer(response.headers.jwt);
+
+      // console.log("----------Response after Login API", response);
       const pat_det = response.data;
       // console.log("\n\n------------- Pring Pat_det in LoginScreen");
-      // console.log(pat_det);
+      console.log(pat_det);
       // setUsnPassToken(email, password);
 
       //Store Patient Data in Reducer
@@ -108,7 +118,11 @@ const StartScreen = ({ navigation }) => {
       //If Doctor Exists
       if (pat_det.d_id) {
         const doctor_resp = await jsonServer
-          .get(`/doctor/${response.data["d_id"]}`)
+          .get(`/doctor/${response.data["d_id"]}`, {
+            headers: {
+              Authorization: `Bearer ${response.headers.jwt}`,
+            },
+          })
           .catch((err) => {
             console.log(
               "\n\t Ayoo : Error Retriving Doctor Name ",
@@ -116,6 +130,7 @@ const StartScreen = ({ navigation }) => {
             );
           });
         //Store Doctor in Reducer
+        storeOfflineData("doctor_data", JSON.stringify(doctor_resp.data));
 
         storageDoctorDetailsReducer(doctor_resp.data);
       }
@@ -126,8 +141,7 @@ const StartScreen = ({ navigation }) => {
         //getOfflineData("patient_data");
 
         //Storing Doctor Data offline:
-        if (pat_det.d_id)
-          storeOfflineData("doctor_data", JSON.stringify(doctor_resp.data));
+        // if (response.response.d_id)
         // getOfflineData("doctor_data");
 
         // removeOfflineData("tokeen");
@@ -146,6 +160,7 @@ const StartScreen = ({ navigation }) => {
       setErrorMessage("Oppssss!!! Something went wrong..Try Again");
       console.log("\n\n\n----------------Ayoo..Issue Getting the Details");
       console.log(e.message);
+      removeOfflineData("token");
     }
   };
 

@@ -98,7 +98,7 @@ const PersonalDetailsRegistration = ({ navigation }) => {
 
   const [email, setEmail] = useState();
   const [firstName, setFirstName] = useState();
-  const [lastName, setLastName] = useState();
+  const [lastName, setLastName] = useState(" ");
   const [gender, setGender] = useState();
   const [contact_number, setContactNo] = useState();
   const [username, setUsername] = useState();

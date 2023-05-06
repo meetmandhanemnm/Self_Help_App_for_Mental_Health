@@ -70,16 +70,16 @@ const AccountScreen = (props) => {
     console.log("\n\n\t >>>>> changePasswordInDB() | Request for a change");
     try {
       const req_body = {
-        email: state.patient_data.email,
         password: new_password,
         username: state.patient_data.username,
+        patient_id: state.patient_data.patient_id,
       };
       // const resp = await jsonServer.put(`/patient/Password`, req_body);
-      const resp = await jsonServer.put(`/patient/Password`, req_body);
+      const resp = await jsonServer.post(`/patient/Password`, req_body);
 
       console.log(" ----- Request Sent : ", resp.data);
     } catch (err) {
-      console.log("\n\n\t AYOO : Issue changing Password");
+      console.log("\n\n\t AYOO : Issue changing Password", err.message);
     }
     setpasswordModelVisible(false);
   };
@@ -295,6 +295,8 @@ const AccountScreen = (props) => {
               `https://app.nativenotify.com/api/app/indie/sub/7695/wDN7Drh1sdRsg6rE11FAVz/${106}`
             );
             removeOfflineData("token");
+            removeOfflineData("patient_data");
+            removeOfflineData("doctor_data");
             props.navigation.navigate("Start");
           }}
         />
