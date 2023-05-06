@@ -5,7 +5,8 @@ package com.had.selfhelp.controller;
 import com.had.selfhelp.entity.Doctor;
 import com.had.selfhelp.entity.LoginRequest;
 import com.had.selfhelp.entity.Patient;
-//import com.had.selfhelp.entity.User;
+import com.had.selfhelp.entity.payload;
+import com.had.selfhelp.entity.payload;
 import com.had.selfhelp.jwt.JwtUtils;
 import com.had.selfhelp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,7 @@ public class AuthController {
        // login seperate and jwt header
         Doctor d= doctorService.login(loginRequest);
         if(d!=null) {
+
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("JWT",
                     jwt);
@@ -112,6 +114,7 @@ public class AuthController {
     @PostMapping("/register/patient") //ADMIN
     ResponseEntity<?> createUser(@RequestBody Patient user){
         user.setPatient_id(0);
+        System.out.println(user);
         //Doctor theDoctor = doctorService.assignDoctor();
         //user.setDoctor(theDoctor);
         patientService.save(user);
@@ -170,7 +173,7 @@ public class AuthController {
             String u = p!=null?p.getUsername():d.getUsername();
             int leftLimit = 48; // numeral '0'
             int rightLimit = 122; // letter 'z'
-            int targetStringLength = 10;
+            int targetStringLength = 6;
             Random random = new Random();
 
             String pass = random.ints(leftLimit, rightLimit + 1)

@@ -24,6 +24,7 @@ public interface PatientService {
 
 	public void assignDoctor(int patient_id);
 	public Patient findByEmail(String Email);
+	public Patient findById(int id);
 
     void changePass(Patient p, String pass);
 }

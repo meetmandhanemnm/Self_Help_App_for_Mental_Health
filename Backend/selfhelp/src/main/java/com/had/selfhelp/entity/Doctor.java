@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-//import com.had.selfhelp.configuration.AesEncryptor;
+import com.had.selfhelp.configuration.AesEncryptor;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
@@ -25,11 +25,11 @@ public class Doctor {
 	@Column(name = "last_name")
 	private String lastName;
 
-	//@Convert(converter = AesEncryptor.class)
+	///@Convert(converter = AesEncryptor.class)
 	@Column(name = "qualification")
 	private String qualification;
 
-	//@Convert(converter = AesEncryptor.class)
+	////@Convert(converter = AesEncryptor.class)
 	@Column(name = "type")
 	private char type;
 

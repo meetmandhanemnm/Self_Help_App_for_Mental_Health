@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.had.selfhelp.entity.*;
+import com.had.selfhelp.jwt.JwtUtils;
 import com.had.selfhelp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +38,8 @@ public class  DoctorController {
 	@Autowired
 	UserService userService;
 
-
+	@Autowired
+	JwtUtils jwtUtils;
 	@Autowired
 	public DoctorController(DoctorService doctorService, WorkoutService workoutService) {
 		this.doctorService = doctorService;
@@ -58,9 +60,14 @@ public class  DoctorController {
 	}
 	
 	@GetMapping("/patient/{doctorId}")
-	@PreAuthorize("hasAuthority('Doctor')")
-	public List<Patient> getPatientList(@PathVariable(name = "doctorId") int doctorId) {
-		return doctorService.findPatients(doctorId);
+	//@PreAuthorize("hasAnyAuthority('Doctor')")
+	public List<Patient> getPatientList(@RequestHeader("Authorization") String token,@PathVariable(name = "doctorId") int doctorId) {
+          String t = token.substring(7, token.length());
+		if(doctorId!=doctorService.findByUsername(jwtUtils.getUserNameFromJwtToken(t)).getDoctor_id())
+		     throw new RuntimeException("You are not Authenticate to do veiw the other Doctors Patient ");
+
+		   return doctorService.findPatients(doctorId);
+
 	}
 	
 //	@PostMapping("/login")

@@ -20,7 +20,7 @@ import com.had.selfhelp.service.PatientService;
 import com.had.selfhelp.service.WorkoutService;
 
 @RestController
-
+@CrossOrigin
 @RequestMapping("/patient")
 public class PatientController {
 
@@ -122,12 +122,12 @@ public class PatientController {
 	public List<PatientDoctorChange> getDoctorChangeRequests() {
 		return patientService.getDoctorChangeRequests();
 	}
-	@PutMapping("/Password")
+	@PostMapping("/Password")
 	public void changePassword(@RequestBody Patient P) {
 
 
 		userService.changePass(P.getPassword(),P.getUsername());
 
-		patientService.changePass(patientService.findByEmail(P.getEmail()),P.getPassword());
+		patientService.changePass(P,P.getPassword());
 	}
 }

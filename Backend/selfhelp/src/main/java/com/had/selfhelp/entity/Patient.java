@@ -2,18 +2,10 @@ package com.had.selfhelp.entity;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.had.selfhelp.configuration.AesEncryptor;
 
 @Entity
 @Table(name = "patient")
@@ -24,28 +16,35 @@ public class Patient {
 	@Column(name = "id")
 	private int patient_id;
 
+	@Convert(converter = AesEncryptor.class)
 	@Column(name = "first_name")
 	private String firstName;
 
+	@Convert(converter = AesEncryptor.class)
 	@Column(name = "last_name")
 	private String lastName;
 
 	@Column(name = "gender")
 	private char gender;
 
+	//@Convert(converter = AesEncryptor.class)
 	@Column(name = "contact")
 	private long contact_number;
 
+	@Convert(converter = AesEncryptor.class)
 	@Column(name = "username")
 	private String username;
+	@Convert(converter = AesEncryptor.class)
 	@Column(name = "email")
 	private String email;
+	@Convert(converter = AesEncryptor.class)
 	@Column(name = "password")
 	private String password;
-
+	@Convert(converter = AesEncryptor.class)
 	@Column(name = "remark")
 	private String remarks;
 
+	//@Convert(converter = AesEncryptor.class)
 	@Column(name = "severity")
 	private int severity;
 

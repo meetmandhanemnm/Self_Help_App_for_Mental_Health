@@ -110,21 +110,21 @@ public class PatientServiceImpl implements PatientService {
 	
 	@Override
 	public void assignDoctor(int patient_id) {
-//		List<Doctor> doctorList = doctorRepository.findAll();
-//		doctorList.remove(doctorRepository.findByType('C'));
-//		doctorList.remove(doctorRepository.findByType('A'));
-//		doctorList.sort(new sortByPatient());
-//		Patient thePatient = patientRepository.getReferenceById(patient_id);
-//		thePatient.setDoctor(doctorList.get(0));
-//		thePatient.setD_id(doctorList.get(0).getDoctor_id());
-//		patientRepository.save(thePatient);
-
-
-
+		List<Doctor> doctorList = doctorRepository.findAll();
+		doctorList.remove(doctorRepository.findByType('C'));
+		doctorList.remove(doctorRepository.findByType('A'));
+		doctorList.sort(new sortByPatient());
 		Patient thePatient = patientRepository.getReferenceById(patient_id);
-		thePatient.setDoctor(doctorRepository.getReferenceById(11));
-		thePatient.setD_id(11);
-		thePatient.setDoctor_change(new Date());
+		thePatient.setDoctor(doctorList.get(0));
+		thePatient.setD_id(doctorList.get(0).getDoctor_id());
+		patientRepository.save(thePatient);
+
+
+
+//		Patient thePatient = patientRepository.getReferenceById(patient_id);
+//		thePatient.setDoctor(doctorRepository.getReferenceById(11));
+//		thePatient.setD_id(11);
+//		thePatient.setDoctor_change(new Date());
 
 		patientRepository.save(thePatient);
 	}
@@ -133,7 +133,10 @@ public class PatientServiceImpl implements PatientService {
 	public Patient findByEmail(String Email) {
 		return patientRepository.findByEmail(Email);
 	}
-
+	@Override
+	public Patient findById(int id) {
+		return patientRepository.findById(id);
+	}
 	@Override
 	public void changePass(Patient p, String pass) {
 		Patient temp = patientRepository.getReferenceById(p.getPatient_id());

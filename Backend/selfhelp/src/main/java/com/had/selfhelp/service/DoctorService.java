@@ -20,4 +20,6 @@ public interface DoctorService {
 	public List<Doctor> findDoctors();
 
 	void changePass(Doctor d, String pass);
+
+    Doctor findByUsername(String userNameFromJwtToken);
 }

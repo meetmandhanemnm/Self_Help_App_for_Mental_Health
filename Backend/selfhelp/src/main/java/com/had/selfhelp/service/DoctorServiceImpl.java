@@ -61,4 +61,9 @@ public class DoctorServiceImpl implements DoctorService {
 		doctorRepository.save(temp);
 	}
 
+	@Override
+	public Doctor findByUsername(String username) {
+		return doctorRepository.findByUsername(username);
+	}
+
 }
