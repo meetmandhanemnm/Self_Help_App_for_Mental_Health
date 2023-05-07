@@ -51,7 +51,16 @@ public class DoctorServiceImpl implements DoctorService {
 	}
 	@Override
 	public List<Doctor> findDoctors() {
-		return doctorRepository.findAll();
+		List<Doctor> doctorList =  doctorRepository.findByTypeNotIn(new char[]{'C', 'A'});
+//		for(Doctor d:doctorList)
+//		{
+//			System.out.println(d);
+////			if(d.getType()=='C' || d.getType()=='A')
+////			{
+////				doctorList.remove(d);
+////			}
+//		}
+		return doctorList;
 	}
 
 	@Override

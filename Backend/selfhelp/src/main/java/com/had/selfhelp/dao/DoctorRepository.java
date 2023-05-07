@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.had.selfhelp.entity.Doctor;
 
+import java.util.List;
+
 public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
 
 	Doctor findByUsernameAndPassword(String username, String password);
@@ -12,4 +14,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
 	Doctor findByType(char c);
 
     Doctor findByUsername(String username);
+
+	List<Doctor> findByTypeNotIn(char[] c);
 }

@@ -84,7 +84,7 @@ public class PatientController {
 	}
 
 	@PostMapping("/workout/response")
-	@PreAuthorize("hasAuthority('Doctor')")
+	@PreAuthorize("hasAnyAuthority('Doctor','Patient')")
 	public List<Workout_question_response> saveWorkoutResponse(@RequestBody List<Workout_question_response> responseList) {
 		return workoutService.saveResponse(responseList);
 	}
