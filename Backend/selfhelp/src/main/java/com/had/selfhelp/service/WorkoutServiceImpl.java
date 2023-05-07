@@ -116,8 +116,8 @@ public class WorkoutServiceImpl implements WorkoutService {
 
 				Request req = new Request();
 
-				req.setAppId("7695");
-				req.setAppToken("wDN7Drh1sdRsg6rE11FAVz");
+				req.setAppId("7793");
+				req.setAppToken("Mm8O7Ld44FO4SEC6hbBrfd");
 				req.setMessage("Your new workout is "+workout.getTitle());
 				req.setSubID(String.valueOf(P.getPatient_id()));
 				req.setTitle("Hey "+P.getFirstName()+ "! check out new Activity!!");

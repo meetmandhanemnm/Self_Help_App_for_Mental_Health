@@ -54,8 +54,8 @@ public class Notification {
 		                	
 		                	Request req = new Request();
 	
-		                    req.setAppId("7695");
-		                    req.setAppToken("wDN7Drh1sdRsg6rE11FAVz");
+		                    req.setAppId("7793");
+		                    req.setAppToken("Mm8O7Ld44FO4SEC6hbBrfd");
 		                    req.setMessage("Don't miss on your mental health!");
 		                    req.setSubID(String.valueOf(P.getPatient_id()));
 		                    req.setTitle("Hey "+P.getFirstName()+ "! Long time no see!!");
