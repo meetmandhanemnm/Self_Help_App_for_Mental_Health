@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useContext } from "react";
 import { Alert } from "react-native";
 import {
   View,
@@ -17,6 +17,7 @@ import Spacer from "../components/Spacer";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
+import { Context as PatientContext } from "./../context/patientContext";
 // const postPatientDetails = async (patientDetails, callback) => {
 //   // await jsonServer.post("/patient", patientDetails);
 
@@ -40,6 +41,7 @@ import { FontAwesome } from "@expo/vector-icons";
 // };
 
 const ForgotPassword = ({ navigation }) => {
+  const { state } = useContext(PatientContext);
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -77,7 +79,7 @@ const ForgotPassword = ({ navigation }) => {
       handlePress();
     } catch (err) {
       setIsLoading(false);
-      setError("Oppsss..Something went wrong! Verify the Email ID");
+      setError(state.language.ForgotPassword.errorMessage);
     }
   };
   return (
@@ -90,11 +92,11 @@ const ForgotPassword = ({ navigation }) => {
             color: "#9370DB",
           }}
         >
-          We're humans afterall,{"\n"}It's ok to forget :)
+          {state.language.ForgotPassword.titleText}
         </Text>
         <View style={{ marginTop: 120 }}></View>
         <Input
-          label="Enter Registered EmailID "
+          label={state.language.ForgotPassword.email}
           onChangeText={(data) => setEmail(data)}
         />
         {error ? (
@@ -108,7 +110,7 @@ const ForgotPassword = ({ navigation }) => {
         >
           <View style={{ flexDirection: "row" }}>
             <Text style={{ marginRight: 10, fontSize: 15, fontWeight: "bold" }}>
-              Send
+              {state.language.ForgotPassword.sendButtonTitle}
             </Text>
             <AntDesign name="message1" size={24} color="black" />
           </View>
@@ -130,9 +132,9 @@ const ForgotPassword = ({ navigation }) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>
-              The <FontAwesome name="key" size={24} color="black" /> to unlock
-              your account is in you registered email. {"\n"} Please Login with
-              it
+              {state.language.ForgotPassword.modalText1}{" "}
+              <FontAwesome name="key" size={24} color="black" />{" "}
+              {state.language.ForgotPassword.modalText2}
             </Text>
             <TouchableOpacity
               onPress={() => {

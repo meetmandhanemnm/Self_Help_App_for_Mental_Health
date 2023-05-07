@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useContext } from "react";
 import {
   View,
   ScrollView,
@@ -12,6 +12,7 @@ import { Button, Text, Input } from "react-native-elements";
 import jsonServer from "../../api/jsonServer";
 import Spacer from "../components/Spacer";
 import RadioGroup from "react-native-radio-buttons-group";
+import { Context as PatientContext } from "../context/patientContext";
 
 const postPatientDetails = async (patientDetails, callback) => {
   // await jsonServer.post("/patient", patientDetails);
@@ -58,25 +59,27 @@ const PersonalDetailsRegistration = ({ navigation }) => {
   //   password: "",
   //   remarks: "",
   // };
+  const { state } = useContext(PatientContext);
+
   const [radioButtons, setRadioButtons] = useState([
     {
       id: "1", // acts as primary key, should be unique and non-empty string
-      label: "Male            ",
+      label: state.language.Signup.gender.male,
       value: "M",
     },
     {
       id: "2",
-      label: "Female        ",
+      label: state.language.Signup.gender.female,
       value: "F",
     },
     {
       id: "3",
-      label: "Trans           ",
+      label: state.language.Signup.gender.trans,
       value: "T",
     },
     {
       id: "4",
-      label: "Not Specify",
+      label: state.language.Signup.gender.notSpecify,
       value: "N",
     },
   ]);
@@ -95,7 +98,6 @@ const PersonalDetailsRegistration = ({ navigation }) => {
     }
   }
   //Need to get Doctor names from DB
-
   const [email, setEmail] = useState();
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState(" ");
@@ -118,26 +120,27 @@ const PersonalDetailsRegistration = ({ navigation }) => {
 
   const validateData = () => {
     if (!email) {
-      setEmailErr("Email is required");
+      setEmailErr(state.language.Signup.error.emailReqd);
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailErr("Email Format is wrong");
+      setEmailErr(state.language.Signup.error.emailFormat);
     } else setEmailErr("");
 
-    if (!firstName) setFirstNameErr("Name is Required");
+    if (!firstName) setFirstNameErr(state.language.Signup.error.firstNameReqd);
     else setFirstNameErr("");
-    if (!contact_number) setContactNoErr("Contact Number is required");
+    if (!contact_number)
+      setContactNoErr(state.language.Signup.error.contactNoReqd);
     else if (!/^\d+$/.test(contact_number))
-      setContactNoErr("Contact Number must be a numeber");
+      setContactNoErr(state.language.Signup.error.contactNoFormat);
     else setContactNoErr("");
 
-    if (!username) setUsernameErr("Username Required");
+    if (!username) setUsernameErr(state.language.Signup.error.usernameReqd);
     else setUsernameErr("");
-    if (!password) setPasswordErr("Password cant be empty");
+    if (!password) setPasswordErr(state.language.Signup.error.passwordReqd);
     else setPasswordErr("");
     if (!password_re || password != password_re)
-      setPasswordREErr("Passwords Dont Match");
+      setPasswordREErr(state.language.Signup.error.passwordMismatch);
     else setPasswordREErr("");
-    if (!gender) setGenderErr("Opt any of the gender");
+    if (!gender) setGenderErr(state.language.Signup.error.genderReqd);
     else setGenderErr("");
 
     if (
@@ -163,7 +166,7 @@ const PersonalDetailsRegistration = ({ navigation }) => {
             color: "#9370DB",
           }}
         >
-          Enter the
+          {state.language.Signup.title1}
         </Text>
         <Text
           h2
@@ -173,10 +176,10 @@ const PersonalDetailsRegistration = ({ navigation }) => {
             color: "#9370DB",
           }}
         >
-          below Details
+          {state.language.Signup.title2}
         </Text>
         <Input
-          label="Email"
+          label={state.language.Signup.email}
           autoCapitalize="none"
           onChangeText={(data) => {
             setEmail(data);
@@ -185,7 +188,7 @@ const PersonalDetailsRegistration = ({ navigation }) => {
         />
         {emailErr ? <Text style={style.errorText}>{emailErr}</Text> : null}
         <Input
-          label="First Name"
+          label={state.language.Signup.firstName}
           onChangeText={(data) => {
             setFirstName(data);
             setFirstNameErr("");
@@ -194,7 +197,10 @@ const PersonalDetailsRegistration = ({ navigation }) => {
         {firstNameErr ? (
           <Text style={style.errorText}>{firstNameErr}</Text>
         ) : null}
-        <Input label="Last Name" onChangeText={(data) => setLastName(data)} />
+        <Input
+          label={state.language.Signup.lastName}
+          onChangeText={(data) => setLastName(data)}
+        />
         <Text
           style={{
             fontSize: 16,
@@ -204,7 +210,7 @@ const PersonalDetailsRegistration = ({ navigation }) => {
             marginBottom: 5,
           }}
         >
-          Gender
+          {state.language.Signup.gender.title}
         </Text>
         <View style={style.container}>
           <RadioGroup
@@ -215,7 +221,7 @@ const PersonalDetailsRegistration = ({ navigation }) => {
         </View>
         <View style={{ marginTop: 10 }} />
         <Input
-          label="Contact No"
+          label={state.language.Signup.contactNo}
           keyboardType="numeric"
           onChangeText={(data) => {
             setContactNo(data);
@@ -226,7 +232,7 @@ const PersonalDetailsRegistration = ({ navigation }) => {
           <Text style={style.errorText}>{contact_numberErr}</Text>
         ) : null}
         <Input
-          label="Username"
+          label={state.language.Signup.username}
           autoCapitalize="none"
           onChangeText={(data) => {
             setUsername(data);
@@ -238,7 +244,7 @@ const PersonalDetailsRegistration = ({ navigation }) => {
         ) : null}
 
         <Input
-          label="Password"
+          label={state.language.Signup.password}
           autoCapitalize="none"
           secureTextEntry={true}
           onChangeText={(data) => {
@@ -251,7 +257,7 @@ const PersonalDetailsRegistration = ({ navigation }) => {
         ) : null}
 
         <Input
-          label="Re-type Password"
+          label={state.language.Signup.password_re}
           autoCapitalize="none"
           secureTextEntry={true}
           onChangeText={(data) => {
@@ -263,9 +269,12 @@ const PersonalDetailsRegistration = ({ navigation }) => {
           <Text style={style.errorText}>{password_reErr}</Text>
         ) : null}
 
-        <Input label="Remarks" onChangeText={(data) => setRemarks(data)} />
+        <Input
+          label={state.language.Signup.remarks}
+          onChangeText={(data) => setRemarks(data)}
+        />
         <Button
-          title="Save Profile"
+          title={state.language.Signup.saveButtonTitle}
           icon={{
             name: "user",
             type: "font-awesome",

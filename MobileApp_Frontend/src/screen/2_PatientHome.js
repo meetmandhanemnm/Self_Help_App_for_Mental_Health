@@ -76,13 +76,7 @@ const PatientHome = (props) => {
   const [workout_data, setWorkoutData] = useState("");
   const [quote, setQuote] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  const quotes = [
-    "The best way to predict your future is to create it.",
-    "Don't let yesterday take up too much of today.",
-    "Believe you can and you're halfway there.",
-    "Strive not to be a success, but rather to be of value.",
-    "You miss 100% of the shots you don't take.",
-  ];
+  const quotes = state.language.Quotes;
   console.log("\n\n(((((((((((((((PATEINT HOME)))))))))))))))");
   const [modalChatVisible, setModalChatVisible] = useState(false);
 
@@ -362,8 +356,7 @@ const PatientHome = (props) => {
           <View style={stylesChatModel.centeredView}>
             <View style={stylesChatModel.modalView}>
               <Text style={stylesChatModel.modalText}>
-                Sorry!! Seems like you don't have a doctor to Chat with. You can
-                request for a doctor from Account Page
+                state.language.PatientHome.chatModal
               </Text>
               <TouchableOpacity
                 onPress={() => {

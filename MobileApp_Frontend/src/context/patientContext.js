@@ -37,10 +37,10 @@ const patientReducer = (state, action) => {
 const addLanguage = (dispatch) => {
   return async (language) => {
     try {
-      console.log(
-        "\n\n==================== REDUCER :addLanguage() \n Language Recieved :  ",
-        language
-      );
+      // console.log(
+      //   "\n\n==================== REDUCER :addLanguage() \n Language Recieved :  ",
+      //   language
+      // );
 
       dispatch({
         type: "add_language",
