@@ -93,29 +93,29 @@ const AccountScreen = (props) => {
     <View style={{ marginTop: 40 }}>
       <Spacer>
         <Text h3 style={{ marginTop: 60 }}>
-          Namaskar
+          {state.language.Account.welcomeTitle}
         </Text>
         <Text h2 style={{ marginBottom: 20, color: "rgba(130, 202, 186, 1)" }}>
           {`${state.patient_data.firstName} ${state.patient_data.lastName} !!`}
         </Text>
         <DetailsEntry
-          question={"Patient ID "}
+          question={state.language.Account.patientID}
           response={state.patient_data.patient_id}
         />
 
         <DetailsEntry
-          question={"Status "}
-          response={`${total}/${workout_data.length} workouts completed`}
+          question={state.language.Account.status}
+          response={`${total}/${workout_data.length} ${state.language.Account.statusText}`}
         />
         <DetailsEntry
-          question={"Severity "}
+          question={state.language.Account.severity}
           response={state.patient_data.severity}
         />
 
         {!(state.patient_data.d_id == 0) ? (
           <>
             <DetailsEntry
-              question={"Assigned Doctor"}
+              question={state.language.Account.assignedDoc}
               response={
                 "Dr." +
                 " " +
@@ -130,18 +130,24 @@ const AccountScreen = (props) => {
         )}
 
         <Spacer>
-          <Text style={{ fontSize: 20, marginTop: 40 }}>Important Links :</Text>
+          <Text style={{ fontSize: 20, marginTop: 40 }}>
+            {state.language.Account.importantLinks} :
+          </Text>
           {state.patient_data.d_id != 0 ? (
             <>
               <TouchableOpacity
                 onPress={() => {
-                  setDoctorModalText("Doctors could be annoying!!");
-                  setDoctorModalButtonText("Request Change");
+                  setDoctorModalText(
+                    state.language.Account.changeDoctorModalText
+                  );
+                  setDoctorModalButtonText(
+                    state.language.Account.changeDoctorModalButton
+                  );
                   handlePress();
                 }}
               >
                 <Text style={{ marginTop: 10, fontSize: 14, color: "blue" }}>
-                  Change Doctor?
+                  {state.language.Account.changeDoctor}
                 </Text>
               </TouchableOpacity>
             </>
@@ -149,13 +155,17 @@ const AccountScreen = (props) => {
             <>
               <TouchableOpacity
                 onPress={() => {
-                  setDoctorModalText("Help is on the way. ");
-                  setDoctorModalButtonText("Request Doctor");
+                  setDoctorModalText(
+                    state.language.Account.requestNewDoctorModalText
+                  );
+                  setDoctorModalButtonText(
+                    state.language.Account.requestNewDoctorModalButton
+                  );
                   handlePress();
                 }}
               >
                 <Text style={{ marginTop: 10, fontSize: 14, color: "blue" }}>
-                  Do you want a doctor's help?
+                  {state.language.Account.requestDoctor}
                 </Text>
               </TouchableOpacity>
             </>
@@ -166,7 +176,7 @@ const AccountScreen = (props) => {
             }}
           >
             <Text style={{ marginTop: 10, fontSize: 14, color: "blue" }}>
-              Change Password?
+              {state.language.Account.changePassword}
             </Text>
           </TouchableOpacity>
           <Modal //Change Doctor Model
@@ -178,7 +188,7 @@ const AccountScreen = (props) => {
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <Text style={styles.modalText}>
-                  {doctorModalText} {"\n"}Any specific remarks in
+                  {doctorModalText}
                   <MaterialCommunityIcons name="head" size={24} color="black" />
                   ?
                 </Text>
@@ -203,21 +213,25 @@ const AccountScreen = (props) => {
             <View style={styles.centeredView}>
               <View style={styles.modalView2}>
                 <Text style={styles.modalText}>
-                  Everb
+                  {state.language.Account.changePasswordModelText1}
                   <AntDesign name="smileo" size={24} color="black" />
-                  dy likes changes
+                  {state.language.Account.changePasswordModelText2}
                 </Text>
                 <View style={{ marginTop: 20 }} />
                 <Input
                   autoCapitalize="none"
                   secureTextEntry={true}
-                  label="Enter new password"
+                  label={
+                    state.language.Account.changePasswordModelEnterPassword
+                  }
                   onChangeText={(data) => setNewPass1(data)}
                 />
                 <Input
                   autoCapitalize="none"
                   secureTextEntry={true}
-                  label="Re Enter new password"
+                  label={
+                    state.language.Account.changePasswordModelEnterPasswordAgain
+                  }
                   onChangeText={(data) => {
                     setNewPass2(data);
                     if (!newpass1 && !newpass2 && newpass1 !== newpass2)
@@ -227,9 +241,7 @@ const AccountScreen = (props) => {
                   }}
                 />
                 {passError ? (
-                  <Text style={{ color: "red" }}>
-                    Seems like the Passwords don't match
-                  </Text>
+                  <Text style={{ color: "red" }}>{passError}</Text>
                 ) : null}
                 <TouchableOpacity
                   onPress={() => {
@@ -237,12 +249,16 @@ const AccountScreen = (props) => {
                       console.log("CHANGE PASSWORD :  Pass MATCH");
                       changePasswordInDB(newpass1);
                     } else {
-                      setPassError("Passwords Not matching...yet...");
+                      setPassError(
+                        state.language.Account.changePasswordModelError
+                      );
                       console.log("CHANGE PASS : Pass not MATCHING");
                     }
                   }}
                 >
-                  <Text style={styles.closeButton}>Change Password</Text>
+                  <Text style={styles.closeButton}>
+                    {state.language.Account.changePasswordModelButton}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -252,7 +268,7 @@ const AccountScreen = (props) => {
 
       <View style={{ flexDirection: "row", marginTop: 85 }}>
         <Button
-          title="WorkoutList"
+          title={state.language.Account.workoutListButtonTitle}
           loadingProps={{ size: "small", color: "white" }}
           buttonStyle={{
             backgroundColor: "rgba(130, 202, 186, 1)",
@@ -272,7 +288,7 @@ const AccountScreen = (props) => {
           }}
         />
         <Button
-          title="Logout"
+          title={state.language.Account.logoutButtonTitle}
           loadingProps={{ size: "small", color: "white" }}
           buttonStyle={{
             backgroundColor: "rgba(130, 202, 186, 1)",
@@ -291,7 +307,7 @@ const AccountScreen = (props) => {
 
             // axios.delete(`https://app.nativenotify.com/api/app/indie/sub/7793/Mm8O7Ld44FO4SEC6hbBrfd/${state.patient_data.patient_id}`)
             axios.delete(
-              `https://app.nativenotify.com/api/app/indie/sub/7793/Mm8O7Ld44FO4SEC6hbBrfd/${6}`
+              `https://app.nativenotify.com/api/app/indie/sub/7793/Mm8O7Ld44FO4SEC6hbBrfd/${16}`
             );
 
             removeOfflineData("token");

@@ -1,16 +1,6 @@
 import createDataContext from "./createDataContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-// const workOutReducer = (state, action) => {
-//   // reducer fun
-//   switch (action.type) {
-//     case "addworkout":
-//       return { ...state, errorMessage: action.payload };
-
-//     default:
-//       return state;
-//   }
-// };
+import { engLang } from "../languages/all_languages_content";
 const patientReducer = (state, action) => {
   switch (action.type) {
     case "add_patient":
@@ -38,9 +28,28 @@ const patientReducer = (state, action) => {
       return { ...state, doctor_data: action.payload };
     case "add_token":
       return { ...state, token: action.payload };
+    case "add_language":
+      return { ...state, language: action.payload };
     default:
       return state;
   }
+};
+const addLanguage = (dispatch) => {
+  return async (language) => {
+    try {
+      console.log(
+        "\n\n==================== REDUCER :addLanguage() \n Language Recieved :  ",
+        language
+      );
+
+      dispatch({
+        type: "add_language",
+        payload: language,
+      });
+    } catch (err) {
+      console.log("Error : ", err.message);
+    }
+  };
 };
 
 const addPatient = (dispatch) => {
@@ -220,7 +229,20 @@ const updateWorkoutStatus = (dispatch) => {
 
 export const { Provider, Context } = createDataContext(
   patientReducer,
-  { addPatient, addWorkout, updatePreReqWorkout, addDoctor, addToken },
+  {
+    addPatient,
+    addWorkout,
+    updatePreReqWorkout,
+    addDoctor,
+    addToken,
+    addLanguage,
+  },
 
-  { patient_data: "", workout_data: "", doctor_data: "", token: "" }
+  {
+    patient_data: "",
+    workout_data: "",
+    doctor_data: "",
+    token: "",
+    language: engLang,
+  }
 );

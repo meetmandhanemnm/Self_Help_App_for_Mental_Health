@@ -61,7 +61,7 @@ import { Ionicons } from "@expo/vector-icons";
 //     );
 //   }
 // };
-
+import { engLang } from "../languages/all_languages_content";
 const logOut = (callback) => {
   //Clear all Cache
   removeToken();
@@ -72,7 +72,7 @@ const logOut = (callback) => {
 
 const PatientHome = (props) => {
   console.disableYellowBox = true;
-  const { state, addWorkout } = useContext(PatientContext);
+  const { state, addWorkout, addLanguage } = useContext(PatientContext);
   const [workout_data, setWorkoutData] = useState("");
   const [quote, setQuote] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -84,7 +84,6 @@ const PatientHome = (props) => {
     "You miss 100% of the shots you don't take.",
   ];
   console.log("\n\n(((((((((((((((PATEINT HOME)))))))))))))))");
-
   const [modalChatVisible, setModalChatVisible] = useState(false);
 
   //For appending Header with JWT
@@ -107,7 +106,7 @@ const PatientHome = (props) => {
       "--------- Register For Push Notificaiton : ID (For API)- ",
       state.patient_data.patient_id
     );
-    registerIndieID(`6`, 7793, "Mm8O7Ld44FO4SEC6hbBrfd");
+    registerIndieID(`16`, 7793, "Mm8O7Ld44FO4SEC6hbBrfd");
 
     // registerIndieID(`${state.patient_data.patient_id}`, 7793, 'Mm8O7Ld44FO4SEC6hbBrfd');
 
@@ -166,6 +165,7 @@ const PatientHome = (props) => {
     console.log("\n\t:Patient Data \n", state.patient_data);
     console.log("Workout Data:\n", state.workout_data);
     console.log("Doctor Data :\n", state.doctor_data);
+    console.log("Language Data :\n", state.language);
   }, []);
 
   const getRandomQuote = () => {
@@ -226,7 +226,7 @@ const PatientHome = (props) => {
       </Text> */}
       <Spacer>
         <Text h3 style={{}}>
-          Namaskar
+          {state.language.PatientHome.welcomeTitle}
         </Text>
         <Text h2 style={{ color: "rgba(111, 202, 186, 1)" }}>
           {`${state.patient_data.firstName} ${state.patient_data.lastName} !!`}
@@ -299,7 +299,7 @@ const PatientHome = (props) => {
 
       <View style={{ flexDirection: "row" }}>
         <Button
-          title="Account"
+          title={state.language.PatientHome.accountButton}
           loadingProps={{ size: "small", color: "white" }}
           buttonStyle={{
             backgroundColor: "rgba(111, 202, 186, 1)",
@@ -330,7 +330,7 @@ const PatientHome = (props) => {
         </TouchableOpacity>
 
         <Button
-          title="Chat"
+          title={state.language.PatientHome.chatButton}
           loadingProps={{ size: "small", color: "white" }}
           buttonStyle={{
             backgroundColor: "rgba(111, 202, 186, 1)",

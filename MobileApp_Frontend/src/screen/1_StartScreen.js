@@ -6,6 +6,7 @@ import {
   Image,
   ImageBackground,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { Text, Input, Button } from "react-native-elements";
 import Spacer from "../components/Spacer";
@@ -26,6 +27,13 @@ import {
   storeOfflineData,
   removeOfflineData,
 } from "../offlineStorage/1_Token";
+import {
+  engLang,
+  kannadaLang,
+  hindiLang,
+  teluguLang,
+  maratiLang,
+} from "../languages/all_languages_content";
 
 // import BackgroundImg from "../components/BackGroundImage";
 
@@ -52,12 +60,15 @@ const StartScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const { addPatient, addDoctor, addToken } = useContext(PatientContext);
+  const { state, addPatient, addDoctor, addToken, addLanguage } =
+    useContext(PatientContext);
   const [JWT, setJWT] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateToken = async () => {
     console.log("\n\n\t >>>>>>>>> validationToken()");
     const jwtt = await tokenAvaliable();
+    //Add language for next screen
     if (jwtt) {
       // if (await getOfflineData("token")) {
       console.log("\n\t\t Hurray! Direct Signin", jwtt);
@@ -87,10 +98,12 @@ const StartScreen = ({ navigation }) => {
       //   username: email,
       //   password: password,
       // });
+      setIsLoading(true);
       const response = await jsonServer.post(`/api/auth/login/patient`, {
         username: email,
         password: password,
       });
+      setIsLoading(false);
       // jwt = response.headers.jwt;
       // storeOfflineData("token", jwt);
       // storeTokenReducer(jwt);
@@ -157,7 +170,8 @@ const StartScreen = ({ navigation }) => {
 
       // console.log(response.data);
     } catch (e) {
-      setErrorMessage("Oppssss!!! Something went wrong..Try Again");
+      setIsLoading(false);
+      setErrorMessage(state.language.StartPage.errorMessage);
       console.log("\n\n\n----------------Ayoo..Issue Getting the Details");
       console.log(e.message);
       removeOfflineData("token");
@@ -177,6 +191,7 @@ const StartScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
+    console.log("LANGUAGE ", state);
     validateToken();
   }, []);
 
@@ -191,25 +206,27 @@ const StartScreen = ({ navigation }) => {
   return (
     <>
       <View style={style.containerStyle}>
+        <Spacer />
+        <Spacer />
         <Spacer>
           <Image
             style={style.imageStyle}
             source={require("../../images/happyBrain.png")}
           />
           <Text h4 style={{ textAlign: "center" }}>
-            Welcome to your Welness Destination!!
+            {state.language.StartPage.welcomeMessage}
           </Text>
           <Spacer />
           <Spacer>
             <Input
-              label="Username"
+              label={state.language.StartPage.username}
               value={email}
               onChangeText={(newEmail) => setEmail(newEmail)}
               autoCapitalize="none"
             />
 
             <Input
-              label="Password"
+              label={state.language.StartPage.password}
               value={password}
               onChangeText={(newPass) => setPassword(newPass)}
               autoCapitalize="none"
@@ -219,9 +236,19 @@ const StartScreen = ({ navigation }) => {
             {errorMessage ? (
               <Text style={style.errorMessageStyle}>{errorMessage}</Text>
             ) : null}
-
+            {isLoading ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <ActivityIndicator size="large" color="#0000ff" />
+              </View>
+            ) : null}
             <Button
-              title="Log in"
+              title={state.language.StartPage.loginButtonText}
               loading={false}
               loadingProps={{ size: "small", color: "white" }}
               buttonStyle={{
@@ -245,33 +272,89 @@ const StartScreen = ({ navigation }) => {
             />
           </Spacer>
 
+          <View
+            style={{
+              marginLeft: 20,
+              marginBottom: 5,
+              marginRight: 20,
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <TouchableOpacity>
+              <Text
+                style={
+                  state.language.code === "english"
+                    ? style.linkStyleLanguageSelected
+                    : style.linkStyleLanguage
+                }
+                onPress={() => addLanguage(engLang)}
+              >
+                English
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity>
+              <Text
+                style={
+                  state.language.code == "hindi"
+                    ? style.linkStyleLanguageSelected
+                    : style.linkStyleLanguage
+                }
+                onPress={() => addLanguage(hindiLang)}
+              >
+                हिंदी
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text
+                style={
+                  state.language.code === "kannada"
+                    ? style.linkStyleLanguageSelected
+                    : style.linkStyleLanguage
+                }
+                onPress={() => addLanguage(kannadaLang)}
+              >
+                ಕನ್ನಡ
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity>
+              <Text
+                style={
+                  state.language.code === "telugu"
+                    ? style.linkStyleLanguageSelected
+                    : style.linkStyleLanguage
+                }
+                onPress={() => addLanguage(teluguLang)}
+              >
+                తెలుగు
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text
+                style={
+                  state.language.code === "marati"
+                    ? style.linkStyleLanguageSelected
+                    : style.linkStyleLanguage
+                }
+                onPress={() => addLanguage(maratiLang)}
+              >
+                मराठी
+              </Text>
+            </TouchableOpacity>
+          </View>
+
           <TouchableOpacity onPress={() => navigation.navigate("PersonalDet")}>
-            <Text style={style.linkStyle}>No Account? Signup here</Text>
+            <Text style={style.linkStyle}>
+              {state.language.StartPage.signupText}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("Forgot")}>
             <Text style={style.linkStyle2}>
-              Forgot Username/ Password? Click here
+              {state.language.StartPage.forgotPasswordText}
             </Text>
           </TouchableOpacity>
-          {/* <Button
-            title="Chat"
-            loadingProps={{ size: "small", color: "white" }}
-            buttonStyle={{
-              backgroundColor: "rgba(111, 202, 186, 1)",
-              borderRadius: 5,
-            }}
-            titleStyle={{ fontWeight: "bold", fontSize: 23 }}
-            containerStyle={{
-              marginHorizontal: 10,
-              height: 50,
-              width: 110,
-              marginBottom: 10,
-              alignSelf: "center",
-            }}
-            onPress={() => {
-              navigation.navigate("Chat");
-            }}
-          /> */}
         </Spacer>
       </View>
     </>
@@ -289,8 +372,20 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
   buttonStyle: {},
-  linkStyle: { textAlign: "center", marginTop: 30, color: "blue" },
-  linkStyle2: { textAlign: "center", marginTop: 20, color: "blue" },
+  linkStyleLanguage: {
+    textAlign: "center",
+    marginTop: 15,
+    color: "blue",
+  },
+  linkStyleLanguageSelected: {
+    textDecorationLine: "underline",
+    textAlign: "center",
+    marginTop: 15,
+    fontSize: 17,
+    color: "blue",
+  },
+  linkStyle: { textAlign: "center", marginTop: 15, color: "blue" },
+  linkStyle2: { textAlign: "center", marginTop: 15, color: "blue" },
 
   imageStyle: {
     alignSelf: "center",
