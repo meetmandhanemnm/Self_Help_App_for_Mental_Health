@@ -17,6 +17,7 @@ const DropDownComponent = ({
   goToQuestions,
   questions,
   preReqId,
+  preReqName,
 }) => {
   console.disableYellowBox = true;
 
@@ -25,16 +26,32 @@ const DropDownComponent = ({
       <ListItem.Accordion
         content={
           <ListItem.Content>
-            <ListItem.Title
-              style={{
-                fontSize: 18,
+            <View style={{ flexDirection: "row" }}>
+              <ListItem.Title
+                style={{
+                  fontSize: 18,
 
-                color: workout_status ? "#B19FF9" : "black",
-                marginLeft: 14,
-              }}
-            >
-              {workout_title}
-            </ListItem.Title>
+                  color: workout_status ? "#B19FF9" : "black",
+                  marginLeft: 14,
+                  marginTop: 2,
+                }}
+              >
+                {workout_title}
+              </ListItem.Title>
+              <Text style={{ marginLeft: 10 }}>
+                {preReqName ? (
+                  <>
+                    <AntDesign
+                      name="lock"
+                      size={24}
+                      color="#ffbf00"
+                      style={{ marginTop: 2 }}
+                    />
+                    <Text style={{ color: "#a67c00" }}>{preReqName}</Text>
+                  </>
+                ) : null}
+              </Text>
+            </View>
           </ListItem.Content>
         }
         isExpanded={expandable}

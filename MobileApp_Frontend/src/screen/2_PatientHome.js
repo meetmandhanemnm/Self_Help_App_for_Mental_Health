@@ -255,7 +255,7 @@ const PatientHome = (props) => {
         //data={state.workout_data}
         keyExtractor={(workout) => workout.workout_instance_id}
         renderItem={({ item }) => {
-          return expandState.includes(item.workout_instance_id) ? (
+          return expandState.includes(item.workout_instance_id) ? ( //For completed workouts
             <Spacer>
               <DropDownComponent
                 workout_title={item.workout.title}
@@ -279,18 +279,13 @@ const PatientHome = (props) => {
             </Spacer>
           ) : (
             <DropDownComponent
-              workout_title={
-                item.pre_id != 0
-                  ? `${item.workout.title}  ( PreReq: ${getWotkoutName(
-                      item.pre_id
-                    )})`
-                  : item.workout.title
-              }
+              workout_title={item.workout.title}
               //{item.workout.title}
               workout_description={item.description}
               workout_status={item.completed}
               expandable={false}
               preReqId={item.pre_id}
+              preReqName={getWotkoutName(item.pre_id)}
               onPress={() => {
                 {
                   if (item.pre_id == 0)
