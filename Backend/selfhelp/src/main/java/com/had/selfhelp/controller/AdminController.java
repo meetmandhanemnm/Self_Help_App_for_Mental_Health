@@ -45,6 +45,7 @@ public class AdminController {
 
 //    @PreAuthorize("hasAuthority('Admin')")
     @PostMapping("/register/doctor") //ADMIN
+    @PreAuthorize("hasAuthority('Admin')")
     ResponseEntity<?> createDoctor(@RequestBody Doctor user){
         user.setDoctor_id(0);
         doctorService.save(user);

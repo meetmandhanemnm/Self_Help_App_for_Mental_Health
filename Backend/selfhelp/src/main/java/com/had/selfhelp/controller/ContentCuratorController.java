@@ -3,6 +3,7 @@ package com.had.selfhelp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.had.selfhelp.entity.Workout;
@@ -20,6 +21,7 @@ public class ContentCuratorController {
 	}
 	
 	@PostMapping("/workout")
+	@PreAuthorize("hasAuthority('ContentCurator')")
 	public Workout addWorkout(@RequestBody Workout theWorkout) {
 		theWorkout.setWorkout_id(0);
 		workoutService.save(theWorkout);
@@ -27,6 +29,7 @@ public class ContentCuratorController {
 	}
 	
 	@GetMapping("/workout")
+	@PreAuthorize("hasAnyAuthority('ContentCurator','Admin')")
 	public List<Workout> getWorkout() {
 		return workoutService.findWorkout();
 	}

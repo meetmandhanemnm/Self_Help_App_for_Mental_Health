@@ -44,7 +44,7 @@ public class PatientController {
 	}
 
 	@PostMapping("/responses/{patientId}")
-
+	@PreAuthorize("hasAuthority('Patient')")
 	public int addResponses(@RequestBody List<Questionnaire_response> response, @PathVariable(name = "patientId") int patient_id) {
 		System.out.println(response);
 		int severity = patientService.saveResponses(response, patient_id);
@@ -55,13 +55,13 @@ public class PatientController {
 	}
 
 	@GetMapping("/questions")
-	//@PreAuthorize("hasAuthority('Patient')")
+	@PreAuthorize("hasAuthority('Patient')")
 	public List<Questionnaire> getQuestions() {
 		return patientService.getQuestions();
 	}
 
 	@GetMapping("/responses/{patientId}")
-	//@PreAuthorize("hasAuthority('Patient')")
+	@PreAuthorize("hasAuthority('Doctor')")
 	public List<Questionnaire_response> getResponses(@PathVariable(name = "patientId") int patientId) {
 		return patientService.getResponses(patientId);
 	}
@@ -72,23 +72,26 @@ public class PatientController {
 //	}
 
 	@GetMapping("/workout/{patientId}")
-//	@PreAuthorize("hasAuthority('Doctor')")
+ 	@PreAuthorize("hasAnyAuthority('Doctor','Patient')")
 	public List<Workout_instance> getWorkout(@PathVariable(name = "patientId") int patientId) {
 		return workoutService.findWorkoutInstances(patientId);
 	}
 
 	@GetMapping("/workout/questions/{workout_id}")
+	@PreAuthorize("hasAuthority('Patient')")
 	public List<Workout_question> getWorkoutQuestions(@PathVariable(name = "workout_id") int workout_id) {
 		return workoutService.findWorkoutQuestions(workout_id);
 	}
 
 	@PostMapping("/workout/response")
+	@PreAuthorize("hasAuthority('Doctor')")
 	public List<Workout_question_response> saveWorkoutResponse(@RequestBody List<Workout_question_response> responseList) {
 		return workoutService.saveResponse(responseList);
 	}
 
 
 	@PostMapping("/workout/complete")
+	@PreAuthorize("hasAuthority('Patient')")
 	public void markWorkoutInstanceComplete(@RequestBody Workout_instance instance) {
 		workoutService.markInstance(instance);
 	}
@@ -109,10 +112,12 @@ public class PatientController {
 		patientService.updateDoctor(patient_id, doctor);
 	}
 	@PutMapping("/workout/complete")
+	@PreAuthorize("hasAuthority('Patient')")
 	public void markPrerequistes(@RequestBody Workout_instance instance) {
 		workoutService.updatePrerequisite(instance);
 	}
 	@PostMapping("/doctor")
+	@PreAuthorize("hasAuthority('Patient')")
 	public void requestDoctorChange(@RequestBody PatientDoctorChange Pd) {
 		patientService.requestForDoctorChange(Pd);
 	}
@@ -123,11 +128,9 @@ public class PatientController {
 		return patientService.getDoctorChangeRequests();
 	}
 	@PostMapping("/Password")
+	@PreAuthorize("hasAuthority('Patient')")
 	public void changePassword(@RequestBody Patient P) {
-
-
-		userService.changePass(P.getPassword(),P.getUsername());
-
-		patientService.changePass(P,P.getPassword());
+                 userService.changePass(P.getPassword(),P.getUsername());
+				 patientService.changePass(P,P.getPassword());
 	}
 }

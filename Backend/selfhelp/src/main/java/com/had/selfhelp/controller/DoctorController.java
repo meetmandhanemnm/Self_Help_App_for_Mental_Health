@@ -60,7 +60,7 @@ public class  DoctorController {
 	}
 	
 	@GetMapping("/patient/{doctorId}")
-	//@PreAuthorize("hasAnyAuthority('Doctor')")
+	@PreAuthorize("hasAnyAuthority('Doctor')")
 	public List<Patient> getPatientList(@RequestHeader("Authorization") String token,@PathVariable(name = "doctorId") int doctorId) {
           String t = token.substring(7, token.length());
 		if(doctorId!=doctorService.findByUsername(jwtUtils.getUserNameFromJwtToken(t)).getDoctor_id())
@@ -113,6 +113,7 @@ public class  DoctorController {
 		return d;
 	}
 	@PostMapping("/Password")
+	@PreAuthorize("hasAuthority('Doctor')")
 	public void changePassword(@RequestBody Doctor D) {
 
         String username =    doctorService.findById(D.getDoctor_id()).getUsername();

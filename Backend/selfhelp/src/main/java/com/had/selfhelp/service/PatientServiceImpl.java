@@ -100,6 +100,10 @@ public class PatientServiceImpl implements PatientService {
 		PatientDoctorChange pd1 = new PatientDoctorChange();
 		pd1.setPatient(patientRepository.getReferenceById(pd.getPatient().getPatient_id()));
 		pd1.setRemark(pd.getRemark());
+		if(!patientDoctorChangeRepository.findByPatient(patientRepository.getReferenceById(pd.getPatient().getPatient_id())).isEmpty()) {
+			List<PatientDoctorChange> pdList = patientDoctorChangeRepository.findByPatient(patientRepository.getReferenceById(pd.getPatient().getPatient_id()));
+			patientDoctorChangeRepository.delete(pdList.get(0));
+		}
 		patientDoctorChangeRepository.save(pd);
 	}
 
